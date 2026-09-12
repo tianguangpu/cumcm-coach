@@ -14,6 +14,10 @@ import numpy as np
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
+# scripts/ 目录下的自检工具（isolated_solve / ai_compliance 等）
+# 供 test_algorithms_smoke / test_ai_compliance 导入
+sys.path.insert(0, str(project_root / "scripts"))
+
 
 @pytest.fixture
 def sphere_function():

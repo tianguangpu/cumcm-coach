@@ -5,8 +5,9 @@ import sys
 import tempfile
 from pathlib import Path
 
-# 确保能 import 同目录的 ai_compliance(无论从何处运行)
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+# ai_compliance 位于 scripts/ 目录；显式注入路径使本文件可独立运行
+# （pytest 场景下 tests/conftest.py 已注入同一路径）
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from ai_compliance import AILogger
 

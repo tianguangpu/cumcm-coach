@@ -22,6 +22,10 @@ import numpy as np
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 if str(SKILL_ROOT / "algorithms") not in sys.path:
     sys.path.insert(0, str(SKILL_ROOT / "algorithms"))
+# scripts/ 提供 isolated_solve（隔离子进程跑求解器）；
+# pytest 场景下 tests/conftest.py 已注入同一路径
+if str(SKILL_ROOT / "scripts") not in sys.path:
+    sys.path.insert(0, str(SKILL_ROOT / "scripts"))
 
 # 模块 -> 必须存在的符号
 MODULES = {
@@ -102,7 +106,7 @@ def check(verbose: bool = False) -> int:
     return 1 if failed else 0
 
 
-def test_optimizers_feasibility(verbose: bool = False) -> int:
+def check_optimizers_feasibility(verbose: bool = False) -> int:
     """回归测试: 隔离子进程跑求解器, 验证内置 repair 在紧约束下返回可行解。
 
     采用 isolated_solve.run_isolated 将每个求解器放入独立子进程执行, 规避
@@ -147,8 +151,23 @@ def main() -> int:
     p.add_argument("--verbose", action="store_true", help="打印导入异常完整堆栈")
     a = p.parse_args()
     code = check(a.verbose)
-    code = code or test_optimizers_feasibility(a.verbose)
+    code = code or check_optimizers_feasibility(a.verbose)
     return code
+
+
+# ---------------- pytest 入口 ----------------
+# check_* 函数返回 0/1 供 CLI 使用；pytest 入口必须用 assert，
+# 否则内层失败只体现为返回值，pytest 见不到异常即报 PASS（假绿色）。
+
+
+def test_module_imports() -> None:
+    """全部算法模块必须可导入且关键符号存在（环境缺失依赖记为 ENV，不计失败）。"""
+    assert check() == 0, "算法模块冒烟检查失败（详见上方输出）"
+
+
+def test_optimizers_feasibility() -> None:
+    """内置求解器在紧约束下必须返回可行解。"""
+    assert check_optimizers_feasibility() == 0, "优化器可行性检查失败（详见上方输出）"
 
 
 if __name__ == "__main__":
