@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------------- 代码风格 ----------------
+  lint:
+    name: 代码风格 (ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 安装 ruff
+        run: python -m pip install --upgrade pip ruff
+
+      - name: Ruff 检查
+        run: ruff check algorithms/ scripts/ utils/ tests/
+
+      - name: 配置解析检查
+        run: python -c "import tomllib,pathlib; tomllib.loads(pathlib.Path('pyproject.toml').read_text('utf-8')); print('pyproject.toml 解析正常')"
+
+  # ---------------- 测试矩阵 ----------------
+  test:
+    name: 测试 (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.11", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[full]"
+          pip install pytest pytest-cov
+
+      - name: 语法检查
+        run: python -m compileall -q algorithms scripts utils tests
+
+      - name: 运行测试
+        env:
+          PYTHONIOENCODING: utf-8
+        run: pytest tests/ -q --cov=algorithms --cov-report=term-missing
+
+  # ---------------- 包可安装性 ----------------
+  package:
+    name: 包安装校验
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 构建 wheel
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build --wheel
+
+      - name: 校验包可导入
+        run: |
+          python -m pip install dist/*.whl
+          python -c "import algorithms, utils; print('algorithms', algorithms.__version__); print('utils 导入正常')"
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7

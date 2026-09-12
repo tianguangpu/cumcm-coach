@@ -1,74 +1,51 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
+#
+# 代码风格配置统一在 pyproject.toml（[tool.ruff] / [tool.black] / [tool.pytest.ini_options]），
+# 此处只声明钩子，不再重复参数，避免两处配置漂移。
 
 repos:
-  # Python 代码格式化 - Black
-  - repo: https://github.com/psf/black
-    rev: 24.8.0
+  # ---- Ruff：统一替代 black + flake8 + isort ----
+  # 注：暂不启用 ruff-format。ruff 0.16.x 在 ecology/game/mechanistic/misc/stats
+  # 等含多字节字符的文件上会触发 Rust panic（上游 bug，非本项目代码问题）。
+  # 待上游修复后启用；当前可用 `make format` 手动格式化。
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.7
     hooks:
-      - id: black
-        language_version: python3.13
-        args: [--line-length=120]
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
 
-  # Python 代码检查 - Flake8
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.1.1
-    hooks:
-      - id: flake8
-        args: [--max-line-length=120, --ignore=E501,W503]
-
-  # Python 导入排序 - isort
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        args: [--profile=black, --line-length=120]
-
-  # 类型检查 - mypy（可选）
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.11.1
-    hooks:
-      - id: mypy
-        additional_dependencies: [types-all]
-        args: [--ignore-missing-imports]
-        pass_filenames: false
-        # 只在特定目录运行
-        files: ^algorithms/
-
-  # 通用检查
+  # ---- 通用文件卫生检查 ----
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
-      # 删除尾随空格
       - id: trailing-whitespace
-      # 确保文件以换行符结尾
       - id: end-of-file-fixer
-      # 检查 YAML 语法
       - id: check-yaml
-      # 检查 JSON 语法
       - id: check-json
-      # 检查合并冲突标记
+      - id: check-toml
       - id: check-merge-conflict
-      # 检查大文件
       - id: check-added-large-files
         args: [--maxkb=1000]
-      # 检查私钥
       - id: detect-private-key
+      - id: mixed-line-ending
+        args: [--fix=lf]
 
-  # 本地钩子 - 烟雾测试
+  # ---- 本地钩子 ----
   - repo: local
     hooks:
-      - id: smoke-test
-        name: Run algorithm smoke tests
-        entry: python -m pytest tests/test_algorithms_smoke.py -x -q
+      # 推送前跑算法冒烟测试（提交时跑太慢，放 pre-push）
+      - id: pytest-smoke
+        name: 算法冒烟测试
+        entry: python -m pytest tests/test_algorithms_smoke.py -q
         language: system
         pass_filenames: false
         always_run: true
-        stages: [push]
+        stages: [pre-push]
 
-      # 检查 Python 语法
+      # 提交时检查 Python 语法
       - id: python-syntax-check
-        name: Check Python syntax
+        name: Python 语法检查
         entry: python -m py_compile
         language: system
         types: [python]

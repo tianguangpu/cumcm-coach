@@ -19,10 +19,13 @@ help:
 	@echo "  make pre-commit   安装 pre-commit hooks"
 	@echo ""
 
-# 安装依赖
+# 安装依赖（含开发工具：pytest / ruff / black / mypy / pre-commit）
 install:
-	pip install -r requirements.txt
-	pip install pytest pytest-cov black flake8 pre-commit matplotlib numpy
+	pip install -e ".[dev]"
+
+# 仅安装核心依赖
+install-core:
+	pip install -e .
 
 # 运行单元测试
 test:
@@ -37,15 +40,17 @@ test-cov:
 smoke:
 	python -m pytest tests/test_algorithms_smoke.py -v
 
-# 代码规范检查
+# 代码规范检查（配置见 pyproject.toml [tool.ruff]）
 lint:
-	flake8 algorithms/ scripts/ --max-line-length=120 --ignore=E501,W503
-	black --check algorithms/ scripts/
+	ruff check algorithms/ scripts/ utils/ tests/
+	black --check algorithms/ scripts/ utils/ tests/
 
 # 代码格式化
+# 注：ruff format 在 0.16.x 对部分含多字节字符的文件会触发 Rust panic
+# （上游 bug，非本项目代码问题），故格式化改用 black，import 排序仍由 ruff 负责
 format:
-	black algorithms/ scripts/ --line-length=120
-	isort algorithms/ scripts/ --profile=black
+	black algorithms/ scripts/ utils/ tests/
+	ruff check --fix algorithms/ scripts/ utils/ tests/
 
 # 基准测试
 benchmark:
