@@ -18,7 +18,7 @@ import json
 import math
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Optional
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -38,7 +38,7 @@ class SelfVerifier:
 
     def __init__(self, ptype: str = "B"):
         self.ptype = ptype.upper()
-        self.checks: List[Dict] = []
+        self.checks: list[dict] = []
 
     def add(self, name: str, ok: bool, detail: str):
         self.checks.append({
@@ -102,7 +102,7 @@ class SelfVerifier:
         self.add(f"权重归一化[{name}]", ok, f"Σw = {s:.6f} (≈1)")
 
     # ---- 报告输出 ----
-    def report(self) -> Dict:
+    def report(self) -> dict:
         fails = [c for c in self.checks if c["status"] == "FAIL"]
         return {
             "all_pass": len(fails) == 0,
@@ -123,7 +123,7 @@ class SelfVerifier:
         return "\n".join(lines)
 
 
-def verify_from_results(results_dir: str, ptype: str, bounds: Optional[Dict] = None) -> SelfVerifier:
+def verify_from_results(results_dir: str, ptype: str, bounds: Optional[dict] = None) -> SelfVerifier:
     """从 results/ 目录读取结果并自证（通用示例 + 按题型扩展）"""
     v = SelfVerifier(ptype)
     rd = Path(results_dir)
@@ -145,7 +145,7 @@ def verify_from_results(results_dir: str, ptype: str, bounds: Optional[Dict] = N
 
     # 按题型做专项检查（Agent 可扩展）
     if bounds:
-        for name, (lb, ub) in bounds.items():
+        for _name, (_lb, _ub) in bounds.items():
             # 从已扫到的数值里找对应字段；简化处理：单独检查已传值
             pass
     return v

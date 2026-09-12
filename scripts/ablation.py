@@ -18,7 +18,7 @@ import csv
 import json
 import time
 from pathlib import Path
-from typing import Callable, Dict, List, Tuple
+from typing import Callable
 
 
 # numpy延迟导入 — 未安装时基本功能(write_ablation/validate_ablation)仍可用
@@ -35,7 +35,7 @@ HEADER = [
 SEED = 42
 
 
-def write_ablation(rows: List[Dict], out: str = "results/ablation.csv") -> str:
+def write_ablation(rows: list[dict], out: str = "results/ablation.csv") -> str:
     """写入 ablation.csv，自动补齐缺字段。"""
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -47,7 +47,7 @@ def write_ablation(rows: List[Dict], out: str = "results/ablation.csv") -> str:
     return str(out)
 
 
-def validate_ablation(path: str, min_algorithms_per_q: int = 2) -> Tuple[bool, str]:
+def validate_ablation(path: str, min_algorithms_per_q: int = 2) -> tuple[bool, str]:
     """校验 ablation.csv:每个 q 至少 min_algorithms_per_q 个算法。"""
     p = Path(path)
     if not p.exists():
@@ -67,12 +67,12 @@ def validate_ablation(path: str, min_algorithms_per_q: int = 2) -> Tuple[bool, s
 
 def run_ablation(
     q_label: str,
-    algorithms: Dict[str, Callable],
+    algorithms: dict[str, Callable],
     objective_fn: Callable,
     n_runs: int = 30,
     max_iter: int = 1000,
     seed: int = SEED,
-) -> List[Dict]:
+) -> list[dict]:
     """
     自动运行多算法消融实验。
 
@@ -153,7 +153,7 @@ def run_ablation(
 def statistical_test(
     path: str = "results/ablation.csv",
     alpha: float = 0.05,
-) -> List[Dict]:
+) -> list[dict]:
     """
     对消融结果做统计显著性检验（配对t检验）。
 
@@ -278,7 +278,7 @@ def generate_latex_table(path: str = "results/ablation.csv") -> str:
     return "\n".join(lines)
 
 
-def generate_radar_chart_data(path: str = "results/ablation.csv") -> Dict[str, List]:
+def generate_radar_chart_data(path: str = "results/ablation.csv") -> dict[str, list]:
     """生成雷达图数据（供matplotlib使用）。"""
     import numpy as np
     p = Path(path)

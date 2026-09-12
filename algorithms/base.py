@@ -20,7 +20,7 @@ Usage:
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Optional
 
 import numpy as np
 
@@ -45,10 +45,10 @@ class SolverResult:
 
     x_opt: Any = None
     f_opt: float = float("inf")
-    history: Optional[List[float]] = None
+    history: Optional[list[float]] = None
     iterations: Optional[int] = None
     convergence: Optional[bool] = None
-    metadata: Optional[Dict[str, Any]] = None
+    metadata: Optional[dict[str, Any]] = None
     solver_name: Optional[str] = None
     solve_time: Optional[float] = None
 
@@ -57,7 +57,7 @@ class SolverResult:
         if self.metadata is None:
             self.metadata = {}
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """
         转换为字典格式。
 
@@ -119,10 +119,10 @@ class BaseSolver(ABC):
             **kwargs: 求解器参数
         """
         self.params = kwargs
-        self._history: List[float] = []
+        self._history: list[float] = []
 
     @abstractmethod
-    def solve(self, objective: Callable, bounds: List[Tuple[float, float]], **kwargs) -> SolverResult:
+    def solve(self, objective: Callable, bounds: list[tuple[float, float]], **kwargs) -> SolverResult:
         """
         求解优化问题。
 
@@ -153,7 +153,7 @@ class BaseSolver(ABC):
         """
         pass
 
-    def get_history(self) -> List[float]:
+    def get_history(self) -> list[float]:
         """
         获取收敛历史。
 
@@ -221,7 +221,7 @@ class PopulationBasedSolver(BaseSolver):
             raise ValueError(f"max_iter must be positive, got {self.max_iter}")
         return True
 
-    def _init_population(self, bounds: List[Tuple[float, float]]) -> np.ndarray:
+    def _init_population(self, bounds: list[tuple[float, float]]) -> np.ndarray:
         """
         初始化种群。
 
@@ -236,7 +236,7 @@ class PopulationBasedSolver(BaseSolver):
         upper = np.array([b[1] for b in bounds])
         return lower + np.random.rand(self.pop_size, self.dim) * (upper - lower)
 
-    def _clip_bounds(self, x: np.ndarray, bounds: List[Tuple[float, float]]) -> np.ndarray:
+    def _clip_bounds(self, x: np.ndarray, bounds: list[tuple[float, float]]) -> np.ndarray:
         """
         将解裁剪到边界内。
 

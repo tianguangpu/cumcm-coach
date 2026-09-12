@@ -26,7 +26,6 @@ ARIMA: 差分整合移动平均自回归模型
 - matplotlib（绘图，仅 plot() 需要）
 """
 
-from typing import Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -35,7 +34,7 @@ import numpy as np
 class ARIMA_Forecast:
     """ARIMA(p, d, q) 时间序列预测模型"""
 
-    def __init__(self, series, order: Tuple[int, int, int] = (1, 1, 1)):
+    def __init__(self, series, order: tuple[int, int, int] = (1, 1, 1)):
         """
         初始化
 

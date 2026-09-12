@@ -523,7 +523,7 @@ class AILogger:
                 "opening_repetition_ratio": round(repetition_ratio, 3),
             },
             "ai_phrases_found": list(set(ai_phrase_hits))[:10],
-            "ai_patterns_found": list(set(str(p) for p in ai_pattern_hits))[:5],
+            "ai_patterns_found": list({str(p) for p in ai_pattern_hits})[:5],
             "recommendations": [],
         }
 

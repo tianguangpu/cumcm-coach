@@ -21,7 +21,7 @@ Sensitivity: 灵敏度分析
     sa.plot_tornado('tornado.png')
 """
 
-from typing import Callable, Dict, Tuple
+from typing import Callable
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -32,9 +32,9 @@ class SensitivityAnalyzer:
 
     def __init__(
         self,
-        model_func: Callable[[Dict], float],
-        base_params: Dict,
-        perturbations: Tuple[float, ...] = (0.1, 0.2)
+        model_func: Callable[[dict], float],
+        base_params: dict,
+        perturbations: tuple[float, ...] = (0.1, 0.2)
     ):
         self.model_func = model_func
         self.base_params = dict(base_params)
@@ -42,11 +42,11 @@ class SensitivityAnalyzer:
         self.base_output = None
         self.results = {}
 
-    def _eval(self, params: Dict) -> float:
+    def _eval(self, params: dict) -> float:
         out = self.model_func(dict(params))
         return float(np.asarray(out).ravel()[0])
 
-    def analyze(self) -> Dict:
+    def analyze(self) -> dict:
         """执行灵敏度分析，返回 {参数名: {elasticity, grade, ...}}"""
         self.base_output = self._eval(self.base_params)
         self.results = {}
@@ -76,7 +76,7 @@ class SensitivityAnalyzer:
                 }
         return self.results
 
-    def elasticity_summary(self) -> Dict:
+    def elasticity_summary(self) -> dict:
         """每个参数取最大扰动档的弹性系数并分级"""
         summary = {}
         for name in self.base_params:

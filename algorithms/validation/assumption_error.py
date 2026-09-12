@@ -26,13 +26,12 @@ AssumptionError: 假设误差量化
     report  = checker.analyze()
     # report['summary'] 排序后的影响; report['judgement'] 全文按假设判断
 """
-from typing import Dict, List
 
 import numpy as np
 
 
 class AssumptionChecker:
-    def __init__(self, base_output: float, assumptions: List[Dict]):
+    def __init__(self, base_output: float, assumptions: list[dict]):
         """
         assumptions 每项:
           {"name": "轮作约束", "relax_func": lambda: <重算输出>,
@@ -43,7 +42,7 @@ class AssumptionChecker:
         self.assumptions = assumptions
         self.results = []
 
-    def _measure(self, a: Dict) -> Dict:
+    def _measure(self, a: dict) -> dict:
         """量化单条假设误差, 返回含 rel_change(相对变化率)。"""
         if "delta" in a:
             rel = float(a["delta"])
@@ -52,7 +51,7 @@ class AssumptionChecker:
             rel = (float(np.asarray(relaxed).ravel()[0]) - self.base) / self.base \
                 if abs(self.base) > 1e-10 else float(np.asarray(relaxed).ravel()[0])
         else:
-            raise ValueError("假设 %s 需提供 delta 或 relax_func" % a["name"])
+            raise ValueError("假设 {} 需提供 delta 或 relax_func".format(a["name"]))
         return {"name": a["name"],
                 "relaxed_name": a.get("relaxed_name", "(放松后)"),
                 "rel_change": float(rel),
@@ -60,7 +59,7 @@ class AssumptionChecker:
                 "grade": _grade(abs(float(rel)) * 100.0),
                 "judgement": _judge(a.get("relaxed_name", ""), rel)}
 
-    def analyze(self) -> Dict:
+    def analyze(self) -> dict:
         """对每条假设量化, 并按影响从大到小排序, 给出总风险。"""
         self.results = [self._measure(a) for a in self.assumptions]
         self.results.sort(key=lambda r: -r["impact_pct"])

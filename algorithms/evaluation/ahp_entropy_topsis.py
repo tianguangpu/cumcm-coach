@@ -19,7 +19,7 @@ AHP + 熵权 + TOPSIS 综合评价流程
     scores = ce.topsis()
 """
 
-from typing import List, Optional
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -31,9 +31,9 @@ class ComprehensiveEvaluation:
     def __init__(
         self,
         data: np.ndarray,
-        benefit_cols: List[int],
-        cost_cols: List[int],
-        col_names: Optional[List[str]] = None
+        benefit_cols: list[int],
+        cost_cols: list[int],
+        col_names: Optional[list[str]] = None
     ):
         """
         初始化
@@ -221,7 +221,7 @@ class ComprehensiveEvaluation:
         # 标准化原始数据用于雷达图
         normalized = self.normalize()
 
-        fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(projection='polar'))
+        fig, ax = plt.subplots(figsize=(8, 8), subplot_kw={'projection': 'polar'})
 
         angles = np.linspace(0, 2 * np.pi, self.n_features, endpoint=False).tolist()
         angles += angles[:1]

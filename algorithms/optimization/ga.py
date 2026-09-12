@@ -30,7 +30,7 @@ GA: 遗传算法
     result = solver.solve()
 """
 
-from typing import Callable, List, Optional, Tuple
+from typing import Callable, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -43,7 +43,7 @@ class GA:
         self,
         obj: Callable[[np.ndarray], float],
         dim: int,
-        bounds: List[Tuple[float, float]],
+        bounds: list[tuple[float, float]],
         constraints: Optional[Callable[[np.ndarray], bool]] = None,
         repair: Optional[Callable[[np.ndarray], np.ndarray]] = None,
         pop_size: int = 50,

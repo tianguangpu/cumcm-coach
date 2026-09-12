@@ -69,7 +69,7 @@ def solve_ivp_wrapper(f, y0, t_span, t_eval=None, method='RK45', rtol=1e-6,
     res = solve_ivp(f, tuple(t_span), y0a, t_eval=t_eval,
                     method=method, rtol=rtol, atol=atol, **kwargs)
     if not res.success:
-        raise RuntimeError("solve_ivp 求解失败: %s" % res.message)
+        raise RuntimeError(f"solve_ivp 求解失败: {res.message}")
     y = res.y[0] if scalar else res.y
     return res.t, y
 

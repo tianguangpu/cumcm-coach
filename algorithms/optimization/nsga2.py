@@ -11,19 +11,19 @@
 import math
 import random as _rng
 from collections import defaultdict
-from typing import Callable, List, Optional, Tuple
+from typing import Callable, Optional
 
 import numpy as np
 
 
-def _dominates(a: List[float], b: List[float]) -> bool:
+def _dominates(a: list[float], b: list[float]) -> bool:
     """a 是否支配 b (均最小化)。纯 Python, 避免 np.all C 层崩溃。"""
     le = all(ai <= bi for ai, bi in zip(a, b))
     lt = any(ai < bi for ai, bi in zip(a, b))
     return le and lt
 
 
-def _fast_non_dominated_sort(F: List[List[float]]):
+def _fast_non_dominated_sort(F: list[list[float]]):
     """F: List[List[float]] (pop, m) 目标矩阵(最小化)。返回 fronts: List[List[int]]"""
     pop = len(F)
     S = [[] for _ in range(pop)]      # 被 i 支配的解
@@ -54,7 +54,7 @@ def _fast_non_dominated_sort(F: List[List[float]]):
     return fronts
 
 
-def _crowding_distance(F: List[List[float]], front: List[int]) -> List[float]:
+def _crowding_distance(F: list[list[float]], front: list[int]) -> list[float]:
     """计算某 front 内每个解的拥挤度, 返回顺序与 front 一一对应。纯 Python。"""
     k = len(front)
     cd = [0.0] * k
@@ -76,7 +76,7 @@ def _crowding_distance(F: List[List[float]], front: List[int]) -> List[float]:
     return cd
 
 
-def _hypervolume(F: List[List[float]], ref: List[float]) -> float:
+def _hypervolume(F: list[list[float]], ref: list[float]) -> float:
     """2 维超体积 (目标最小化)。F: List[List[2]], ref: 参考点(最差角)。纯 Python。"""
     pts = sorted(F, key=lambda v: v[0])
     hv = 0.0
@@ -88,7 +88,7 @@ def _hypervolume(F: List[List[float]], ref: List[float]) -> float:
     return float(hv)
 
 
-def _spread(F: List[List[float]]) -> float:
+def _spread(F: list[list[float]]) -> float:
     """Deb 分布度 Δ (2 维近似)。越接近 0 分布越均匀。纯 Python。"""
     pts = sorted(F, key=lambda v: v[0])
     k = len(pts)
@@ -108,9 +108,9 @@ class NSGA2:
 
     def __init__(
         self,
-        objs: List[Callable[[np.ndarray], float]],
+        objs: list[Callable[[np.ndarray], float]],
         dim: int,
-        bounds: List[Tuple[float, float]],
+        bounds: list[tuple[float, float]],
         constraints: Optional[Callable[[np.ndarray], bool]] = None,
         repair: Optional[Callable[[np.ndarray], np.ndarray]] = None,
         pop_size: int = 60,
@@ -156,7 +156,7 @@ class NSGA2:
                 self.cd[idx] = cd_map[pos]
         self.history = []
 
-    def _eval(self, x: np.ndarray) -> List[float]:
+    def _eval(self, x: np.ndarray) -> list[float]:
         return [float(f(x)) for f in self.objs]
 
     def _bound(self, x: np.ndarray) -> np.ndarray:
@@ -281,14 +281,14 @@ class NSGA2:
                 if not self.repair(self.pop[i]).shape == self.pop[i].shape:
                     feasible_all = False
 
-        return dict(
-            x_opt=np.array(pareto_X[0]) if pareto_X else self.pop[0],
-            f_opt=min(self.F[i][0] for i in range(self.pop_size)),
-            pop=self.pop, F=self.F,
-            pareto_F=np.array(pareto_F), pareto_X=np.array(pareto_X),
-            n_pareto=len(pareto_F), hv=float(hv), spread=float(spread),
-            feasible=bool(feasible_all), history=self.history,
-        )
+        return {
+            "x_opt": np.array(pareto_X[0]) if pareto_X else self.pop[0],
+            "f_opt": min(self.F[i][0] for i in range(self.pop_size)),
+            "pop": self.pop, "F": self.F,
+            "pareto_F": np.array(pareto_F), "pareto_X": np.array(pareto_X),
+            "n_pareto": len(pareto_F), "hv": float(hv), "spread": float(spread),
+            "feasible": bool(feasible_all), "history": self.history,
+        }
 
 
 if __name__ == "__main__":

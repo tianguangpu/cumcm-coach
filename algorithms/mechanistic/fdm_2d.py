@@ -53,8 +53,8 @@ def fdm_2d_explicit(D, Lx, Ly, T, nx, ny, nt, f=None, u0=None, bc=0.0,
     r = rx + ry
     if r >= 0.5:
         raise ValueError(
-            "显式格式不稳定: r = Dx*dt/dx^2 + Dy*dt/dy^2 = %.4f >= 0.5 "
-            "(均匀网格需单方向 r<0.25)。请增大 nt 或减小 nx/ny。" % r)
+            f"显式格式不稳定: r = Dx*dt/dx^2 + Dy*dt/dy^2 = {r:.4f} >= 0.5 "
+            "(均匀网格需单方向 r<0.25)。请增大 nt 或减小 nx/ny。")
 
     X, Y = np.meshgrid(x, y, indexing='ij')  # 形状 (nx+1, ny+1)
 

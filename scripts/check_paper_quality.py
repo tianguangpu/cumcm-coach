@@ -13,7 +13,6 @@ import argparse
 import os
 import re
 from pathlib import Path
-from typing import Dict
 
 
 class PaperQualityChecker:
@@ -36,7 +35,7 @@ class PaperQualityChecker:
             return 'typst'
         return 'latex'
 
-    def check_all(self) -> Dict:
+    def check_all(self) -> dict:
         """执行所有检查"""
         print("=" * 60)
         print(f"论文质量自检（国一标准）— {self.engine.upper()} 引擎")
@@ -72,7 +71,7 @@ class PaperQualityChecker:
         else:
             return 'D（需改进）'
 
-    def check_abstract(self) -> Dict:
+    def check_abstract(self) -> dict:
         """检查摘要质量（支持 LaTeX + Typst）"""
         print("\n[1/6] 检查摘要质量...")
 
@@ -152,7 +151,7 @@ class PaperQualityChecker:
 
         return {'score': score, 'max_score': max_score, 'issues': issues}
 
-    def check_model_structure(self) -> Dict:
+    def check_model_structure(self) -> dict:
         """检查模型结构"""
         print("\n[2/6] 检查模型结构...")
 
@@ -199,7 +198,7 @@ class PaperQualityChecker:
 
         return {'score': score, 'max_score': max_score, 'issues': issues}
 
-    def check_formulas(self) -> Dict:
+    def check_formulas(self) -> dict:
         """检查公式规范（支持 LaTeX + Typst）"""
         print("\n[3/6] 检查公式规范...")
 
@@ -238,7 +237,7 @@ class PaperQualityChecker:
 
         return {'score': score, 'max_score': max_score, 'issues': issues}
 
-    def check_figures(self) -> Dict:
+    def check_figures(self) -> dict:
         """检查图表规范（支持 LaTeX + Typst）"""
         print("\n[4/6] 检查图表规范...")
 
@@ -281,7 +280,7 @@ class PaperQualityChecker:
 
         return {'score': score, 'max_score': max_score, 'issues': issues}
 
-    def check_verification(self) -> Dict:
+    def check_verification(self) -> dict:
         """检查四重检验"""
         print("\n[5/6] 检查四重检验...")
 
@@ -327,7 +326,7 @@ class PaperQualityChecker:
 
         return {'score': score, 'max_score': max_score, 'issues': issues}
 
-    def check_references(self) -> Dict:
+    def check_references(self) -> dict:
         """检查参考文献（支持 LaTeX + Typst）"""
         print("\n[6/6] 检查参考文献...")
 

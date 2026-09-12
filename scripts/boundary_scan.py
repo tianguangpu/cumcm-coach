@@ -11,7 +11,7 @@ boundary_scan.py — 边界检验 + 鲁棒性分析
 import argparse
 import sys
 from pathlib import Path
-from typing import Callable, Dict, List, Tuple
+from typing import Callable
 
 import numpy as np
 
@@ -21,10 +21,10 @@ if hasattr(sys.stdout, "reconfigure"):
 
 def sensitivity_scan(
     model_fn: Callable,
-    base_params: Dict[str, float],
-    param_ranges: Dict[str, Tuple[float, float]],
+    base_params: dict[str, float],
+    param_ranges: dict[str, tuple[float, float]],
     n_points: int = 20,
-) -> Dict[str, List]:
+) -> dict[str, list]:
     """
     自动扫描参数灵敏度，生成龙卷风图数据。
 
@@ -98,11 +98,11 @@ def _grade_elasticity(e: float) -> str:
 
 def monte_carlo_boundary(
     model_fn: Callable,
-    base_params: Dict[str, float],
-    noise_levels: List[float] = [0.01, 0.05, 0.10, 0.20],
+    base_params: dict[str, float],
+    noise_levels: list[float] = [0.01, 0.05, 0.10, 0.20],
     n_runs: int = 500,
     seed: int = 42,
-) -> Dict[str, Dict]:
+) -> dict[str, dict]:
     """
     蒙特卡洛边界检验：在不同噪声水平下测试模型鲁棒性。
 
@@ -161,12 +161,12 @@ def monte_carlo_boundary(
 
 def find_failure_boundary(
     model_fn: Callable,
-    base_params: Dict[str, float],
+    base_params: dict[str, float],
     param_name: str,
     direction: str = "up",
     max_factor: float = 5.0,
     n_steps: int = 50,
-) -> Dict:
+) -> dict:
     """
     寻找模型失效边界：逐步增大/减小参数直到模型失效。
 

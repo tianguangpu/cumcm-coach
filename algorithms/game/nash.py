@@ -25,9 +25,7 @@ def _profile_is_nash(A, B, pr, qc):
     maxr, maxc = er.max(), ec.max()
     if not np.all(pr[er < maxr - 1e-12] == 0):
         return False
-    if not np.all(qc[ec < maxc - 1e-12] == 0):
-        return False
-    return True
+    return np.all(qc[ec < maxc - 1e-12] == 0)
 
 
 def pure_nash(payoff_matrix):

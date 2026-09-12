@@ -27,7 +27,7 @@
 """
 
 import random
-from typing import Dict, List, Optional, Tuple
+from typing import Optional
 
 import numpy as np
 
@@ -39,9 +39,9 @@ class JobShopScheduler:
     """作业车间调度求解器"""
 
     def __init__(self,
-                 jobs: List[List[Tuple[int, int]]],
+                 jobs: list[list[tuple[int, int]]],
                  n_machines: Optional[int] = None,
-                 due_dates: Optional[List[int]] = None):
+                 due_dates: Optional[list[int]] = None):
         """
         初始化JSSP问题
 
@@ -65,7 +65,7 @@ class JobShopScheduler:
             self.job_operation_idx.append(list(range(idx, idx + len(job))))
             idx += len(job)
 
-    def _decode_chromosome(self, chromosome: List[int]) -> Dict:
+    def _decode_chromosome(self, chromosome: list[int]) -> dict:
         """
         解码染色体为调度方案
 
@@ -111,12 +111,12 @@ class JobShopScheduler:
             'job_available': job_available
         }
 
-    def _calculate_fitness(self, chromosome: List[int]) -> float:
+    def _calculate_fitness(self, chromosome: list[int]) -> float:
         """计算适应度（makespan）"""
         result = self._decode_chromosome(chromosome)
         return result['makespan']
 
-    def _generate_chromosome(self) -> List[int]:
+    def _generate_chromosome(self) -> list[int]:
         """生成随机染色体（基于工序编码）"""
         chromosome = []
         for job in range(self.n_jobs):
@@ -126,7 +126,7 @@ class JobShopScheduler:
 
     # ── 启发式规则 ────────────────────────────────────────────
 
-    def solve_spt(self) -> Dict:
+    def solve_spt(self) -> dict:
         """最短加工时间优先（SPT）"""
         # 按加工时间排序工序
         operations = []
@@ -145,7 +145,7 @@ class JobShopScheduler:
         result['method'] = 'SPT（最短加工时间）'
         return result
 
-    def solve_edd(self) -> Dict:
+    def solve_edd(self) -> dict:
         """最早交货期优先（EDD）"""
         if not self.due_dates:
             # 如果没有交货期，使用SPT
@@ -171,7 +171,7 @@ class JobShopScheduler:
                  pc: float = 0.8,
                  pm: float = 0.2,
                  elite_ratio: float = 0.1,
-                 verbose: bool = False) -> Dict:
+                 verbose: bool = False) -> dict:
         """
         遗传算法求解JSSP
 
@@ -244,7 +244,7 @@ class JobShopScheduler:
         result['iterations'] = max_gen
         return result
 
-    def _pox_crossover(self, parent1: List[int], parent2: List[int]) -> List[int]:
+    def _pox_crossover(self, parent1: list[int], parent2: list[int]) -> list[int]:
         """POX交叉（Precedence Operation Crossover）"""
         n = len(parent1)
 
@@ -278,7 +278,7 @@ class JobShopScheduler:
 
         return child
 
-    def _swap_mutation(self, chromosome: List[int]) -> List[int]:
+    def _swap_mutation(self, chromosome: list[int]) -> list[int]:
         """交换变异"""
         chrom = chromosome[:]
         i, j = random.sample(range(len(chrom)), 2)
@@ -290,7 +290,7 @@ class JobShopScheduler:
     def solve_nsga2(self,
                     pop_size: int = 100,
                     max_gen: int = 500,
-                    verbose: bool = False) -> Dict:
+                    verbose: bool = False) -> dict:
         """
         NSGA-II 多目标优化求解JSSP
 
@@ -398,7 +398,7 @@ class JobShopScheduler:
             'iterations': max_gen
         }
 
-    def _calculate_objectives(self, chromosome: List[int]) -> List[float]:
+    def _calculate_objectives(self, chromosome: list[int]) -> list[float]:
         """计算多目标值"""
         result = self._decode_chromosome(chromosome)
         makespan = result['makespan']
@@ -413,7 +413,7 @@ class JobShopScheduler:
 
         return [makespan, total_tardiness]
 
-    def _non_dominated_sort(self, objectives: List[List[float]]) -> List[List[int]]:
+    def _non_dominated_sort(self, objectives: list[list[float]]) -> list[list[int]]:
         """非支配排序"""
         n = len(objectives)
         domination_count = [0] * n
@@ -445,7 +445,7 @@ class JobShopScheduler:
 
         return [f for f in fronts if f]
 
-    def _dominates(self, obj1: List[float], obj2: List[float]) -> bool:
+    def _dominates(self, obj1: list[float], obj2: list[float]) -> bool:
         """判断obj1是否支配obj2"""
         better_in_any = False
         for a, b in zip(obj1, obj2):
@@ -455,8 +455,8 @@ class JobShopScheduler:
                 better_in_any = True
         return better_in_any
 
-    def _calculate_crowding(self, objectives: List[List[float]],
-                           fronts: List[List[int]]) -> Dict[int, float]:
+    def _calculate_crowding(self, objectives: list[list[float]],
+                           fronts: list[list[int]]) -> dict[int, float]:
         """计算拥挤度"""
         crowding = dict.fromkeys(range(len(objectives)), 0.0)
 
@@ -487,8 +487,8 @@ class JobShopScheduler:
 
         return crowding
 
-    def _calculate_crowding_single(self, objectives: List[List[float]],
-                                  indices: List[int]) -> Dict[int, float]:
+    def _calculate_crowding_single(self, objectives: list[list[float]],
+                                  indices: list[int]) -> dict[int, float]:
         """计算单个前沿的拥挤度"""
         crowding = dict.fromkeys(indices, 0.0)
 
@@ -518,7 +518,7 @@ class JobShopScheduler:
         return crowding
 
     def _tournament_select(self, population, objectives, fronts, crowding,
-                          tournament_size: int = 2) -> List[int]:
+                          tournament_size: int = 2) -> list[int]:
         """锦标赛选择"""
         candidates = random.sample(range(len(population)), tournament_size)
 
@@ -540,7 +540,7 @@ class FlexibleJobShopScheduler:
     """柔性作业车间调度求解器"""
 
     def __init__(self,
-                 jobs: List[List[List[Tuple[int, int]]]],
+                 jobs: list[list[list[tuple[int, int]]]],
                  n_machines: Optional[int] = None):
         """
         初始化FJSSP问题
@@ -558,7 +558,7 @@ class FlexibleJobShopScheduler:
         self.n_machines = n_machines or max(m for job in jobs for ops in job for m, _ in ops) + 1
 
     def solve_ga(self, pop_size: int = 100, max_gen: int = 500,
-                 verbose: bool = False) -> Dict:
+                 verbose: bool = False) -> dict:
         """遗传算法求解FJSSP（简化版）"""
 
         def decode(chromosome):

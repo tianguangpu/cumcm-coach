@@ -16,7 +16,7 @@ def clerc_constriction(c1=2.05, c2=2.05):
     经典 (2.05,2.05) 得 chi=0.7298, c1'=c2'=1.49618。"""
     phi = c1 + c2
     if phi < 4.0:
-        raise ValueError("Clerc 要求 c1+c2>=4, 得 phi=%.3f" % phi)
+        raise ValueError(f"Clerc 要求 c1+c2>=4, 得 phi={phi:.3f}")
     chi = 2.0 / abs(2.0 - phi - np.sqrt(phi * phi - 4.0 * phi))
     return chi, chi * c1, chi * c2
 
@@ -157,15 +157,15 @@ if __name__ == "__main__":
     def sphere(x): return float(np.sum(np.asarray(x, float) ** 2))
     print("Clerc:", clerc_constriction())
     r1 = pso_clerc(sphere, 2, (-5, 5), iters=300, seed=1)
-    print("Clerc-PSO sphere: %.3e" % r1["g_val"])
+    print("Clerc-PSO sphere: {:.3e}".format(r1["g_val"]))
     r2 = pso_tvac(sphere, 2, (-5, 5), iters=300, seed=1)
-    print("TVAC-PSO sphere: %.3e" % r2["g_val"])
+    print("TVAC-PSO sphere: {:.3e}".format(r2["g_val"]))
     fr = feasibility_rule()
     print("可行性规则:", fr["pairwise_better"]((0.1, 1.0), (0.2, 0.0)))
     ec = epsilon_constrained()
     print("eps(100):", round(float(ec["eps_curve"](100)), 4))
     b, v = pso_plus_local_search(r1["g_best"], r1["g_val"], sphere, 2, (-5, 5), seed=2)
-    print("PSO+LS: %.3e->%.3e" % (r1["g_val"], v))
+    print("PSO+LS: {:.3e}->{:.3e}".format(r1["g_val"], v))
     pop = np.random.default_rng(0).uniform(-5, 5, (30, 2))
     fit = np.array([sphere(p) for p in pop])
     print("GA+SA mut shape:", ga_sa_mutation(pop, fit).shape)

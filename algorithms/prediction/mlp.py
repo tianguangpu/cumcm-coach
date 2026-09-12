@@ -28,7 +28,7 @@ MLP: 多层感知机序列预测
 - matplotlib（绘图，仅 plot() 需要）
 """
 
-from typing import Optional, Tuple
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -41,7 +41,7 @@ class MLP_Forecast:
         self,
         series,
         window: int = 5,
-        hidden_layer_sizes: Tuple[int, ...] = (50,),
+        hidden_layer_sizes: tuple[int, ...] = (50,),
         max_iter: int = 1000,
         random_state: int = 42
     ):

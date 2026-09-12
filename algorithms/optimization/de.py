@@ -28,7 +28,7 @@ DE: 差分进化算法
     result = solver.solve()
 """
 
-from typing import Callable, List, Optional, Tuple
+from typing import Callable, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -41,7 +41,7 @@ class DE:
         self,
         obj: Callable[[np.ndarray], float],
         dim: int,
-        bounds: List[Tuple[float, float]],
+        bounds: list[tuple[float, float]],
         constraints: Optional[Callable[[np.ndarray], bool]] = None,
         pop_size: int = 50,
         max_gen: int = 200,

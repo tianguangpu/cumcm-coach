@@ -24,7 +24,7 @@ VRP/MTVRP 车辆路径问题求解器 v1.0
 """
 
 import random
-from typing import Dict, List, Optional, Tuple
+from typing import Optional
 
 import numpy as np
 
@@ -37,12 +37,12 @@ class VRP:
 
     def __init__(self,
                  distance_matrix: np.ndarray,
-                 demands: List[float],
+                 demands: list[float],
                  capacity: float,
                  n_vehicles: int,
                  depot: int = 0,
-                 time_windows: Optional[List[Tuple[float, float]]] = None,
-                 service_times: Optional[List[float]] = None):
+                 time_windows: Optional[list[tuple[float, float]]] = None,
+                 service_times: Optional[list[float]] = None):
         """
         初始化VRP问题
 
@@ -67,7 +67,7 @@ class VRP:
         # 客户节点（排除车场）
         self.customers = [i for i in range(self.n_nodes) if i != depot]
 
-    def _calculate_route_distance(self, route: List[int]) -> float:
+    def _calculate_route_distance(self, route: list[int]) -> float:
         """计算单条路径的总距离"""
         if not route:
             return 0
@@ -79,15 +79,15 @@ class VRP:
 
         return dist
 
-    def _calculate_route_load(self, route: List[int]) -> float:
+    def _calculate_route_load(self, route: list[int]) -> float:
         """计算单条路径的总载重"""
         return sum(self.demands[i] for i in route)
 
-    def _is_route_feasible(self, route: List[int]) -> bool:
+    def _is_route_feasible(self, route: list[int]) -> bool:
         """检查路径是否可行（容量约束）"""
         return self._calculate_route_load(route) <= self.capacity
 
-    def _split_routes(self, chromosome: List[int]) -> List[List[int]]:
+    def _split_routes(self, chromosome: list[int]) -> list[list[int]]:
         """将染色体分割为多条路径"""
         routes = []
         current_route = []
@@ -118,13 +118,13 @@ class VRP:
 
         return routes
 
-    def _total_distance(self, routes: List[List[int]]) -> float:
+    def _total_distance(self, routes: list[list[int]]) -> float:
         """计算所有路径的总距离"""
         return sum(self._calculate_route_distance(route) for route in routes)
 
     # ── 贪心 + 2-opt 启发式 ──────────────────────────────────
 
-    def solve_greedy_2opt(self) -> Dict:
+    def solve_greedy_2opt(self) -> dict:
         """贪心构造 + 2-opt 改进"""
         # 贪心构造：最近邻
         unvisited = set(self.customers)
@@ -171,7 +171,7 @@ class VRP:
             'n_vehicles_used': len(routes)
         }
 
-    def _2opt_improve(self, routes: List[List[int]]) -> List[List[int]]:
+    def _2opt_improve(self, routes: list[list[int]]) -> list[list[int]]:
         """2-opt 局部搜索改进"""
         improved_routes = []
 
@@ -218,7 +218,7 @@ class VRP:
                  pc: float = 0.8,
                  pm: float = 0.2,
                  elite_ratio: float = 0.1,
-                 verbose: bool = False) -> Dict:
+                 verbose: bool = False) -> dict:
         """
         遗传算法求解VRP
 
@@ -303,7 +303,7 @@ class VRP:
             'iterations': max_gen
         }
 
-    def _order_crossover(self, parent1: List[int], parent2: List[int]) -> List[int]:
+    def _order_crossover(self, parent1: list[int], parent2: list[int]) -> list[int]:
         """顺序交叉（OX）"""
         n = len(parent1)
         start, end = sorted(random.sample(range(n), 2))
@@ -320,7 +320,7 @@ class VRP:
 
         return child
 
-    def _swap_mutation(self, chromosome: List[int]) -> List[int]:
+    def _swap_mutation(self, chromosome: list[int]) -> list[int]:
         """交换变异"""
         chrom = chromosome[:]
         i, j = random.sample(range(len(chrom)), 2)
@@ -335,7 +335,7 @@ class VRP:
                   w: float = 0.7,
                   c1: float = 1.5,
                   c2: float = 1.5,
-                  verbose: bool = False) -> Dict:
+                  verbose: bool = False) -> dict:
         """
         粒子群算法求解VRP（基于排列的PSO）
 
@@ -441,8 +441,8 @@ class MTVRP:
 
     def __init__(self,
                  distance_matrix: np.ndarray,
-                 demands: List[float],
-                 vehicle_types: List[Dict],
+                 demands: list[float],
+                 vehicle_types: list[dict],
                  depot: int = 0):
         """
         初始化MTVRP问题
@@ -460,7 +460,7 @@ class MTVRP:
         self.n_nodes = len(demands)
         self.customers = [i for i in range(self.n_nodes) if i != depot]
 
-    def solve_greedy(self) -> Dict:
+    def solve_greedy(self) -> dict:
         """贪心求解多车型VRP"""
         unvisited = set(self.customers)
         routes = []
@@ -519,7 +519,7 @@ class MTVRP:
             'total_distance': sum(self._calculate_route_distance(r) for r in routes)
         }
 
-    def _calculate_route_distance(self, route: List[int]) -> float:
+    def _calculate_route_distance(self, route: list[int]) -> float:
         """计算单条路径的总距离"""
         if not route:
             return 0

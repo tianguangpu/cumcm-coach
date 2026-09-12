@@ -89,7 +89,7 @@ def extract_anchors_from_problem(problem_text: str) -> list:
     ]
 
     lines = problem_text.split("\n")
-    for i, line in enumerate(lines):
+    for _i, line in enumerate(lines):
         line = line.strip()
         if not line:
             continue
@@ -249,7 +249,7 @@ def verify_against_decision_log(anchors: list, decision_log_path: str) -> dict:
 
     # 检查符号一致性
     symbol_conventions = log.get("anchors", {}).get("symbol_conventions", {})
-    for symbol, meaning in symbol_conventions.items():
+    for _symbol, _meaning in symbol_conventions.items():
         # 这里可以扩展为更详细的符号检查
         pass
 

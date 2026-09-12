@@ -79,7 +79,7 @@ def query(method_name):
     if method_name in DE_QUICKREF:
         return DE_QUICKREF[method_name]
     raise ValueError(
-        "未知方法: %r。可选: %s" % (method_name, list(DE_QUICKREF.keys())))
+        f"未知方法: {method_name!r}。可选: {list(DE_QUICKREF.keys())}")
 
 
 if __name__ == "__main__":

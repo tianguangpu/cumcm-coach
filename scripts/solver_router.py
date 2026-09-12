@@ -74,7 +74,7 @@ def _solve_highs(objective, constraints, variables, sense):
     if any(integrality[i] == highspy.HighsVarType.kInteger for i in range(n)):
         h.changeColsIntegralityByRange(0, n-1, integrality)
     for cons in constraints:
-        row_indices = [var_names.index(name) for name in cons["coeffs"].keys()]
+        row_indices = [var_names.index(name) for name in cons["coeffs"]]
         row_values = list(cons["coeffs"].values())
         rhs = cons["rhs"]
         if cons["sense"] == "<=": h.addRow(-1e20, rhs, len(row_indices), row_indices, row_values)
@@ -120,7 +120,7 @@ def _solve_scipy(objective, constraints, variables, sense):
     bounds = [(variables[name].get("lowBound", 0), variables[name].get("upBound")) for name in var_names]
     result = linprog(c, A_ub=A_ub or None, b_ub=b_ub or None, A_eq=A_eq or None, b_eq=b_eq or None, bounds=bounds)
     obj_val = -result.fun if sense == "maximize" else result.fun
-    return {"status": "optimal" if result.success else "failed", "objective_value": obj_val, "variables": {name: val for name, val in zip(var_names, result.x)}, "solver_used": "scipy_linprog"}
+    return {"status": "optimal" if result.success else "failed", "objective_value": obj_val, "variables": dict(zip(var_names, result.x)), "solver_used": "scipy_linprog"}
 
 
 def available_solvers():

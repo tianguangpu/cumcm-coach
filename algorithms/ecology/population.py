@@ -143,6 +143,6 @@ if __name__ == "__main__":
     tv, x, y = lotka_volterra(0.7, 0.5, 0.3, 0.2, 10, 5, np.linspace(0, 50, 200))
     print("Lotka-Volterra OK, len(t)=%d, x_end=%.3f, y_end=%.3f" % (len(tv), x[-1], y[-1]))
     ts, S, I, R = SIR(0.3, 0.1, 990, 10, 0, np.linspace(0, 100, 200))
-    print("SIR OK, I_peak=%.1f, R_end=%.1f" % (I.max(), R[-1]))
+    print(f"SIR OK, I_peak={I.max():.1f}, R_end={R[-1]:.1f}")
     te, Ss, E, Ie, Rr = SEIR(0.3, 0.2, 0.1, 980, 10, 10, 0, np.linspace(0, 120, 240))
-    print("SEIR OK, E_peak=%.1f, I_peak=%.1f, total=%.1f" % (E.max(), Ie.max(), Ss[-1] + E[-1] + Ie[-1] + Rr[-1]))
+    print(f"SEIR OK, E_peak={E.max():.1f}, I_peak={Ie.max():.1f}, total={Ss[-1] + E[-1] + Ie[-1] + Rr[-1]:.1f}")

@@ -62,7 +62,7 @@ class BaselineModels:
             window = max(1, len(series))
 
         forecasts = []
-        for i in range(steps):
+        for _i in range(steps):
             if len(series) >= window:
                 pred = np.mean(series[-window:])
             else:
@@ -93,7 +93,7 @@ class BaselineModels:
         max_queue = 0
         total_wait = 0
 
-        for t, arr in enumerate(arrivals):
+        for _t, arr in enumerate(arrivals):
             queue = max(0, queue + arr - capacity)
             max_queue = max(max_queue, queue)
             total_wait += queue
@@ -245,9 +245,8 @@ class BaselineComparator:
 """
 
         for k, v in self.advanced_result.items():
-            if k not in ('method', 'description'):
-                if isinstance(v, float):
-                    report += f"| {k} | {v:.6f} |\n"
+            if k not in ('method', 'description') and isinstance(v, float):
+                report += f"| {k} | {v:.6f} |\n"
 
         report += f"""
 ## 三、比较结果

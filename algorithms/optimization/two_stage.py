@@ -21,7 +21,6 @@
 """
 
 import random
-from typing import Dict, List
 
 import numpy as np
 from scipy.cluster.hierarchy import fcluster, linkage
@@ -50,11 +49,11 @@ class TwoStageSolver:
 
     def solve(self,
               customers: np.ndarray,
-              demands: List[float],
+              demands: list[float],
               n_clusters: int,
               capacity: float = None,
               distance_matrix: np.ndarray = None,
-              verbose: bool = False) -> Dict:
+              verbose: bool = False) -> dict:
         """
         执行两阶段求解
 
@@ -104,10 +103,10 @@ class TwoStageSolver:
 
     def _stage1_clustering(self,
                           customers: np.ndarray,
-                          demands: List[float],
+                          demands: list[float],
                           n_clusters: int,
                           distance_matrix: np.ndarray,
-                          verbose: bool) -> Dict:
+                          verbose: bool) -> dict:
         """第一阶段：聚类/选址"""
         n_customers = len(customers)
 
@@ -126,9 +125,9 @@ class TwoStageSolver:
 
     def _kmeans_clustering(self,
                           customers: np.ndarray,
-                          demands: List[float],
+                          demands: list[float],
                           n_clusters: int,
-                          verbose: bool) -> Dict:
+                          verbose: bool) -> dict:
         """K-Means聚类"""
         from scipy.cluster.vq import kmeans2
 
@@ -157,9 +156,9 @@ class TwoStageSolver:
 
     def _hierarchical_clustering(self,
                                 customers: np.ndarray,
-                                demands: List[float],
+                                demands: list[float],
                                 n_clusters: int,
-                                verbose: bool) -> Dict:
+                                verbose: bool) -> dict:
         """层次聚类"""
         # 计算距离矩阵
         dist_matrix = cdist(customers, customers, metric='euclidean')
@@ -189,10 +188,10 @@ class TwoStageSolver:
 
     def _greedy_facility_location(self,
                                   customers: np.ndarray,
-                                  demands: List[float],
+                                  demands: list[float],
                                   n_facilities: int,
                                   distance_matrix: np.ndarray,
-                                  verbose: bool) -> Dict:
+                                  verbose: bool) -> dict:
         """贪心选址"""
         n_customers = len(customers)
 
@@ -248,10 +247,10 @@ class TwoStageSolver:
 
     def _stage2_optimization(self,
                             customers: np.ndarray,
-                            demands: List[float],
+                            demands: list[float],
                             distance_matrix: np.ndarray,
                             capacity: float,
-                            verbose: bool) -> Dict:
+                            verbose: bool) -> dict:
         """第二阶段：路径/调度优化"""
         clusters = self.stage1_result['clusters']
         n_clusters = len(clusters)
@@ -365,9 +364,9 @@ class FacilityLocationSolver:
 
     def __init__(self,
                  customer_locations: np.ndarray,
-                 customer_demands: List[float],
+                 customer_demands: list[float],
                  facility_candidates: np.ndarray,
-                 fixed_costs: List[float],
+                 fixed_costs: list[float],
                  transport_costs: np.ndarray = None):
         """
         初始化设施选址问题
@@ -393,7 +392,7 @@ class FacilityLocationSolver:
         else:
             self.transport_costs = transport_costs
 
-    def solve_greedy(self, max_facilities: int = None) -> Dict:
+    def solve_greedy(self, max_facilities: int = None) -> dict:
         """贪心选址"""
         if max_facilities is None:
             max_facilities = self.n_facilities
@@ -461,7 +460,7 @@ class FacilityLocationSolver:
             'n_facilities': len(selected)
         }
 
-    def solve_p_median(self, p: int = 3) -> Dict:
+    def solve_p_median(self, p: int = 3) -> dict:
         """P-中位数问题求解"""
         # 简化：枚举所有p个设施的组合（适合小规模问题）
         if self.n_facilities > 15:

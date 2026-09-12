@@ -364,7 +364,8 @@ class TestODESolver:
         from algorithms.mechanistic.ode_solver import euler
 
         # dy/dt = -y, y(0) = 1
-        f = lambda t, y: -y
+        def f(t, y):
+            return -y
         t = np.linspace(0, 1, 10)
         result = euler(f, 1.0, t)
 

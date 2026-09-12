@@ -271,7 +271,7 @@ class SHAPAnalyzer:
             "|------|------|----------------|",
         ]
 
-        for i, row in top5.iterrows():
+        for _i, row in top5.iterrows():
             lines.append(f"| {len(lines)-6} | {row['feature']} | {row['importance']:.4f} |")
 
         lines.extend([

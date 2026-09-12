@@ -12,7 +12,6 @@ Usage:
 import argparse
 import sys
 from pathlib import Path
-from typing import Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -36,7 +35,7 @@ COLORS = {
 }
 
 
-def generate_benchmark_data() -> Dict[str, Dict[str, float]]:
+def generate_benchmark_data() -> dict[str, dict[str, float]]:
     """
     生成基准测试数据（示例数据，实际应从测试结果读取）。
 
@@ -53,7 +52,7 @@ def generate_benchmark_data() -> Dict[str, Dict[str, float]]:
 
 
 def plot_radar_chart(
-    data: Dict[str, Dict[str, float]],
+    data: dict[str, dict[str, float]],
     output: str = "reports/benchmark_radar.png",
     figsize: tuple = (10, 8),
 ) -> None:
@@ -73,7 +72,7 @@ def plot_radar_chart(
     angles = np.linspace(0, 2 * np.pi, n_metrics, endpoint=False).tolist()
     angles += angles[:1]  # 闭合
 
-    fig, ax = plt.subplots(figsize=figsize, subplot_kw=dict(polar=True))
+    fig, ax = plt.subplots(figsize=figsize, subplot_kw={"polar": True})
 
     # 绘制每个算法
     color_list = list(COLORS.values())
@@ -104,7 +103,7 @@ def plot_radar_chart(
 
 
 def plot_bar_chart(
-    data: Dict[str, Dict[str, float]],
+    data: dict[str, dict[str, float]],
     output: str = "reports/benchmark_bar.png",
     figsize: tuple = (12, 6),
 ) -> None:
@@ -161,7 +160,7 @@ def plot_bar_chart(
 
 
 def plot_summary_table(
-    data: Dict[str, Dict[str, float]],
+    data: dict[str, dict[str, float]],
     output: str = "reports/benchmark_table.md",
 ) -> None:
     """

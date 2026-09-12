@@ -39,7 +39,7 @@ if hasattr(sys.stdout, 'reconfigure'):  # Win GBK console emoji/UTF-8 fix
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Optional
 
 
 class PaperChecker:
@@ -135,7 +135,7 @@ class PaperChecker:
     # ============================================================
     # 步骤 1:编译通过
     # ============================================================
-    def check_compilation(self) -> Tuple[bool, str]:
+    def check_compilation(self) -> tuple[bool, str]:
         """检查编译(LaTeX xelatex 两次 / Typst 单次)"""
         try:
             if self.is_latex:
@@ -164,7 +164,7 @@ class PaperChecker:
         except subprocess.TimeoutExpired:
             return False, "编译超时(>120s)"
 
-    def _extract_latex_errors(self, log: str) -> List[str]:
+    def _extract_latex_errors(self, log: str) -> list[str]:
         errors = []
         for line in log.split('\n'):
             if line.startswith('!') or 'Error' in line:
@@ -174,7 +174,7 @@ class PaperChecker:
     # ============================================================
     # 步骤 2:章节数量与顺序 [新增]
     # ============================================================
-    def check_chapter_structure(self) -> Tuple[bool, str]:
+    def check_chapter_structure(self) -> tuple[bool, str]:
         """检查 8 章 + 附录齐全,顺序正确"""
         text = self._read_all_paper_text()
 
@@ -212,7 +212,7 @@ class PaperChecker:
     # ============================================================
     # 步骤 3:图表与章节匹配 [新增]
     # ============================================================
-    def check_figure_refs(self) -> Tuple[bool, str]:
+    def check_figure_refs(self) -> tuple[bool, str]:
         """检查所有图表引用文件是否存在"""
         text = self._read_all_paper_text()
         missing = []
@@ -239,7 +239,7 @@ class PaperChecker:
     # ============================================================
     # 步骤 4:公式编号连续
     # ============================================================
-    def check_equation_numbering(self) -> Tuple[bool, str]:
+    def check_equation_numbering(self) -> tuple[bool, str]:
         """检查公式编号:被引用 + 无未标注公式(真正的'编号连续'靠 LaTeX 计数器保证)"""
         text = self._read_all_paper_text()
 
@@ -270,7 +270,7 @@ class PaperChecker:
     # ============================================================
     # 步骤 5:数值一致性 [新增]
     # ============================================================
-    def check_values(self, min_coverage: float = 0.7) -> Tuple[bool, str]:
+    def check_values(self, min_coverage: float = 0.7) -> tuple[bool, str]:
         """检查论文关键数值与 RESULTS_REPORT.md 一致(覆盖率 ≥70% 通过, 避免中间量误报)"""
         if not self.results_file or not self.results_file.exists():
             return True, "未提供 RESULTS_REPORT.md, 跳过数值一致性检查"
@@ -310,7 +310,7 @@ class PaperChecker:
     # ============================================================
     # 步骤 6:占位符与内部文件泄露检查 [新增]
     # ============================================================
-    def check_placeholders(self) -> Tuple[bool, str]:
+    def check_placeholders(self) -> tuple[bool, str]:
         """检查无占位符、无内部工作流术语泄露"""
         text = self._read_all_paper_text()
 
@@ -332,7 +332,7 @@ class PaperChecker:
     # ============================================================
     # 步骤 6b:页数合规检查 [新增]
     # ============================================================
-    def check_page_count(self, max_pages: int = 20) -> Tuple[bool, str]:
+    def check_page_count(self, max_pages: int = 20) -> tuple[bool, str]:
         """
         检查论文页数是否超过限制。
         国赛要求：正文（不含附录）不超过 20 页。
@@ -405,7 +405,7 @@ except ImportError:
     # ============================================================
     # 步骤 6c:AI 声明位置检查 [新增]
     # ============================================================
-    def check_ai_declaration(self) -> Tuple[bool, str]:
+    def check_ai_declaration(self) -> tuple[bool, str]:
         """检查论文中是否包含 AI 工具使用声明（参考文献之前）。"""
         text = self._read_all_paper_text()
 
@@ -441,7 +441,7 @@ except ImportError:
     # ============================================================
     def check_references(
         self, min_count: int = 10, min_recent_ratio: float = 0.4, min_foreign_ratio: float = 0.3
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         """检查参考文献:数量 + 近5年比例 + 外文比例"""
         text = self._read_all_paper_text()
         current_year = datetime.now().year
@@ -509,7 +509,7 @@ except ImportError:
     # ============================================================
     # 步骤 8a:图表数量
     # ============================================================
-    def check_figure_count(self, min_count: int = 12) -> Tuple[bool, str]:
+    def check_figure_count(self, min_count: int = 12) -> tuple[bool, str]:
         """检查图表数量(PNG 在 figures/png/, PDF 在兄弟目录 figures/pdf/)"""
         if not self.figures_dir.exists():
             return False, f"图表目录不存在: {self.figures_dir}"
@@ -526,7 +526,7 @@ except ImportError:
     # ============================================================
     # 步骤 8b:图表质量(占位,需调用 image-reader MCP)
     # ============================================================
-    def check_figure_quality(self) -> Tuple[bool, str]:
+    def check_figure_quality(self) -> tuple[bool, str]:
         """检查图表质量(程序化基础检查: 空白/过小; 缺字/遮挡需 Agent 用 image-reader 复核)"""
         if not self.figures_dir.exists():
             return False, f"图表目录不存在: {self.figures_dir}"
@@ -563,7 +563,7 @@ except ImportError:
     # ============================================================
     # 步骤 8c:图题自解释校验(禁"示意图",须含数值)
     # ============================================================
-    def check_figure_captions(self) -> Tuple[bool, str]:
+    def check_figure_captions(self) -> tuple[bool, str]:
         """检查图题:禁止'示意图/图示'等空泛词, 应含结论+关键数值"""
         text = self._read_all_paper_text()
 
@@ -593,7 +593,7 @@ except ImportError:
     # ============================================================
     # 步骤 9:PDF 视觉逐页检查 [新增]
     # ============================================================
-    def check_pdf_visual(self) -> Tuple[bool, str]:
+    def check_pdf_visual(self) -> tuple[bool, str]:
         """逐页导出 PNG, 检查空白/裁切/越界/乱码"""
         pdf_path = self.paper_path.with_suffix('.pdf')
         if not pdf_path.exists():
@@ -659,7 +659,7 @@ except ImportError:
     # ============================================================
     # PRO-1 新: 控制页合规检查
     # ============================================================
-    def check_control_page(self) -> Tuple[bool, str]:
+    def check_control_page(self) -> tuple[bool, str]:
         """检查控制页/承诺书/编号页 符合国赛规范 8 项合规要求"""
         text = self._read_paper()
         issues = []
@@ -688,10 +688,9 @@ except ImportError:
             issues.append("页边距未设置为国赛标准(上2.54/下2.54/左3.17/右3.17cm)")
 
         # (2) 正文字号: 五号 10.5pt
-        if self.is_latex:
-            if "\\zihao{5}" not in text and "10.5pt" not in text:
-                if "ctexart" not in text and "cumcm" not in text.lower():
-                    issues.append("正文字号未明确指定五号(10.5pt)")
+        if self.is_latex and "\\zihao{5}" not in text and "10.5pt" not in text:
+            if "ctexart" not in text and "cumcm" not in text.lower():
+                issues.append("正文字号未明确指定五号(10.5pt)")
 
         # (3) 行距: 20pt 固定值
         if self.is_latex:
@@ -774,7 +773,7 @@ except ImportError:
         min_journal_ratio: float = 0.3,
         min_doi_ratio: float = 0.7,
         max_web_ratio: float = 0.2,
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         """.bib 文件 8 维质量: 总数/近5年/外文/期刊/DOI/网页/作者/空标题"""
         current_year = datetime.now().year
         recent_cutoff = current_year - min_recent_years
@@ -923,7 +922,7 @@ except ImportError:
     # ============================================================
     # PRO-6 新: 评委 7 维评分自查(百分制估算)
     # ============================================================
-    def check_judge_scores(self) -> Tuple[bool, str]:
+    def check_judge_scores(self) -> tuple[bool, str]:
         """7 维度百分制估算(假设10 创新25 结果25 深度15 结构15 图表5 摘要5), >=80 通过"""
         text = self._read_all_paper_text()
         scores = {}
@@ -1029,7 +1028,7 @@ except ImportError:
     # ============================================================
     # PRO-8 新: 可复现性 - 固定随机种子
     # ============================================================
-    def check_seed_fixed(self) -> Tuple[bool, str]:
+    def check_seed_fixed(self) -> tuple[bool, str]:
         """扫描代码目录,验证 numpy/random/torch/random_state 都有固定 seed"""
         code_roots = []
         if self._code_dir_override:
@@ -1085,9 +1084,8 @@ except ImportError:
         }
         combined = "\n".join(p.read_text(encoding="utf-8", errors="ignore") for p in all_py)
         for name, imp in import_map.items():
-            if re.search(imp, combined):
-                if name not in [n for n, _ in used]:
-                    issues.append(name + " 已 import 但未调用固定种子")
+            if re.search(imp, combined) and name not in [n for n, _ in used]:
+                issues.append(name + " 已 import 但未调用固定种子")
         if missing_sklearn:
             issues.extend(missing_sklearn[:3])
 
@@ -1101,7 +1099,7 @@ except ImportError:
     # ============================================================
     # PRO-1 新: 占位符严格检查(控制页/交卷命名)
     # ============================================================
-    def check_placeholder_strict(self) -> Tuple[bool, str]:
+    def check_placeholder_strict(self) -> tuple[bool, str]:
         """严格模式: 控制页编号/队名/XXX 等交卷前必须替换的占位符"""
         text = self._read_all_paper_text()
         issues = []
@@ -1139,7 +1137,7 @@ except ImportError:
     # ============================================================
     # 中文字体(辅助检查,不计入门禁)
     # ============================================================
-    def check_chinese_font(self) -> Tuple[bool, str]:
+    def check_chinese_font(self) -> tuple[bool, str]:
         """检查中文字体设置"""
         text = self._read_paper()
         if self.is_latex:
@@ -1158,7 +1156,7 @@ except ImportError:
     # ============================================================
     def run_all_checks(
         self, min_figures: int = 12, min_refs: int = 10, level: int = 4
-    ) -> List[Tuple[str, bool, str]]:
+    ) -> list[tuple[str, bool, str]]:
         """运行门禁检查。level: 1=结构(L1) 2=+交叉验证(L2) 3/4=全部自动化项(+人工评审提示)。
 
         层级映射:

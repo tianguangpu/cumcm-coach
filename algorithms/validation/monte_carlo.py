@@ -26,7 +26,7 @@ MonteCarlo: 蒙特卡洛模拟
     mc.plot_distribution('mc.png')
 """
 
-from typing import Callable, Dict, Optional
+from typing import Callable, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -35,14 +35,14 @@ import numpy as np
 class MonteCarlo:
     """蒙特卡洛模拟器"""
 
-    def __init__(self, sim_func: Callable[[Dict], float], dist_params: Dict):
+    def __init__(self, sim_func: Callable[[dict], float], dist_params: dict):
         self.sim_func = sim_func
         self.dist_params = dist_params
         self.samples = None
         self._dist_types = {name: spec.get('dist', 'normal')
                             for name, spec in dist_params.items()}
 
-    def _sample_one(self) -> Dict:
+    def _sample_one(self) -> dict:
         """按分布定义采样一组参数"""
         params = {}
         for name, spec in self.dist_params.items():
@@ -75,7 +75,7 @@ class MonteCarlo:
         self.samples = np.array(out)
         return self.samples
 
-    def quantiles(self, qs: Optional[list] = None) -> Dict:
+    def quantiles(self, qs: Optional[list] = None) -> dict:
         """分位数分析: 默认 5/50/95 分位，另含 min/max。"""
         if self.samples is None:
             raise ValueError("请先调用 run()")
@@ -83,7 +83,7 @@ class MonteCarlo:
         return {('q%.0f' % (q * 100)): float(np.percentile(self.samples, q * 100))
                 for q in qs}
 
-    def convergence_diag(self, group=None) -> Dict:
+    def convergence_diag(self, group=None) -> dict:
         """收敛性诊断: 随样本量累积的均值与标准误(SE)是否趋于稳定。
 
         - 累积均值 mean_t 随 t 波动幅度越来越小 -> 收敛
@@ -97,7 +97,8 @@ class MonteCarlo:
         n = len(s)
         g = group or max(int(n / 20), 5)
         cum_mean = np.convolve(s, np.ones(g) / g, mode='valid')
-        se_t = lambda t: float(np.std(s[:t + 1], ddof=1) / np.sqrt(t + 1))
+        def se_t(t):
+            return float(np.std(s[:t + 1], ddof=1) / np.sqrt(t + 1))
         final = np.arange(g, n, g)  # 抽样检查的累积长度
         tail = cum_mean[-max(int(len(cum_mean) / 3), 1):]
         span = float(tail.max() - tail.min())
@@ -112,7 +113,7 @@ class MonteCarlo:
             'converged': bool(span / scale < 0.02),
         }
 
-    def statistics(self) -> Dict:
+    def statistics(self) -> dict:
         """输出统计量: 均值/标准差/CV/95%CI/分位数/分布标注/收敛诊断。"""
         if self.samples is None:
             raise ValueError("请先调用 run()")
@@ -138,20 +139,20 @@ class MonteCarlo:
         for name, kind in self._dist_types.items():
             spec = self.dist_params[name]
             if kind == 'normal':
-                parts[name] = 'N(%.4g, %.4g^2)' % (spec.get('mean', 0), spec.get('std', 1))
+                parts[name] = 'N({:.4g}, {:.4g}^2)'.format(spec.get('mean', 0), spec.get('std', 1))
             elif kind == 'uniform':
-                parts[name] = 'U[%.4g, %.4g]' % (spec.get('low', 0),
+                parts[name] = 'U[{:.4g}, {:.4g}]'.format(spec.get('low', 0),
                                                  spec.get('high', spec.get('max', 1)))
             elif kind == 'lognormal':
-                parts[name] = 'LogN(mu=%.4g, sigma=%.4g)' % (
+                parts[name] = 'LogN(mu={:.4g}, sigma={:.4g})'.format(
                     spec.get('mean', 1), spec.get('std', 0.3))
             elif kind == 'triangle':
-                parts[name] = 'Tri(%.4g, %.4g, %.4g)' % (
+                parts[name] = 'Tri({:.4g}, {:.4g}, {:.4g})'.format(
                     spec.get('low', 0), spec.get('mode', 0.5),
                     spec.get('high', spec.get('max', 1)))
             else:
                 parts[name] = kind
-        return '、'.join('%s~%s' % (k, v) for k, v in parts.items())
+        return '、'.join(f'{k}~{v}' for k, v in parts.items())
 
     def plot_distribution(self, save_path: Optional[str] = None):
         """直方图 + CDF"""
@@ -213,7 +214,7 @@ def demo():
     print(f"  95%CI = ({stats['ci_95'][0]:.4f}, {stats['ci_95'][1]:.4f})")
     print("  分位数:", {k: round(v, 4) for k, v in stats['quantiles'].items()})
     print("  收敛诊断:", stats['convergence']['converged'],
-          "stable_ratio=%.4f" % stats['convergence']['stable_ratio'])
+          "stable_ratio={:.4f}".format(stats['convergence']['stable_ratio']))
     print("  分布假设:", stats['dist_statement'])
 
     mc.plot_distribution('mc.png')

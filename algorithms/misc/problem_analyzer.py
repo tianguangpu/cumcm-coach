@@ -61,7 +61,7 @@ def _extract_sentences(text):
 def _find_context_terms(text):
     """判断农耕/制造/网络/经济领域背景(用于补充隐含约束)。"""
     matched = []
-    for domain, hints in DOMAIN_HINTS.items():
+    for domain, _hints in DOMAIN_HINTS.items():
         for kw in (["轮作", "种植", "地块", "作物"] if domain == "农业"
                    else ["排班", "班次", "产能", "工序"] if domain == "制造/排班"
                    else ["节点", "流量", "网络", "路径"] if domain == "网络/流"
@@ -114,8 +114,8 @@ def analyze_problem(text, title="", outdir=None, verbose=True):
     rep = {
         "title": title or "(未命名)",
         "ambiguity": _ambiguity_scan(text) or [{"note": "未检出明显模糊词, 仍需人工复核"}],
-        "constraints_explicit": list(set(body[4:] if body.startswith("X:") else body
-                                         for body in [x for x in _constraint_mining(text)[0]])) or [],
+        "constraints_explicit": list({body[4:] if body.startswith("X:") else body
+                                         for body in list(_constraint_mining(text)[0])}) or [],
         "constraints_implied": list(set(_constraint_mining(text)[1])),
         "background": _find_context_terms(text),
         "terminology": sorted({kw for kw in DOMAIN_LEXICON if kw in text}),
