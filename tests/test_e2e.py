@@ -19,8 +19,12 @@ if hasattr(sys.stdout, "reconfigure"):
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-def test_full_workflow():
-    """测试完整工作流程"""
+def run_full_workflow() -> bool:
+    """执行完整工作流程，返回是否成功。
+
+    供命令行调用（``python tests/test_e2e.py``）使用。
+    pytest 入口见文件末尾的 :func:`test_full_workflow`。
+    """
     print("=" * 60)
     print("v7 端到端验证 — 2025 C 题蔬菜定价补货")
     print("=" * 60)
@@ -177,10 +181,18 @@ def test_full_workflow():
         try:
             shutil.rmtree(work_dir)
             print(f"\n已清理临时目录: {work_dir}")
-        except:
+        except OSError:
             pass
 
 
+def test_full_workflow():
+    """pytest 入口：端到端流程必须成功，否则测试失败。
+
+    注意：不能直接在断言里调用返回 bool 的辅助函数——断言失败会被
+    内层 ``except Exception`` 捕获并转成 ``return False``，导致测试假绿。
+    """
+    assert run_full_workflow(), "端到端流程未通过（详见上方输出）"
+
+
 if __name__ == "__main__":
-    success = test_full_workflow()
-    sys.exit(0 if success else 1)
+    sys.exit(0 if run_full_workflow() else 1)

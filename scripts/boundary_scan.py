@@ -275,7 +275,7 @@ def main():
     a = p.parse_args()
 
     if a.check_robustness:
-        if not os.path.isfile(a.tex):
+        if not Path(a.tex).is_file():
             print(f"[err] 未找到 {a.tex}")
             return 1
         txt = open(a.tex, encoding="utf-8", errors="ignore").read()

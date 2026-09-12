@@ -348,7 +348,7 @@ class PaperChecker:
                     # 尝试用 PyPDF2 或简单正则读取 PDF 页数
                     import subprocess
                     result = subprocess.run(
-                        ["python", "-c", f"""
+                        ["python", "-c", rf"""
 import sys
 try:
     from PyPDF2 import PdfReader
@@ -841,7 +841,6 @@ except ImportError:
         paper_refs = (bibit_keys | cite_keys) - {"*"}
         missing_in_bib = sorted(paper_refs - bib_keys)
         if bib_keys and missing_in_bib:
-            issues.append("cite↔bib 对应缺失 " + ",".join(missing_in_bib))
             return False, ".bib 对应检查: 论文引用键未命中 .bib 条目 " + ",".join(missing_in_bib)
 
         counts = {"recent": 0, "foreign": 0, "journal": 0, "has_doi": 0,

@@ -236,7 +236,7 @@ def check_requirements_consistency(root: Path):
             src = py_file.read_text(encoding="utf-8-sig", errors="replace")
             matches = import_pattern.findall(src)
             imported_pkgs.update(m.lower() for m in matches)
-        except:
+        except (OSError, UnicodeDecodeError):
             pass
 
     # 标准库和本地模块（排除）
