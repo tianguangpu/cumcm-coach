@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from algorithms.game.nash import mixed_nash_2x2, pure_nash
 from algorithms.mechanistic.fdm_2d import fdm_2d_explicit
 from algorithms.mechanistic.fem_poisson import assemble_and_solve, rect_tri_mesh
 from algorithms.optimization.adaptive_hybrid import AdaptiveHybrid
@@ -29,6 +30,7 @@ from algorithms.stats.hypothesis import (
 )
 from algorithms.validation.assumption_error import AssumptionChecker
 from algorithms.validation.sensitivity import SensitivityAnalyzer
+from algorithms.validation.sobol_enhanced import sobol_analysis
 
 
 def _sphere(v):
@@ -72,7 +74,7 @@ class TestPSOVariantBounds:
 
     def test_reproducible_with_seed(self):
         """固定种子应可复现（复现性是国赛评审关注点）。"""
-        kw = dict(dim=2, bounds=[(-5, 5)], iters=40, swarms=20, seed=7)
+        kw = {"dim": 2, "bounds": [(-5, 5)], "iters": 40, "swarms": 20, "seed": 7}
         r1 = pso_clerc(_sphere, **kw)
         r2 = pso_clerc(_sphere, **kw)
         assert r1["g_val"] == pytest.approx(r2["g_val"])
@@ -317,3 +319,75 @@ class TestTAMForecast:
         """未拟合时应返回可读提示，而非抛异常。"""
         tam = TAM_Forecast()
         assert tam.summary() == "模型未拟合"
+
+
+# ---------------------------------------------------------------- 博弈论
+
+
+class TestNashEquilibria:
+    """pure_nash 按零和博弈处理：行玩家最大化收益，列玩家最小化之。"""
+
+    def test_no_pure_equilibrium_in_matching_pennies(self):
+        """匹配硬币不存在纯策略纳什均衡。"""
+        assert pure_nash([[1, -1], [-1, 1]]) == []
+
+    def test_finds_unique_pure_equilibrium(self):
+        """矩阵 A = [[3,0],[5,1]]：列玩家为压低行玩家收益会避开列 0
+        （行玩家在该列可得 5），故均衡落在 A[1,1]，行玩家收益为 1。"""
+        r = pure_nash([[3, 0], [5, 1]])
+
+        assert len(r) == 1
+        assert r[0]["row"] == 1 and r[0]["col"] == 1
+        assert r[0]["type"] == "pure"
+        assert r[0]["is_pure"] is True
+        assert r[0]["payoff_row"] == pytest.approx(1.0)
+        assert r[0]["payoff_col"] == pytest.approx(-1.0)
+
+    def test_pure_equilibrium_uses_degenerate_strategies(self):
+        r = pure_nash([[3, 0], [5, 1]])[0]
+        assert r["strategy_row"] == pytest.approx([0.0, 1.0])
+        assert r["strategy_col"] == pytest.approx([0.0, 1.0])
+
+    def test_mixed_equilibrium_is_fifty_fifty(self):
+        """匹配硬币的混合均衡为双方各 50%。"""
+        res = mixed_nash_2x2([[1, -1], [-1, 1]])
+        mixed = [x for x in res if x["type"] == "mixed"]
+
+        assert len(mixed) >= 1, "应存在混合策略均衡"
+        assert mixed[0]["strategy_row"] == pytest.approx([0.5, 0.5])
+        assert mixed[0]["strategy_col"] == pytest.approx([0.5, 0.5])
+
+
+# ---------------------------------------------------------------- Sobol 全局灵敏度
+
+
+class TestSobolSensitivity:
+    """SALib 未安装时自动降级到纯 numpy 实现，两条路径的接口须一致。"""
+
+    @staticmethod
+    def _model(x):
+        return float(x[0] ** 2 + 2.0 * x[1])
+
+    def _run(self, seed=1):
+        return sobol_analysis(
+            self._model, bounds=[[0, 1], [0, 1]], N=32, seed=seed, n_boot=10
+        )
+
+    def test_result_structure(self):
+        r = self._run()
+        for key in ("S1", "ST", "S1_conf", "ST_conf", "method", "n_eval"):
+            assert key in r, f"结果缺少 {key}"
+        assert len(r["S1"]) == 2, "两个输入变量应各得一个一阶敏感度指数"
+        assert len(r["ST"]) == 2, "两个输入变量应各得一个总效应指数"
+
+    def test_indices_within_plausible_range(self):
+        """敏感度指数理论值在 [0,1]（自助法置信区间可能略有溢出）。"""
+        r = self._run()
+        for s in r["ST"]:
+            assert -0.5 <= s <= 1.5, f"总效应指数明显异常: {s}"
+
+    def test_reproducible_with_fixed_seed(self):
+        r1 = self._run(seed=7)
+        r2 = self._run(seed=7)
+        assert r1["S1"] == pytest.approx(r2["S1"])
+        assert r1["ST"] == pytest.approx(r2["ST"])

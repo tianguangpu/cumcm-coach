@@ -126,9 +126,15 @@ class TestVRP:
 class TestJobShop:
     """车间调度测试"""
 
-    @pytest.mark.skip(reason="NSGA-II 求解器存在段错误，需修复")
     def test_basic_scheduling(self):
-        """JobShop 应返回可行调度"""
+        """JobShop 应返回可行调度。
+
+        注：本测试此前被 skip，理由记为"NSGA-II 求解器存在段错误"，
+        但它实际走的是 solve_ga，与 NSGA-II 无关；单独运行稳定
+        （3 工件 3 机器算例 makespan=13）。真正的段错误发生在同进程
+        连续实例化多个求解器时，见 tests/test_algorithms_smoke.py
+        中用隔离子进程跑求解器的处理方式。
+        """
         from algorithms.optimization.job_shop import JobShopScheduler
 
         jobs = [
