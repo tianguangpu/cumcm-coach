@@ -46,9 +46,7 @@ def run_mc_sim(solver="SA_PSO", problem="sphere", n=300, dim=10,
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=min(workers, n)) as ex:
         futs = {ex.submit(one_run, base_seed + i): base_seed + i for i in range(n)}
-        done = 0
-        for fut in as_completed(futs):
-            done += 1
+        for done, fut in enumerate(as_completed(futs), start=1):
             results.append(fut.result())
             if done % 100 == 0:
                 sys.stdout.write(f"  ... {done}/{n}\n"); sys.stdout.flush()

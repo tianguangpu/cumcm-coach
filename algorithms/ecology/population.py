@@ -141,7 +141,7 @@ def SEIR(beta, sigma, gamma, S0, E0, I0, R0, t):
 
 if __name__ == "__main__":
     tv, x, y = lotka_volterra(0.7, 0.5, 0.3, 0.2, 10, 5, np.linspace(0, 50, 200))
-    print("Lotka-Volterra OK, len(t)=%d, x_end=%.3f, y_end=%.3f" % (len(tv), x[-1], y[-1]))
+    print(f"Lotka-Volterra OK, len(t)={len(tv)}, x_end={x[-1]:.3f}, y_end={y[-1]:.3f}")
     ts, S, I, R = SIR(0.3, 0.1, 990, 10, 0, np.linspace(0, 100, 200))
     print(f"SIR OK, I_peak={I.max():.1f}, R_end={R[-1]:.1f}")
     te, Ss, E, Ie, Rr = SEIR(0.3, 0.2, 0.1, 980, 10, 10, 0, np.linspace(0, 120, 240))

@@ -108,7 +108,7 @@ class TwoStageSolver:
                           distance_matrix: np.ndarray,
                           verbose: bool) -> dict:
         """第一阶段：聚类/选址"""
-        n_customers = len(customers)
+        len(customers)
 
         if self.problem_type == 'facility_routing':
             # K-Means聚类
@@ -326,8 +326,8 @@ class TwoStageSolver:
                 if route:
                     dist = sub_dist[0][1]  # 车场到第一个客户
                     for i in range(len(route) - 1):
-                        orig_i = cluster_nodes.index(route[i])
-                        orig_j = cluster_nodes.index(route[i + 1])
+                        cluster_nodes.index(route[i])
+                        cluster_nodes.index(route[i + 1])
                         dist += distance_matrix[route[i]][route[i + 1]]
                     # 返回车场
                     last_node = cluster_nodes.index(route[-1])

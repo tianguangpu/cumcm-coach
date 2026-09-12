@@ -54,20 +54,19 @@ def check_paper(paper_dir: str, engine: str = "latex", results_file: str = None)
         heading_re = re.compile(r"\\section\{([^}]*)\}")
         image_re = re.compile(r"\\includegraphics\s*(?:\[[^\]]*\])?\s*\{([^}]+)\}")
         cite_re = re.compile(r"\\cite\w*\{[^}]+\}")
-        figure_blocks_re = re.compile(r"\\begin\{figure\}.*?\\end\{figure\}", re.S)
-        caption_re = re.compile(r"\\caption\{([^}]*)\}")
+        re.compile(r"\\begin\{figure\}.*?\\end\{figure\}", re.S)
+        re.compile(r"\\caption\{([^}]*)\}")
         include_re = re.compile(r"\\(?:input|include)\s*\{([^}]+)\}")
-        list_re = re.compile(r"\\begin\{(?:itemize|enumerate)\}")
+        re.compile(r"\\begin\{(?:itemize|enumerate)\}")
     else:
         main = paper / "main.typ"
         section_ext = "*.typ"
         heading_re = re.compile(r"(?m)^=\s+(.+)")
         image_re = re.compile(r'image\(\s*"([^"]+)"')
         cite_re = re.compile(r"@\w[\w:-]*|#cite\(")
-        figure_blocks_re = None
-        caption_re = re.compile(r"caption:\s*\[(.*?)\]", re.S)
+        re.compile(r"caption:\s*\[(.*?)\]", re.S)
         include_re = re.compile(r'#include\(\s*"([^"]+\.typ)"\s*\)')
-        list_re = re.compile(r"#(?:enum|list)\s*\(")
+        re.compile(r"#(?:enum|list)\s*\(")
 
     if not main.exists():
         fail(f"主文件不存在: {main}")

@@ -243,7 +243,7 @@ class NSGA2:
             by_front = defaultdict(list)
             for pos, rk in enumerate(self.rank):
                 by_front[rk].append(pos)
-            for rk, members in by_front.items():
+            for members in by_front.values():
                 cd_map = _crowding_distance(self.F, members)
                 for pos, mbr in enumerate(members):
                     self.cd[mbr] = cd_map[pos]
@@ -278,7 +278,7 @@ class NSGA2:
                     feasible_all = False
         elif self.repair is not None:
             for i in pf_idx:
-                if not self.repair(self.pop[i]).shape == self.pop[i].shape:
+                if self.repair(self.pop[i]).shape != self.pop[i].shape:
                     feasible_all = False
 
         return {

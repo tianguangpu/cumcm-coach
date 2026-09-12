@@ -629,7 +629,7 @@ class FlexibleJobShopScheduler:
             new_pop = [population[min_idx]]  # 精英保留
             while len(new_pop) < pop_size:
                 p1 = population[random.randint(0, pop_size - 1)]
-                p2 = population[random.randint(0, pop_size - 1)]
+                population[random.randint(0, pop_size - 1)]
                 # 简单交叉
                 child = (p1[0][:], p1[1][:])
                 new_pop.append(child)

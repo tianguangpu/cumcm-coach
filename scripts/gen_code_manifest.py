@@ -74,7 +74,7 @@ def extract_text(path: Path) -> dict:
         s = line.strip()
         if s and not s.startswith("#!") and not s.startswith("---"):
             # 去掉 markdown 标题符号 / 注释符号
-            summary = s.lstrip("#%// ").strip()[:80]
+            summary = s.lstrip("#%/ ").strip()[:80]
             break
     return {"lines": n_lines, "summary": summary, "symbols": []}
 

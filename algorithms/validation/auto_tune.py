@@ -25,12 +25,10 @@ except ImportError:
     HAS_MPL = False
 
 try:
-    from sklearn.metrics import make_scorer, mean_absolute_error, mean_squared_error, r2_score
     from sklearn.model_selection import (
         GridSearchCV,
         KFold,
         RandomizedSearchCV,
-        StratifiedKFold,
         TimeSeriesSplit,
         cross_val_score,
     )
@@ -304,7 +302,7 @@ class AutoTuner:
 
         # 重新执行交叉验证获取各折分数
         from sklearn.model_selection import KFold
-        cv = KFold(n_splits=5, shuffle=True, random_state=42)
+        KFold(n_splits=5, shuffle=True, random_state=42)
 
         # 需要 X, y — 这里用 cv_results 的数据
         # 简化:用 train/test score 的分布

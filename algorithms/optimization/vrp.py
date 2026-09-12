@@ -233,7 +233,7 @@ class VRP:
         Returns:
             包含routes和total_distance的字典
         """
-        n_customers = len(self.customers)
+        len(self.customers)
 
         # 初始化种群
         population = []

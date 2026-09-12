@@ -196,9 +196,9 @@ class ComprehensiveEvaluation:
         x = np.arange(self.n_features)
         width = 0.25
 
-        bars1 = ax.bar(x - width, self.weights_ahp, width, label='AHP权重', color='#2166AC')
-        bars2 = ax.bar(x, self.weights_entropy, width, label='熵权重', color='#D6604D')
-        bars3 = ax.bar(x + width, self.weights_combined, width, label='组合权重', color='#4DAF4A')
+        ax.bar(x - width, self.weights_ahp, width, label='AHP权重', color='#2166AC')
+        ax.bar(x, self.weights_entropy, width, label='熵权重', color='#D6604D')
+        ax.bar(x + width, self.weights_combined, width, label='组合权重', color='#4DAF4A')
 
         ax.set_xlabel('指标', fontsize=12)
         ax.set_ylabel('权重', fontsize=12)

@@ -478,7 +478,7 @@ def main():
     print(f"  结论:   {'[OK] 通过' if result['passed'] else '[FAIL] 未通过'}")
 
     # 生成报告
-    report = comparator.generate_report(args.output)
+    comparator.generate_report(args.output)
     print()
     print(f"报告已保存: {args.output}")
 

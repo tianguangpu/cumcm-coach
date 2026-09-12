@@ -8,19 +8,19 @@ import numpy as np
 SOLVERS = {}
 
 try:
-    import highspy
+    import highspy  # noqa: F401  # 可用性探测：导入成功即登记为可选求解器
     SOLVERS["highs"] = {"name": "HiGHS"}
 except ImportError:
     pass
 
 try:
-    import pulp
+    import pulp  # noqa: F401  # 可用性探测：导入成功即登记为可选求解器
     SOLVERS["pulp"] = {"name": "PuLP"}
 except ImportError:
     pass
 
 try:
-    from scipy.optimize import linprog, minimize
+    from scipy.optimize import linprog, minimize  # noqa: F401  # 可用性探测：导入成功即登记
     SOLVERS["scipy"] = {"name": "SciPy"}
 except ImportError:
     pass

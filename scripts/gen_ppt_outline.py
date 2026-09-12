@@ -69,7 +69,7 @@ def extract_paper_info(tex_path: str) -> dict:
 
     # 提取参考文献数量
     bibs = re.findall(r"\\bibitem\{", txt)
-    bib_file = re.search(r"\\bibliography\{([^}]+)\}", txt)
+    re.search(r"\\bibliography\{([^}]+)\}", txt)
     info["ref_count"] = len(bibs)
 
     return info
@@ -102,7 +102,7 @@ def extract_results(results_dir: str) -> dict:
 def generate_markdown(info: dict, results: dict, output_path: str, ptype: str = "") -> str:
     """生成Markdown格式的PPT大纲。"""
     title = info.get("title", "数学建模竞赛答辩")
-    abstract = info.get("abstract", "")
+    info.get("abstract", "")
     sections = info.get("sections", [])
     fig_count = info.get("figure_count", 0)
     eq_count = info.get("equation_count", 0)
@@ -224,7 +224,6 @@ def generate_pptx(info: dict, results: dict, output_path: str):
     """生成PPTX格式（需要python-pptx）。"""
     try:
         from pptx import Presentation
-        from pptx.dml.color import RGBColor
         from pptx.util import Inches, Pt
     except ImportError:
         print("[PPT] python-pptx 未安装，请运行: pip install python-pptx")
@@ -235,7 +234,7 @@ def generate_pptx(info: dict, results: dict, output_path: str):
     prs.slide_width = Inches(13.33)
     prs.slide_height = Inches(7.5)
 
-    title = info.get("title", "数学建模竞赛答辩")
+    info.get("title", "数学建模竞赛答辩")
 
     for page in PPT_STRUCTURE:
         slide = prs.slides.add_slide(prs.slide_layouts[1])  # 标题+内容布局

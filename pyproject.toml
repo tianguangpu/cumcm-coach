@@ -114,9 +114,20 @@ target-version = "py39"
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
 ignore = [
-    "E501",   # 行长由 formatter 控制
-    "B008",   # 函数默认参数中调用函数（argparse 等常见用法）
+    "E501",    # 行长由 formatter 控制
+    "B008",    # 函数默认参数中调用函数（argparse 等常见用法）
     "SIM108",  # 三元表达式非强制
+    # ---- 以下为项目既定风格，经逐项评估后保留 ----
+    # 每项都写明理由，避免后来者误以为是遗漏
+    "E741",    # 歧义变量名：SIR/SEIR 模型中 I（感染者）是数学标准符号，
+               # 改为 infected 会破坏与流行病学文献的符号一致性
+    "E701",    # 复合语句单行：约束分支 `if sense == "<=": A_ub.append(row)`
+               # 的紧凑写法在数学建模代码中可读性更好
+    "E702",    # 同上（分号形式）
+    "SIM102",  # 嵌套 if：排版检查中「文档类型判断」与「具体规则判断」
+               # 分两层比合并成长条件更易读
+    "SIM115",  # 文件句柄未用 with：部分场景句柄需跨函数生命周期持有
+    "B028",    # warnings.warn 缺 stacklevel：模块内警告，调用栈非关注点
 ]
 
 [tool.ruff.lint.per-file-ignores]

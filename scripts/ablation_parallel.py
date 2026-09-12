@@ -70,9 +70,7 @@ def run_ablation_parallel(algorithms=None, problems=None, n_runs=N_RUNS,
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=n_workers) as ex:
         futs = {ex.submit(one_run, p, a, s): (p, a, s) for (p, a, s) in jobs}
-        done = 0
-        for fut in as_completed(futs):
-            done += 1
+        for done, fut in enumerate(as_completed(futs), start=1):
             try:
                 results.append(fut.result())
             except Exception as e:  # noqa: BLE001

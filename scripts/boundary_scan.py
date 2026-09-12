@@ -99,7 +99,7 @@ def _grade_elasticity(e: float) -> str:
 def monte_carlo_boundary(
     model_fn: Callable,
     base_params: dict[str, float],
-    noise_levels: list[float] = [0.01, 0.05, 0.10, 0.20],
+    noise_levels: list[float] = None,
     n_runs: int = 500,
     seed: int = 42,
 ) -> dict[str, dict]:
@@ -116,6 +116,8 @@ def monte_carlo_boundary(
     Returns:
         各噪声水平下的模型表现
     """
+    if noise_levels is None:
+        noise_levels = [0.01, 0.05, 0.1, 0.2]
     np.random.seed(seed)
     base_result = model_fn(base_params)
     results = {"base_value": base_result, "noise_levels": {}}

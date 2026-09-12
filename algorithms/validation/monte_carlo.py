@@ -99,7 +99,7 @@ class MonteCarlo:
         cum_mean = np.convolve(s, np.ones(g) / g, mode='valid')
         def se_t(t):
             return float(np.std(s[:t + 1], ddof=1) / np.sqrt(t + 1))
-        final = np.arange(g, n, g)  # 抽样检查的累积长度
+        np.arange(g, n, g)  # 抽样检查的累积长度
         tail = cum_mean[-max(int(len(cum_mean) / 3), 1):]
         span = float(tail.max() - tail.min())
         scale = float(abs(np.mean(s))) if abs(np.mean(s)) > 1e-10 else 1.0
@@ -123,7 +123,6 @@ class MonteCarlo:
         cv = std / abs(mean) if abs(mean) > 1e-10 else float('nan')
         ci_lo = float(np.percentile(s, 2.5))
         ci_hi = float(np.percentile(s, 97.5))
-        st = self.statistics  # placeholder (unused)
         return {
             'mean': mean, 'std': std, 'cv': cv,
             'ci_95': (ci_lo, ci_hi), 'n': len(s),

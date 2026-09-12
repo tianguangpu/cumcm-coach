@@ -58,10 +58,6 @@ def extract_anchors_from_problem(problem_text: str) -> list:
     ]
 
     # 变量关键词
-    variable_patterns = [
-        r"(?:决策变量|变量|参数|未知量)",
-        r"(?:设|令|定义).*?(?:为|是|=)",
-    ]
 
     # 假设关键词
     assumption_patterns = [
@@ -329,7 +325,7 @@ def main():
     log_check = verify_against_decision_log(anchors, args.state)
 
     # 生成报告
-    report = generate_report(result, log_check, args.output)
+    generate_report(result, log_check, args.output)
     print(f"[OK] 报告已生成: {args.output}")
     print(f"[SCORE] 语义锚点得分: {result.score:.1f}/100")
 

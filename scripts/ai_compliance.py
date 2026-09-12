@@ -45,6 +45,7 @@ ai_compliance.py — 国赛 AI 工具使用合规模块 (v2.0)
 """
 
 import argparse
+import contextlib
 import json
 import re
 import sys
@@ -320,7 +321,7 @@ class AILogger:
     def generate_compliance_package(self, used_ai: bool = True) -> dict:
         """一键生成全部合规材料，返回清单。"""
         self.get_summary()
-        declaration = self.generate_declaration(used_ai=used_ai)
+        self.generate_declaration(used_ai=used_ai)
         support_tex = self.generate_support_pdf()
 
         # 真实检测: AI 声明是否已插入论文、支撑 PDF 是否已编译
@@ -423,10 +424,8 @@ class AILogger:
         sections_dir = paper.parent / "sections"
         if sections_dir.exists():
             for f in sorted(sections_dir.glob("*.tex")):
-                try:
+                with contextlib.suppress(UnicodeDecodeError):
                     text += "\n" + f.read_text(encoding="utf-8")
-                except UnicodeDecodeError:
-                    pass
 
         # 去掉 LaTeX 命令和注释
         clean_text = re.sub(r'%.*$', '', text, flags=re.MULTILINE)
