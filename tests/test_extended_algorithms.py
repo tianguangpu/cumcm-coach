@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from algorithms.evaluation.ahp_entropy_topsis import ComprehensiveEvaluation
 from algorithms.game.nash import mixed_nash_2x2, pure_nash
 from algorithms.mechanistic.fdm_2d import fdm_2d_explicit
 from algorithms.mechanistic.fem_poisson import assemble_and_solve, rect_tri_mesh
@@ -81,6 +82,67 @@ class TestPSOVariantBounds:
         r1 = pso_clerc(_sphere, **kw)
         r2 = pso_clerc(_sphere, **kw)
         assert r1["g_val"] == pytest.approx(r2["g_val"])
+
+
+# ---------------------------------------------------------------- 综合评价
+
+
+class TestComprehensiveEvaluation:
+    """回归保护：topsis() 的权重选取。
+
+    此前 ``topsis()`` 直接使用 ``self.weights_combined``，而该字段仅在
+    ``combine_weights()`` 中赋值。用户若只调用 ``run_entropy()`` 就调用
+    ``topsis()``，会抛::
+
+        TypeError: unsupported operand type(s) for *: 'float' and 'NoneType'
+
+    而这恰是 C 题最常见的调用顺序（先客观赋权，再看排序）。
+    """
+
+    DATA = [[7, 9, 9], [8, 6, 8], [9, 4, 7], [6, 8, 6]]
+
+    def _make(self):
+        return ComprehensiveEvaluation(self.DATA, benefit_cols=[0, 1, 2], cost_cols=[])
+
+    def test_topsis_after_entropy_only(self):
+        """只调用 run_entropy() 后 topsis() 应可用（回退到熵权）。"""
+        ev = self._make()
+        ev.run_entropy()
+        scores = np.asarray(ev.topsis(), dtype=float)
+
+        assert len(scores) == 4
+        assert np.all((scores >= 0) & (scores <= 1)), "贴近度应落在 [0,1]"
+
+    def test_topsis_without_any_weights(self):
+        """未计算任何权重时应自动补算，而不是抛 TypeError。"""
+        ev = self._make()
+        scores = np.asarray(ev.topsis(), dtype=float)
+        assert len(scores) == 4
+
+    def test_topsis_after_ahp_only(self):
+        ev = self._make()
+        ev.run_ahp(np.array([[1.0, 2.0, 3.0], [0.5, 1.0, 2.0], [1 / 3, 0.5, 1.0]]))
+        scores = np.asarray(ev.topsis(), dtype=float)
+        assert len(scores) == 4
+
+    def test_topsis_after_full_pipeline(self):
+        ev = self._make()
+        ev.run_entropy()
+        ev.run_ahp(np.array([[1.0, 2.0, 3.0], [0.5, 1.0, 2.0], [1 / 3, 0.5, 1.0]]))
+        ev.combine_weights(0.5)
+        scores = np.asarray(ev.topsis(), dtype=float)
+        assert len(scores) == 4
+
+    def test_topsis_accepts_explicit_weights(self):
+        ev = self._make()
+        scores = np.asarray(ev.topsis(weights=np.array([1 / 3, 1 / 3, 1 / 3])), dtype=float)
+        assert len(scores) == 4
+
+    def test_entropy_weights_sum_to_one(self):
+        ev = self._make()
+        w = np.asarray(ev.run_entropy(), dtype=float)
+        assert w.sum() == pytest.approx(1.0)
+        assert np.all(w > 0)
 
 
 # ---------------------------------------------------------------- bounds 归一化

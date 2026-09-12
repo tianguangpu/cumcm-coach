@@ -25,7 +25,7 @@
   灵敏度分析、假设误差量化、TAM 时序预测、纳什均衡、Sobol 全局灵敏度
 
 ### Fixed
-修复 9 处缺陷，其中 3 处会直接导致运行时崩溃：
+修复 11 处缺陷，其中 4 处会导致运行时崩溃或核心功能不可用：
 - `auto_check.py` check_bib_quality 在 `issues` 未定义时调用 `append`，
   且该分支仅在"检查不通过"时触发——失败场景反而崩溃，本该报错的
   路径变成程序挂掉
@@ -35,6 +35,13 @@
 - `pso_variants.py` pso_clerc / pso_tvac 把 `lo`/`hi` 强制转为标量，
   传入逐维边界 `[[lo1,hi1],[lo2,hi2]]` 时抛 ValueError，导致
   "为不同量纲变量设置不同取值范围"无法实现
+- `ahp_entropy_topsis.py` `topsis()` 直接使用 `weights_combined`，
+  而该字段仅在 `combine_weights()` 中赋值；只调用 `run_entropy()`
+  就调用 `topsis()` 会抛 TypeError——而这正是 C 题最常见的调用顺序。
+  现按「组合权重 → 熵权 → AHP → 自动计算熵权」回退，并支持显式传入权重
+- `ga.py` / `de.py` 在 `__init__` 中按维度索引 `bounds[j]`，传入
+  统一边界 `[(-5, 5)]`（dim > 1）会抛 IndexError，而 `pso_clerc`
+  一直支持该写法——国赛 B 题做算法对比时，同一份参数切换算法即崩溃
 - `fdm_2d.py` `u0` 传常量初值函数（返回标量）时得到 0 维数组，
   在边界赋值处索引崩溃
 - `gen_code_manifest.py` `lstrip` 使用多字符参数（按字符集删除而非
@@ -56,10 +63,10 @@
 ### Metrics
 | 指标 | 改进前 | 改进后 |
 |------|--------|--------|
-| 测试 | 47 passed / 1 skipped | **89 passed / 0 skipped** |
+| 测试 | 47 passed / 1 skipped | **101 passed / 0 skipped** |
 | 覆盖率 | 32.9% | **46.5%** |
 | ruff 问题 | 626 | **0** |
-| 运行时缺陷 | 9 处 | 0 |
+| 运行时缺陷 | 11 处 | 0 |
 
 ---
 

@@ -9,7 +9,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-89%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-101%20passed-brightgreen.svg)](tests/)
 [![Algorithms](https://img.shields.io/badge/algorithms-36%20modules-informational.svg)](algorithms/)
 [![CUMCM](https://img.shields.io/badge/CUMCM-国一冲刺-gold.svg)](#)
 
@@ -199,6 +199,9 @@ cumcm-coach/
 ---
 
 ## 使用示例
+
+> 四个可直接运行的完整示例见 [`examples/`](examples/)：
+> 优化算法对比（B 题）、综合评价（C 题）、时序预测（D 题）、四重检验（通用）。
 
 ### 示例 1：优化算法求解
 

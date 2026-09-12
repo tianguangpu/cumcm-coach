@@ -159,9 +159,14 @@ class ComprehensiveEvaluation:
 
         return self.weights_combined
 
-    def topsis(self) -> np.ndarray:
+    def topsis(self, weights: Optional[np.ndarray] = None) -> np.ndarray:
         """
         TOPSIS 方法排序
+
+        Args:
+            weights: 可选的权重向量。缺省时按「组合权重 → 熵权 → AHP →
+                自动计算熵权」的顺序选取，避免因未显式调用
+                ``combine_weights()`` 而直接抛 TypeError。
 
         Returns:
             综合得分向量
@@ -169,8 +174,22 @@ class ComprehensiveEvaluation:
         # 标准化
         normalized = self.normalize()
 
+        # 权重选取：显式传入 > 组合权重 > 已有单源权重 > 自动计算熵权
+        if weights is None:
+            weights = self.weights_combined
+        if weights is None:
+            if self.weights_entropy is not None:
+                weights = self.weights_entropy
+                print("提示: 未调用 combine_weights()，本次 TOPSIS 使用熵权")
+            elif self.weights_ahp is not None:
+                weights = self.weights_ahp
+                print("提示: 未调用 combine_weights()，本次 TOPSIS 使用 AHP 权重")
+            else:
+                print("提示: 尚未计算任何权重，自动调用 run_entropy()")
+                weights = self.run_entropy()
+
         # 加权规范化矩阵
-        weighted = normalized * self.weights_combined
+        weighted = normalized * weights
 
         # 正理想解和负理想解
         v_pos = weighted.max(axis=0)
