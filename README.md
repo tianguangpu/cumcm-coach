@@ -270,6 +270,7 @@ python scripts/auto_check.py --paper paper/main.tex --level all
 | [examples/](examples/) | 四个可直接运行的示例（B/C/D 题型 + 通用验证） |
 | [integrations/](integrations/) | 集成的绘图模块（figure-skill / diagram-design / figure-templates / nature-plot-repro） |
 | [references/mcp-setup.md](references/mcp-setup.md) | MCP 配置指南（8 个 MCP 全部可选，含配置模板） |
+| [references/external-deps.md](references/external-deps.md) | 外部依赖说明、系统级依赖与降级行为一览 |
 | [ROADMAP.md](ROADMAP.md) | 路线图、已知改进项与贡献机会 |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献指南 |
 | [references/gold-standard.md](references/gold-standard.md) | 金标准内核详解（六段子结构 / 公式三段式 / 四重检验） |

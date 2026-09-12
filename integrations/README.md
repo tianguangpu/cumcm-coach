@@ -10,20 +10,37 @@ cumcm-coach 在克隆后即可自包含使用，无需额外安装其他 Skill�
 | 目录 | 来源 | 许可 |
 |------|------|------|
 | [`figure-skill/`](figure-skill/) | 本仓库作者 | MIT |
-| [`diagram-design/`](diagram-design/) | 第三方，MIT 许可 | MIT（保留原声明） |
+| [`diagram-design/`](diagram-design/) | 第三方，MIT 许可 | MIT（保留原声明，见该目录 LICENSE） |
 | [`mathmodel-figure-templates/`](mathmodel-figure-templates/) | 本仓库作者 | MIT |
 | [`nature-plot-repro/`](nature-plot-repro/) | 本仓库作者（方法论部分） | MIT |
+| [`scipilot-figure-skill/`](scipilot-figure-skill/) | 本仓库作者 | 随本仓库以 MIT 分发 |
+| [`math-modeling-abstract-polisher/`](math-modeling-abstract-polisher/) | 本仓库作者 | 随本仓库以 MIT 分发 |
+| [`math-modeling-paper-layouter/`](math-modeling-paper-layouter/) | 本仓库作者 | 随本仓库以 MIT 分发 |
+| [`math-modeling-diagram-master/`](math-modeling-diagram-master/) | 本仓库作者 | 随本仓库以 MIT 分发 |
+
+> 若其中任何模块来自团队协作或第三方，请在使用前补充相应署名与许可声明。
 
 ### 各模块职责
 
+**出图链路**
+
 | 模块 | 负责 | 触发场景 |
 |------|------|---------|
-| `figure-skill` | 常规数据图（折线/柱状/散点/热图/雷达/收敛/3D 曲面） | Python 出图；SimHei 字体、5 套学术色板、300dpi PNG + 矢量 PDF 双导出 |
-| `diagram-design` | 流程图 / 概念图（技术路线、算法流程、泳道图、时间线等 27 种图型） | 需要编辑级 HTML+SVG 图表；灰度无彩色规范 |
-| `mathmodel-figure-templates` | Python 高级图型（SHAP、山脊图、蜂群图、小提琴图、UpSet、冲积图） | 需要 `figure-skill` 覆盖不到的高级图型，且无 MATLAB |
-| `nature-plot-repro` | 图型选型方法与工作流（复刻顶刊配图） | "Nature 同款""顶刊风格""期刊配图" |
+| `math-modeling-diagram-master` | **选型**：题型 → 40 类图型清单（`fig_plan`） | 出图第一步，先定"该画什么图" |
+| `figure-skill` | 常规数据图（折线/柱状/散点/热图/雷达/收敛/3D） | Python 出图；SimHei、5 套学术色板、双导出 |
+| `mathmodel-figure-templates` | 高级图型（SHAP、山脊图、蜂群图、小提琴、UpSet、冲积图） | `figure-skill` 覆盖不到且无 MATLAB |
+| `nature-plot-repro` | 顶刊配图复刻（图型目录 + 工作流） | "Nature 同款""顶刊风格" |
+| `scipilot-figure-skill` | **审查**：EDA 剖析 → 选图顾问 → 视觉自检闭环 | 出版级/期刊投稿级质量把关 |
+| `diagram-design` | 流程图 / 概念图（27 种图型，灰度无彩色） | 技术路线、算法流程、泳道图 |
 
-四者的完整分工与调用顺序见
+**论文质量链路**
+
+| 模块 | 负责 | 触发场景 |
+|------|------|---------|
+| `math-modeling-abstract-polisher` | 摘要评委打分、参考文献质量、AI 味检测（含 2026 对抗检测） | 摘要与语言打磨、文献审查 |
+| `math-modeling-paper-layouter` | 5 层排版门禁（重叠/编译/一致性/文献/编号）+ 自动修复 | 草稿 → 终稿的排版收口 |
+
+出图链路的完整分工与调用顺序见
 [`../references/figure-routing.md`](../references/figure-routing.md)。
 
 ---
