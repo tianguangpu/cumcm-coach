@@ -35,6 +35,8 @@ from typing import Callable, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 
+from .bounds import normalize_bounds
+
 
 class GA:
     """遗传算法（实数编码，连续优化）"""
@@ -72,7 +74,7 @@ class GA:
         """
         self.obj = obj
         self.dim = dim
-        self.bounds = np.array(bounds)
+        self.bounds = normalize_bounds(bounds, dim)
         self.constraints = constraints
         self.repair = repair
         self.pop_size = pop_size

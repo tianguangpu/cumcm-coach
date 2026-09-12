@@ -19,6 +19,9 @@ from algorithms.game.nash import mixed_nash_2x2, pure_nash
 from algorithms.mechanistic.fdm_2d import fdm_2d_explicit
 from algorithms.mechanistic.fem_poisson import assemble_and_solve, rect_tri_mesh
 from algorithms.optimization.adaptive_hybrid import AdaptiveHybrid
+from algorithms.optimization.bounds import normalize_bounds
+from algorithms.optimization.de import DE
+from algorithms.optimization.ga import GA
 from algorithms.optimization.pso_variants import pso_clerc, pso_tvac
 from algorithms.prediction.tam import TAM_Forecast
 from algorithms.stats.hypothesis import (
@@ -78,6 +81,51 @@ class TestPSOVariantBounds:
         r1 = pso_clerc(_sphere, **kw)
         r2 = pso_clerc(_sphere, **kw)
         assert r1["g_val"] == pytest.approx(r2["g_val"])
+
+
+# ---------------------------------------------------------------- bounds 归一化
+
+
+class TestUniformBoundsConvention:
+    """回归保护：GA / DE / PSO 变体必须接受同一种 bounds 写法。
+
+    此前 GA / DE 在 __init__ 中直接 ``np.array(bounds)``，随后按维度
+    索引 ``bounds[j]``；传入统一边界 ``[(-5, 5)]``（dim > 1）会抛
+    IndexError，而 ``pso_clerc`` 一直支持该写法。国赛 B 题要求做算法
+    对比，同一份参数下切换算法不应崩溃。现由 ``optimization/bounds.py``
+    统一归一化三种写法。
+    """
+
+    def test_ga_accepts_uniform_bounds(self):
+        ga = GA(_sphere, dim=3, bounds=[(-5, 5)], pop_size=30, max_gen=60, seed=42)
+        assert ga.solve(verbose=False)["f_opt"] < 1e-2
+
+    def test_de_accepts_uniform_bounds(self):
+        de = DE(_sphere, dim=3, bounds=[(-5, 5)], pop_size=30, max_gen=60, seed=42)
+        assert de.solve(verbose=False)["f_opt"] < 1e-2
+
+    def test_ga_accepts_per_dimension_bounds(self):
+        obj = lambda v: float((v[0] - 5.0) ** 2 + v[1] ** 2)  # noqa: E731
+        ga = GA(obj, dim=2, bounds=[[0.0, 10.0], [-1.0, 1.0]],
+                pop_size=30, max_gen=80, seed=42)
+        x = ga.solve(verbose=False)["x_opt"]
+
+        assert 0.0 <= x[0] <= 10.0, f"x 越界: {x[0]}"
+        assert -1.0 <= x[1] <= 1.0, f"y 越界: {x[1]}"
+
+    def test_normalize_handles_all_three_forms(self):
+        assert normalize_bounds([(0, 1)], dim=3).shape == (3, 2), "统一边界应广播"
+        assert normalize_bounds((0, 1), dim=3).shape == (3, 2), "一维写法应支持"
+        assert normalize_bounds([(0, 1), (2, 3)], dim=2).shape == (2, 2), "逐维应原样返回"
+
+    def test_mismatched_rows_raise_readable_error(self):
+        """行数既不等于 dim 也不是单行时，应给出可读报错而非 IndexError。"""
+        with pytest.raises(ValueError, match="bounds 需要"):
+            normalize_bounds([(0, 1), (0, 1)], dim=5)
+
+    def test_bad_1d_length_raises(self):
+        with pytest.raises(ValueError, match="应为"):
+            normalize_bounds([0, 1, 2], dim=3)
 
 
 # ---------------------------------------------------------------- 自适应混合优化

@@ -15,6 +15,8 @@ from typing import Callable, Optional
 
 import numpy as np
 
+from .bounds import normalize_bounds
+
 
 def _dominates(a: list[float], b: list[float]) -> bool:
     """a 是否支配 b (均最小化)。纯 Python, 避免 np.all C 层崩溃。"""
@@ -123,7 +125,7 @@ class NSGA2:
         self.objs = objs
         self.m = len(objs)
         self.dim = dim
-        self.bounds = np.array(bounds)
+        self.bounds = normalize_bounds(bounds, dim)
         self.constraints = constraints
         self.repair = repair
         self.pop_size = pop_size

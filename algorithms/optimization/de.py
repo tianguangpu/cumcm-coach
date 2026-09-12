@@ -33,6 +33,8 @@ from typing import Callable, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 
+from .bounds import normalize_bounds
+
 
 class DE:
     """差分进化算法（DE/rand/1/bin）"""
@@ -68,7 +70,7 @@ class DE:
 
         self.obj = obj
         self.dim = dim
-        self.bounds = np.array(bounds)
+        self.bounds = normalize_bounds(bounds, dim)
         self.constraints = constraints
         self.pop_size = pop_size
         self.max_gen = max_gen
