@@ -267,6 +267,9 @@ python scripts/auto_check.py --paper paper/main.tex --level all
 |------|------|
 | [SKILL.md](SKILL.md) | 完整流程规范（题型路由、金标准内核、MCP 接线） |
 | [QUICKSTART.md](QUICKSTART.md) | 5 分钟上手 |
+| [examples/](examples/) | 四个可直接运行的示例（B/C/D 题型 + 通用验证） |
+| [ROADMAP.md](ROADMAP.md) | 路线图、已知改进项与贡献机会 |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献指南 |
 | [references/gold-standard.md](references/gold-standard.md) | 金标准内核详解（六段子结构 / 公式三段式 / 四重检验） |
 | [references/figure-routing.md](references/figure-routing.md) | 图表 → 工具路由（单一事实源） |
 | [references/figure-specs.md](references/figure-specs.md) | 绘图规范（10 技法 / 5 色板 / LaTeX 模板） |
