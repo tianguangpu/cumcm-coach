@@ -110,6 +110,9 @@ markers = [
 [tool.ruff]
 line-length = 100
 target-version = "py39"
+# integrations/ 收录的是集成模块（含第三方内容），保持其原始风格
+# 以便与上游同步，不纳入本项目的风格检查
+extend-exclude = ["integrations"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]

@@ -113,10 +113,15 @@ STEPS = [
     {
         "id": "07",
         "name": "图表质量验证",
-        "cmd": None,
+        "cmd": "{py} scripts/check_figure_quality.py figures/ --width-cm 16",
         "skip_if": None,
         "fast_skip": True,
-        "manual": "§3.4 视觉自检闭环: scipilot 画图错误拦截 + check_figure.py --strict 机器审计 + image-reader 读图复核 + check_overlaps.py --fix 重叠修复 + 回改重渲",
+        "manual": (
+            "已自动执行「尺寸-字号」检查（缩放后实际字号 <8pt 即拦截）。"
+            "完整视觉自检闭环另见 §3.4：check_figure.py --strict 机器审计"
+            "（DPI/画布尺寸）+ check_overlaps.py --fix 重叠修复 + "
+            "image-reader 读图复核 + 回改重渲"
+        ),
     },
     {
         "id": "08",
@@ -197,15 +202,15 @@ def run_step(step: dict, project_dir: str, engine: str, team: str, members: str,
         print(f"  [{step_id}] {step_name}: ✓ 已存在，跳过")
         return True
 
-    # 手动步骤
-    if step.get("manual"):
-        print(f"  [{step_id}] {step_name}: ⚠ 手动步骤 - {step['manual']}")
-        return True
-
-    # 无命令的步骤
+    # 命令优先：有 cmd 就执行；manual 仅在没有 cmd 时表示纯手动步骤。
+    # 此前 manual 会无条件短路 return，导致「同时带 cmd 与 manual」的步骤
+    # 永远不会真正执行（图表质量验证步骤曾因此形同虚设）。
     cmd = step.get("cmd")
     if not cmd:
-        print(f"  [{step_id}] {step_name}: ⚠ 无自动命令，需手动执行")
+        if step.get("manual"):
+            print(f"  [{step_id}] {step_name}: ⚠ 手动步骤 - {step['manual']}")
+        else:
+            print(f"  [{step_id}] {step_name}: ⚠ 无自动命令，需手动执行")
         return True
 
     # 格式化命令(用当前解释器 sys.executable 替代 python,规避别名缺失)

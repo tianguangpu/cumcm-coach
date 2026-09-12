@@ -45,6 +45,29 @@ cumcm-coach 在克隆后即可自包含使用，无需额外安装其他 Skill�
 
 ---
 
+## 关于两个同名脚本（互补，非重复）
+
+`scripts/` 与本目录的 `math-modeling-abstract-polisher/code/` 下各有一份
+`check_abstract.py` 与 `check_references.py`。**它们不是版本重复，而是侧重点
+不同、接口互补**：
+
+| 脚本 | 位置 | 独有参数 | 侧重 |
+|------|------|---------|------|
+| `check_abstract.py` | `scripts/`（主流程） | `--text` `--output` | 5 维检查：结构 / 数值密度 / 创新量化 / 关键词 / AI 味 |
+| `check_abstract.py` | `integrations/.../code/` | `--score-only` `--fix-suggest` | 评委 6 维打分 + **改写建议** |
+| `check_references.py` | `scripts/`（主流程） | `--bib` `--output` | 论文引用键 ↔ `.bib` 条目的对应关系检查 |
+| `check_references.py` | `integrations/.../code/` | `--hist` `--suggest` | 文献**历史对比** + 补强建议 |
+
+**怎么选**：
+
+- **主流程**（`run_all.py` / `auto_check.py`）自动调用的是 `scripts/` 版
+- 需要**具体改写建议**或**历史对比**时，用 integrations 版
+
+> 调用时请写完整路径（如 `integrations/math-modeling-abstract-polisher/code/check_abstract.py`），
+> 避免与 `scripts/` 下的同名脚本混淆。
+
+---
+
 ## 关于 nature-plot-repro 的案例库（重要）
 
 `nature-plot-repro` 的完整版包含 **26 个 MATLAB 案例**（环形柱状图、桑基图、
