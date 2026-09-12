@@ -1,18 +1,77 @@
-# CUMCM Coach Skill v7
-
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-7.11.0-blue.svg)
-![Python](https://img.shields.io/badge/python-3.13+-brightgreen.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Tests](https://img.shields.io/badge/tests-34%20modules-brightgreen.svg)
-![CUMCM](https://img.shields.io/badge/CUMCM-国一冲刺-gold.svg)
+# cumcm-coach
 
 **全国大学生数学建模竞赛（CUMCM）国一冲刺级论文生成系统**
 
-[快速开始](#快速开始) · [功能特性](#功能特性) · [架构设计](#架构设计) · [使用指南](#使用指南) · [贡献指南](CONTRIBUTING.md)
+把赛题变成一篇可交卷的论文：题型识别 → 建模求解 → 图表生成 → 论文排版 → 四级评审。
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
+[![Tests](https://img.shields.io/badge/tests-44%20passed-brightgreen.svg)](tests/)
+[![Algorithms](https://img.shields.io/badge/algorithms-36%20modules-informational.svg)](algorithms/)
+[![CUMCM](https://img.shields.io/badge/CUMCM-国一冲刺-gold.svg)](#)
+
+[中文](README.md) · [English](README.en.md) · [快速开始](#快速开始) · [架构](#架构设计) · [贡献指南](CONTRIBUTING.md)
 
 </div>
+
+---
+
+## 这是什么
+
+一个面向 CUMCM 国赛的**全流程论文生成工具链**，以 [Claude Code](https://claude.com/claude-code) Skill 的形式分发。
+
+它解决的问题是：**数学建模竞赛的时间有 72 小时，但真正决定成绩的是「模型有没有创新、验证够不够硬、论文有没有硬伤」这三件事** —— 而这三件事恰恰最容易在赶工中被牺牲。
+
+本工具把评审老师真正会看的点，固化成**可自动检查的流程**：每个子问题必须走完六段子结构、每张图必须带结论、每个数值必须可溯源、每处创新必须配消融对照。
+
+### 设计原则
+
+| 原则 | 具体做法 |
+|------|---------|
+| **不编数字** | 论文中每个数值必须先过 `result_registry.py` 注册，未验证的数值不允许写入正文 |
+| **不自我循环** | 模型必须与**强基线**对比（而非弱贪心），避免「自己证明自己好」 |
+| **不裸画图** | 每张图至少叠加 1 项可视化技法，禁止裸 `plot` / `bar` |
+| **不藏短板** | 假设误差逐项量化，灵敏度分析必须报出敏感参数，不粉饰 |
+| **合规优先** | 2024 年起国赛要求 AI 工具使用声明，全链路自动记录 AI 交互并生成合规材料 |
+
+---
+
+## 核心能力
+
+<table>
+<tr><td width="50%" valign="top">
+
+**🎯 题型自适应**
+
+自动识别 A 机理 / B 优化 / C 评价 / D 数据 四大题型，路由到对应论文模板与算法族；再细分为 12 个细类（OPT/EVA/PRE/GRA/PDE/STA/CLU/GAM/ECO/PHY/NLP/COM）决定算法选型。
+
+**🔬 36 个算法模块**
+
+覆盖优化、预测、评价、图论、机理、统计、博弈、生态、验证九大方向，全部可直接 `import`，不依赖外部服务。
+
+**⚙️ 多求解器自动路由**
+
+LP → HiGHS ｜ MIP/CSP → OR-Tools CP-SAT ｜ NLP → SciPy ｜ 连续优化 → 内置 SA-PSO / GA / DE。
+
+</td><td width="50%" valign="top">
+
+**✅ 四重检验强制**
+
+拟合精度 + Sobol 全局灵敏度 + 蒙特卡洛（≥200 次）+ 假设误差量化（≥3 项），缺一项即降档。
+
+**📊 出版级图表**
+
+300dpi PNG + 600dpi 矢量 PDF 双导出，5 套学术色板（Nature/Science/Qualitative/Diverging/IEEE），10 项可视化技法。
+
+**⚖️ L1–L4 四级评审**
+
+自动化检查 → 交叉验证 → 对抗评审 → Red-Team 终审，含页数合规、AI 声明位置、AIGC 风险自检。
+
+</td></tr>
+</table>
 
 ---
 
@@ -20,291 +79,242 @@
 
 ### 环境要求
 
-- Python 3.13+
-- MATLAB R2024a+（可选，用于绘图）
-- LaTeX（XeLaTeX）或 Typst（可选，用于论文编译）
+| 依赖 | 版本 | 必需性 |
+|------|------|--------|
+| Python | 3.9+ | **必需** |
+| LaTeX (XeLaTeX + biber) | TeX Live / MiKTeX | 二选一 |
+| Typst | 0.11+ | 二选一 |
+| MATLAB | R2024a+ | 可选（惊艳图表） |
 
 ### 安装
 
 ```bash
-# 克隆项目
-git clone <repo-url>
-cd cumcm-coach-skill-v7
+# 克隆
+git clone https://github.com/tianguangpu/cumcm-coach.git
+cd cumcm-coach
 
-# 安装依赖
-pip install -r requirements.txt
+# 核心依赖（必需）
+pip install -e .
 
-# 或使用 Makefile
-make install
+# 全部可选功能（求解器 + 灵敏度 + 图表样式 + 文献检索）
+pip install -e ".[full]"
+
+# 开发环境（测试 + 代码质量工具）
+pip install -e ".[dev]"
 ```
 
-### 5分钟快速使用
+### 5 分钟跑通
 
 ```bash
-# 1. 初始化项目
+# 1. 初始化项目（生成目录结构与状态文件）
 python scripts/init_project.py --team "202600001" --members "张三,李四,王五" --type B
 
-# 2. 运行全链流水线（干跑模式）
+# 2. 干跑全链流水线（不执行求解，验证流程连通性）
 python scripts/run_all.py --dry
 
-# 3. 运行单元测试
-make test
+# 3. 运行测试
+pytest tests/ -q
 
-# 4. 生成基准测试报告
-make benchmark
+# 4. 查看可用命令
+make help
 ```
 
----
+### 作为 Claude Code Skill 使用
 
-## 功能特性
+本仓库同时是一个 Claude Code Skill。克隆到 skills 目录即可通过 `/cumcm-coach-skill-v7` 调用：
 
-### 核心能力
-
-| 模块 | 功能 | 脚本 |
-|------|------|------|
-| **项目初始化** | 目录结构+状态文件 | `init_project.py` |
-| **全链流水线** | 13步断点续跑 | `run_all.py` |
-| **算法库** | 34个模块全PASS | `algorithms/` |
-| **求解器路由** | 多求解器自动选择 | `solver_router.py` |
-| **基线比较** | 防止"自证循环" | `baseline_compare.py` |
-| **结果溯源** | 数值验证注册表 | `result_registry.py` |
-| **四重检验** | L1-L4分级评审 | `auto_check.py` |
-| **AI合规** | 2026新规全链路 | `ai_compliance.py` |
-| **文献检索** | OpenAlex自动检索 | `search_openalex.py` |
-| **摘要优化** | 5+3检查+8稿迭代 | `polish_abstract.py` |
-
-### 算法库（34模块）
-
+```bash
+git clone https://github.com/tianguangpu/cumcm-coach.git \
+  ~/.claude/skills/cumcm-coach-skill-v7
 ```
-algorithms/
-├── optimization/      # 优化算法（6个）
-│   ├── ga.py         # 遗传算法
-│   ├── de.py         # 差分进化
-│   ├── sa_pso.py     # 模拟退火+粒子群混合
-│   ├── vrp.py        # 车辆路径问题
-│   ├── job_shop.py   # 车间调度
-│   └── two_stage.py  # 两阶段优化
-├── prediction/        # 预测算法（4个）
-│   ├── arima.py      # ARIMA时序预测
-│   ├── gm11.py       # 灰色预测
-│   ├── mlp.py        # 神经网络预测
-│   └── tam.py        # 技术采纳模型
-├── evaluation/        # 评价算法（3个）
-│   ├── ahp_entropy_topsis.py  # 综合评价
-│   ├── vikor.py      # VIKOR评价
-│   └── gra.py        # 灰色关联
-├── mechanistic/       # 机理模型（5个）
-│   ├── fdm_1d.py     # 一维有限差分
-│   ├── fdm_2d.py     # 二维有限差分
-│   ├── fem_poisson.py # 有限元
-│   └── ode_solver.py # ODE求解器
-├── network/           # 图论算法（1个）
-│   └── graph_algo.py # Dijkstra/Kruskal/最大流
-├── validation/        # 验证工具（3个）
-│   ├── metrics.py    # 拟合指标
-│   ├── sensitivity.py # 灵敏度分析
-│   └── monte_carlo.py # 蒙特卡洛仿真
-└── misc/              # 辅助工具（2个）
-    ├── problem_analyzer.py  # 问题分析
-    └── innovation_guide.py  # 创新指导
-```
-
-### 题型支持
-
-| 题型 | 代码 | 基线模型 | 典型算法 |
-|------|------|----------|----------|
-| A 机理分析 | `--type A` | 离散队列模型 | FDM/FEM/ODE |
-| B 优化决策 | `--type B` | 贪心分配 | GA/DE/SA-PSO |
-| C 综合评价 | `--type C` | 等权赋权 | TOPSIS/VIKOR/GRA |
-| D 数据分析 | `--type D` | 移动平均 | ARIMA/GM11/MLP |
 
 ---
 
 ## 架构设计
 
+### 流水线
+
 ```
-cumcm-coach-skill-v7/
-├── SKILL.md              # 主文档（Claude Code skill定义）
-├── QUICKSTART.md         # 快速开始
-├── README.md             # 本文件
-├── CHANGELOG.md          # 版本历史
-├── CONTRIBUTING.md       # 贡献指南
-├── Makefile              # 自动化命令
-├── Dockerfile            # Docker容器化
-├── docker-compose.yml    # Docker编排
-├── requirements.txt      # Python依赖
-├── .pre-commit-config.yaml # Git hooks配置
+赛题输入
+   │
+   ├─▶ ① 问题分析 ── 歧义检测 / 隐含约束挖掘 / 子问题依赖图
+   │       └─▶ 需人工确认关键歧义
+   │
+   ├─▶ ② 题型识别 ── A机理 / B优化 / C评价 / D数据
+   │       └─▶ 创新方向规划（5 类框架 + 强基线建议）
+   │
+   ├─▶ ③ 建模求解 ── 算法选型 → 求解器路由 → 结果自证 → 四重检验
+   │       └─▶ 产物：code/ + results/ + ANALYSIS_MODELING_REPORT.md
+   │
+   ├─▶ ④ 图表生成 ── 常规图 / 惊艳图 / 流程图 三轨分工
+   │       └─▶ 产物：figures/{png,pdf}/ + RESULTS_REPORT.md
+   │
+   ├─▶ ⑤ 论文撰写 ── LaTeX 或 Typst，金标准内核
+   │       └─▶ 产物：paper/main.{tex,typ} + sections/
+   │
+   └─▶ ⑥ 四级评审 ── L1 自动 → L2 交叉 → L3 对抗 → L4 Red-Team
+           └─▶ 产物：VERIFY_REPORT.md，任一 FAIL 回炉
+```
+
+### 目录结构
+
+```
+cumcm-coach/
+├── SKILL.md                  # Skill 定义（完整流程规范）
+├── README.md / README.en.md  # 中英文说明
+├── QUICKSTART.md             # 快速上手
+├── CHANGELOG.md              # 版本历史
+├── CONTRIBUTING.md           # 贡献指南
 │
-├── scripts/              # 工具脚本（28个）
-│   ├── run_all.py        # 全链流水线
-│   ├── init_project.py   # 项目初始化
-│   ├── solver_router.py  # 求解器路由
-│   ├── auto_check.py     # 四重检验
-│   └── ...               # 其他脚本
+├── algorithms/               # 算法库（36 模块，9 个方向）
+│   ├── optimization/         #   优化：GA / DE / SA-PSO / AHO / PSO变体 / VRP / JobShop
+│   ├── prediction/           #   预测：TAM / ARIMA / MLP / GM(1,1)
+│   ├── evaluation/           #   评价：AHP+熵权+TOPSIS / VIKOR / GRA
+│   ├── mechanistic/          #   机理：FDM 1D/2D / FEM / ODE
+│   ├── validation/           #   验证：Sobol / 蒙特卡洛 / 假设误差 / SHAP
+│   ├── network/              #   图论：Dijkstra / Kruskal / 最大流
+│   ├── stats/                #   统计：t / ANOVA / 卡方 / 非参数检验
+│   ├── game/                 #   博弈：纯策略与混合策略纳什均衡
+│   ├── ecology/              #   生态：Lotka-Volterra / SIR / SEIR
+│   └── misc/                 #   元工具：问题分析 / 创新引导
 │
-├── algorithms/           # 算法库（34模块）
-│   ├── base.py           # 基类定义
-│   ├── optimization/     # 优化算法
-│   ├── prediction/       # 预测算法
-│   ├── evaluation/       # 评价算法
-│   ├── mechanistic/      # 机理模型
-│   └── ...               # 其他类别
-│
-├── templates/            # 论文模板
-│   ├── template-a.tex    # A题LaTeX模板
-│   ├── template-b.tex    # B题LaTeX模板
-│   └── ...               # 其他模板
-│
-├── references/           # 参考文档
-│   ├── de-ai-writing.md  # 去AI味指南
-│   ├── figure-routing.md # 图表路由
-│   └── ...               # 其他参考
-│
-├── tests/                # 测试套件
-│   ├── conftest.py       # pytest配置
-│   ├── test_algorithms.py # 算法单元测试
-│   └── test_e2e.py       # 端到端测试
-│
-├── vault/                # Obsidian知识库
-│   ├── 00-MOC/           # 内容地图
-│   ├── 01-算法/          # 算法笔记
-│   └── ...               # 其他笔记
-│
-├── state/                # 运行状态
-│   └── project_state.json
-│
-├── output/               # 输出目录
-│   ├── ai_declaration.tex
+├── scripts/                  # 工具脚本（30 个）
+│   ├── run_all.py            #   全链流水线（支持 --from 断点续跑）
+│   ├── init_project.py       #   项目初始化
+│   ├── solver_router.py      #   多求解器自动路由
+│   ├── auto_check.py         #   L1–L4 四级评审
+│   ├── result_registry.py    #   数值溯源注册表
+│   ├── baseline_compare.py   #   强基线对比
+│   ├── ai_compliance.py      #   AI 合规材料生成
 │   └── ...
 │
-└── utils/                # 工具模块
-    └── logger.py         # 统一日志
+├── templates/                # 论文模板（4 题型 × LaTeX/Typst）
+├── references/               # 参考文档（20 篇规范与手册）
+│   └── playbooks/            #   5 本解题手册
+├── vault/                    # Obsidian 知识库（可独立浏览）
+├── tests/                    # 测试套件
+└── state/                    # 运行状态与决策日志
 ```
 
 ---
 
-## 使用指南
+## 使用示例
 
-### 场景1：完整论文生成
-
-```bash
-# 初始化
-python scripts/init_project.py --team "202600001" --members "张三,李四,王五" --type B
-
-# 全链运行（带断点续跑）
-python scripts/run_all.py
-
-# 从第7步继续
-python scripts/run_all.py --from 07
-```
-
-### 场景2：单问题求解
+### 示例 1：优化算法求解
 
 ```python
 from algorithms.optimization.ga import GA
-from algorithms.evaluation.ahp_entropy_topsis import ComprehensiveEvaluation
 
-# 遗传算法求解
-def objective(x):
-    return sum(xi**2 for xi in x)
-
-result = GA(objective, dim=3, bounds=[(-5,5)]*3, pop_size=50, max_gen=200)
-print(f"最优解: {result['x_opt']}, 最优值: {result['f_opt']}")
-
-# TOPSIS综合评价
-data = [[7, 9, 9], [8, 6, 8], [9, 4, 7]]
-ev = ComprehensiveEvaluation(data, benefit_cols=[0,1,2], cost_cols=[])
-weights = ev.run_entropy()
-topsis_result = ev.topsis()
+result = GA(
+    objective=lambda x: sum(xi**2 for xi in x),
+    dim=3,
+    bounds=[(-5, 5)] * 3,
+    pop_size=50,
+    max_gen=200,
+)
+print(f"最优解 {result['x_opt']}  最优值 {result['f_opt']}")
 ```
 
-### 场景3：求解器自动路由
+### 示例 2：综合评价
+
+```python
+from algorithms.evaluation.ahp_entropy_topsis import ComprehensiveEvaluation
+
+data = [[7, 9, 9], [8, 6, 8], [9, 4, 7]]
+ev = ComprehensiveEvaluation(data, benefit_cols=[0, 1, 2], cost_cols=[])
+weights = ev.run_entropy()      # 熵权法客观赋权
+ranking = ev.topsis()           # TOPSIS 排序
+```
+
+### 示例 3：求解器自动路由
 
 ```python
 from scripts.solver_router import SolverRouter
 
 router = SolverRouter()
-
-# 自动选择求解器
 result = router.solve({
-    'type': 'vrp',
-    'dist': distance_matrix,
-    'demands': demands,
-    'capacity': 100,
-    'n_vehicles': 5
+    "type": "vrp",
+    "dist": distance_matrix,
+    "demands": demands,
+    "capacity": 100,
+    "n_vehicles": 5,
 })
 ```
 
-### 场景4：基线比较
+### 示例 4：数值溯源（防编造）
 
 ```bash
-# 运行基线比较
-python scripts/baseline_compare.py \
-    --type B \
-    --advanced results/model.json \
-    --output reports/baseline.md
-
-# 查看报告
-cat reports/baseline.md
+# 注册数值 → 标记验证状态 → 校验论文引用
+python scripts/result_registry.py init
+python scripts/result_registry.py add --id r1 --value 123.45 --status PASS
+python scripts/result_registry.py verify
 ```
 
-### 场景5：运行测试
+### 示例 5：四级评审
 
 ```bash
-# 运行所有测试
-make test
-
-# 运行特定测试
-pytest tests/test_algorithms.py -v
-
-# 生成覆盖率报告
-pytest --cov=algorithms --cov-report=html
+python scripts/auto_check.py --paper paper/main.tex --level all
 ```
 
 ---
 
-## 配置说明
+## 文档索引
 
-### 环境变量
+| 文档 | 内容 |
+|------|------|
+| [SKILL.md](SKILL.md) | 完整流程规范（题型路由、金标准内核、MCP 接线） |
+| [QUICKSTART.md](QUICKSTART.md) | 5 分钟上手 |
+| [references/gold-standard.md](references/gold-standard.md) | 金标准内核详解（六段子结构 / 公式三段式 / 四重检验） |
+| [references/figure-routing.md](references/figure-routing.md) | 图表 → 工具路由（单一事实源） |
+| [references/figure-specs.md](references/figure-specs.md) | 绘图规范（10 技法 / 5 色板 / LaTeX 模板） |
+| [references/de-ai-writing.md](references/de-ai-writing.md) | 去 AI 味指南（含 AIGC 检测专项） |
+| [references/aigc-awareness.md](references/aigc-awareness.md) | AIGC 检测自保指南 |
+| [references/self-review-framework.md](references/self-review-framework.md) | 五轮自审框架 |
+| [references/playbooks/](references/playbooks/) | 5 本解题手册（物理ODE/路径规划/调度优化/评价决策/数据洞察） |
+| [vault/](vault/) | Obsidian 知识库（算法笔记 / 题型要点 / 规范速查） |
 
-| 变量 | 说明 | 默认值 |
-|------|------|--------|
-| `CUMCM_MATLAB_PATH` | MATLAB路径 | `/d/MatLab/bin/matlab.exe` |
-| `CUMCM_TEAM_ID` | 队伍编号 | `202600001` |
-| `CUMCM_PROBLEM_TYPE` | 题型 | `B` |
-| `CUMCM_SEED` | 随机种子 | `42` |
+---
 
-### 配置文件
+## 已知限制
 
-- `requirements.txt` - Python依赖
-- `state/project_state.json` - 项目状态
-- `vault/` - Obsidian知识库配置
+诚实说明当前状态，避免误用：
+
+- `algorithms/optimization/nsga2.py` 在部分环境下触发段错误，测试中已标记 `skip`，待修复。
+- `algorithms/prediction/tam.py` 的完整功能需额外 `pip install tam`；未安装时自动降级为简化加法分解，此时论文中须如实说明。
+- MATLAB 相关功能需本机安装 MATLAB R2024a+，未安装时自动降级到 Python 绘图。
+- MCP 工具（fetch / tavily / matlab 等）均为**可选增强**，未连接时自动降级到内置实现，流程不中断。
 
 ---
 
 ## 贡献
 
-欢迎贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解详细指南。
+欢迎提交 Issue 与 PR。请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+开发前建议：
+
+```bash
+pip install -e ".[dev]"
+pre-commit install      # 安装代码质量钩子
+make test               # 确认测试通过
+```
 
 ---
 
 ## 许可证
 
-本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
+本项目采用 [MIT License](LICENSE)。
 
 ---
 
 ## 致谢
 
-- [latexstudio/CUMCMThesis](https://github.com/latexstudio/CUMCMThesis) - LaTeX模板参考
-- [PuLP](https://github.com/coin-or/pulp) - 优化求解器
-- [OR-Tools](https://github.com/google/or-tools) - 运筹优化工具
-- [scikit-learn](https://github.com/scikit-learn/scikit-learn) - API设计参考
-
----
+- [CUMCMThesis](https://github.com/latexstudio/CUMCMThesis) — LaTeX 模板参考
+- [PuLP](https://github.com/coin-or/pulp) / [OR-Tools](https://github.com/google/or-tools) / [HiGHS](https://github.com/ERGO-Code/HiGHS) — 优化求解器
+- [SALib](https://github.com/SALib/SALib) — 全局灵敏度分析
+- [scikit-learn](https://github.com/scikit-learn/scikit-learn) — API 设计参考
 
 <div align="center">
 
-**[⬆ 回到顶部](#cumcm-coach-skill-v7)**
+**[⬆ 回到顶部](#cumcm-coach)**
 
 </div>
