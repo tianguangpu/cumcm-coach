@@ -1,0 +1,323 @@
+% ============================================================
+% CUMCM 国赛 C 题评价类模板 — v7.2
+% 编译:xelatex main.tex(跑两遍)
+% 金标准:六段子结构 / 三段式公式 / 四重检验 / 算法对比 / 创新量化
+% 核心强化:指标体系 / 权重计算 / 一致性检验
+% ============================================================
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{tikz}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=14pt}
+% ============ 排版规范（对齐国赛优秀论文 B159） ============
+% 行距 1.5 倍，首行缩进 2 字符
+\linespread{1.5}\selectfont
+\setlength{\parindent}{2em}
+
+% 章节标题居中，二级标题左对齐
+\titleformat{\section}{\centering\large\bfseries\heiti}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalsize\bfseries\heiti}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\heiti}{\thesubsubsection}{0.6em}{}
+
+% 页眉空、页脚页码居中
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+
+\setCJKmainfont{SimSun}[BoldFont=SimHei, ItalicFont=KaiTi]
+\setCJKsansfont{SimHei}
+\setCJKmonofont{FangSong}
+
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator{\sgn}{sgn}
+
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!50!black},
+}
+
+\title{\textbf{[评价对象]的综合评价体系建模与求解}}
+\author{队伍编号:\textbf{XXXX}}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% ============================================================
+\begin{abstract}
+\noindent
+\textbf{第一段}:行业背景 + 评价对象 + 三层框架(指标-权重-排序)。
+
+\textbf{第二段}:问题一构建 [N 项] 指标体系,采用 AHP+熵权组合赋权,TOPSIS 排序得到最优方案 [方案名]($C_i = 0.87$);问题二...;问题三...
+
+\textbf{第三段}:3 项创新(指标体系创新 / 组合赋权 / 一致性提升 $X\%$)+ 四重检验指标 + 跨行业迁移。
+
+\vspace{0.5em}
+\noindent\textbf{关键词}:[对象] [评价] [AHP] [TOPSIS] [一致性]
+\end{abstract}
+
+\newpage
+\newpage
+
+% ============================================================
+\section{问题重述}
+\subsection{问题背景}
+[背景:聚焦评价对象与决策需求]
+\subsection{问题提出}
+\begin{itemize}
+  \item 问题一:[指标体系构建]
+  \item 问题二:[权重计算与排序]
+  \item 问题三:[方案择优与灵敏度]
+\end{itemize}
+
+% ============================================================
+\section{问题分析}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/fig1_indicator_system.pdf}
+\caption{图1 评价指标体系(目标层-准则层-指标层三层结构)}
+\label{fig:indicator}
+\end{figure}
+
+% ============================================================
+\section{模型假设}
+\begin{enumerate}
+  \item 假设1:评价指标相互独立(或相关性已处理)
+  \item 假设2:专家打分具有一致性
+  \item 假设3:数据来源真实可靠
+  \item 假设4:无量纲化不改变指标相对优劣
+\end{enumerate}
+
+% ============================================================
+\section{符号说明}
+\begin{table}[H]
+\centering
+\caption{符号说明}
+\label{tab:symbols}
+\begin{tabular}{llll}
+\toprule
+符号 & 含义 & 取值范围 & 单位 \\
+\midrule
+$X_{ij}$ & 第 $i$ 方案第 $j$ 指标原始值 & - & - \\
+$x_{ij}$ & 无量纲化后值 & $[0, 1]$ & - \\
+$w_j$ & 第 $j$ 指标权重 & $[0, 1]$ & - \\
+$C_i$ & 第 $i$ 方案贴近度 & $[0, 1]$ & - \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{模型建立与求解}
+
+\subsection{问题一:指标体系构建}
+
+\subsubsection{参数配置与数据预处理}
+[数据来源、字段说明、异常处理]
+
+\subsubsection{基础经典模型}
+[基础指标体系,如等权重处理]
+\begin{equation}
+C_i = \frac{1}{n} \sum_{j=1}^{n} x_{ij}
+\label{eq:equal_weight}
+\end{equation}
+其中 $x_{ij}$ 为无量纲化值,$n$ 为指标数。式~\eqref{eq:equal_weight} 假设各指标等权重,未考虑指标重要性差异。
+
+\subsubsection{传统模型缺陷剖析}
+\begin{enumerate}
+  \item 缺陷1:等权重忽略指标重要性差异
+  \item 缺陷2:未区分正向/负向指标,排序失真 $X\%$
+  \item 缺陷3:主观赋权缺乏客观性
+\end{enumerate}
+
+\subsubsection{创新改进模型:组合赋权}
+本文构建 AHP+熵权组合赋权模型:
+\paragraph{AHP 主观权重}
+\begin{equation}
+\mathbf{A} \mathbf{w}_{\text{AHP}} = \lambda_{\max} \mathbf{w}_{\text{AHP}}
+\label{eq:ahp}
+\end{equation}
+其中 $\mathbf{A}$ 为判断矩阵,$\lambda_{\max}$ 为最大特征值。一致性比率 $\text{CR} = \text{CI}/\text{RI} < 0.1$。
+
+\paragraph{熵权客观权重}
+\begin{equation}
+w_{\text{entropy},j} = \frac{1 - E_j}{\sum_{k=1}^{n} (1 - E_k)}, \quad E_j = -\frac{1}{\ln m} \sum_{i=1}^{m} p_{ij} \ln p_{ij}
+\label{eq:entropy}
+\end{equation}
+
+式~\eqref{eq:ahp} 给出主观权重,式~\eqref{eq:entropy} 给出客观权重。
+
+\paragraph{组合权重}
+\begin{equation}
+w_j = \alpha w_{\text{AHP},j} + (1 - \alpha) w_{\text{entropy},j}, \quad \alpha = 0.5
+\label{eq:combined}
+\end{equation}
+
+式~\eqref{eq:combined} 给出组合权重,其中 $\alpha = 0.5$ 平衡主客观信息。
+
+\subsubsection{算法设计与求解:TOPSIS 排序}
+
+\paragraph{三算法对比表}
+\begin{table}[H]
+\centering
+\caption{权重计算方法对比}
+\label{tab:algo_compare}
+\begin{tabular}{lccccc}
+\toprule
+方法 & 客观性 & 一致性 CR & 区分度 & 计算时间 (s) & 评级 \\
+\midrule
+AHP+熵权+TOPSIS & 高 & 0.087 & 0.42 & 0.8 & ★★★ \\
+纯 AHP & 低 & 0.092 & 0.31 & 0.5 & ★★☆ \\
+纯熵权 & 高 & - & 0.35 & 0.3 & ★★☆ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+选用 AHP+熵权组合的理由:客观性最高,一致性 CR=0.087 < 0.1,区分度最大($0.42$)。
+
+\subsubsection{数值结果与可视化}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/fig2_radar.pdf}
+\caption{图2 各方案多维度雷达对比(方案 A 各维度均衡,$C_i = 0.87$ 最优)}
+\label{fig:radar}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{问题一综合评价结果}
+\label{tab:result1}
+\begin{tabular}{lcccc}
+\toprule
+方案 & 组合权重得分 & TOPSIS 贴近度 $C_i$ & 排名 & 较传统方法 \\
+\midrule
+方案 A & 0.87 & 0.87 & 1 & +0.12 \\
+方案 B & 0.78 & 0.78 & 2 & +0.08 \\
+方案 C & 0.65 & 0.65 & 3 & +0.05 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+图~\ref{fig:radar} 显示方案 A 在精度、效率、稳定性维度均领先,综合贴近度 $C_i = 0.87$ 排名第一,较传统等权重方法提升 $0.12$。
+
+\subsection{问题二}
+% 同六段子结构
+
+\subsection{问题三}
+% 同六段子结构
+
+% ============================================================
+\section{模型检验}
+
+\subsection{拟合精度检验}
+评价指标的区分度 $\text{CV} = 0.18$,Kendall 一致性系数 $\tau = 0.92$($p < 0.01$)。
+
+\subsection{灵敏度分析}
+\begin{table}[H]
+\centering
+\caption{权重灵敏度分析}
+\label{tab:sensitivity}
+\begin{tabular}{lccccc}
+\toprule
+权重 & 基准值 & ±10\% 影响 & ±20\% 影响 & 弹性系数 $\varepsilon$ & 分级 \\
+\midrule
+$w_1$ & 0.25 & ±0.8\% & ±1.6\% & 0.08 & 低 \\
+$w_2$ & 0.30 & ±2.5\% & ±5.2\% & 0.26 & 中 \\
+$w_3$ & 0.45 & ±4.1\% & ±8.7\% & 0.41 & 中 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/figN_weight_sensitivity.pdf}
+\caption{图N 权重灵敏度热力图($w_3$ 为中灵敏度参数)}
+\label{fig:weight_sens}
+\end{figure}
+
+\subsection{蒙特卡洛验证}
+$N_{\text{sim}} = 200$ 次随机扰动权重,排序一致性 $92.5\%$,$95\%\text{CI} = [0.85, 0.91]$。
+
+\subsection{假设误差量化}
+\begin{table}[H]
+\centering
+\caption{假设误差量化}
+\label{tab:assumption_error}
+\begin{tabular}{lcc}
+\toprule
+假设 & 偏差量化 & 对排序影响 \\
+\midrule
+假设1:指标独立 & 相关性 $\rho = 0.32$ & 排序变动率 $5\%$ \\
+假设2:专家一致 & CR=0.087 & 排序稳定 \\
+假设3:数据真实 & 异常值 $2.1\%$ & 排序变动率 $3\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{模型优缺点与改进}
+\textbf{创新点}:
+\begin{enumerate}
+  \item 构建 [N 项] 指标体系,覆盖 [维度] 较传统方法完整性提升 $35\%$
+  \item AHP+熵权组合赋权,客观性较纯 AHP 提升 $28\%$
+  \item TOPSIS 排序一致性 $\tau = 0.92$,较单一方法提升 $15\%$
+\end{enumerate}
+
+% ============================================================
+\section{参考文献}
+\begin{thebibliography}{99}
+\bibitem{ref1} 作者. 标题[J]. 期刊, 年份, 卷(期): 页码.
+\bibitem{ref2} Author A. Title[J]. Journal, Year, Vol: Pages.
+% 近5年 ≥40%, 外文 ≥30%, 总数 ≥10
+\end{thebibliography}
+
+% ============================================================
+\appendix
+\section{附录1 数据说明}
+[指标原始数据样表]
+
+\section{附录2 代码}
+\begin{lstlisting}[language=Python, caption=problem1_evaluate.py]
+from ahp_entropy_topsis import ComprehensiveEvaluation
+
+ce = ComprehensiveEvaluation(
+    data=X,                  # 原始数据矩阵 (n_samples, n_features)
+    benefit_cols=[0, 1, 2],  # 效益型指标索引
+    cost_cols=[3, 4],        # 成本型指标索引
+    col_names=['效率', '质量', '稳定性', '可维护性', '成本'],
+)
+ce.run_ahp(A)              # AHP 判断矩阵 → 主观权重
+ce.run_entropy()           # 熵权法 → 客观权重
+ce.combine_weights(alpha=0.5)  # 组合赋权
+scores = ce.topsis()       # TOPSIS 排序 → 综合得分向量
+\end{lstlisting}
+
+\section{附录3 公式推导}
+[组合赋权完整推导]
+
+\end{document}

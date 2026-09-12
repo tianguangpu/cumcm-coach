@@ -1,0 +1,354 @@
+% ============================================================
+% CUMCM 国赛 B 题优化类模板 — v7.2
+% 编译:xelatex main.tex(跑两遍)
+% 金标准:六段子结构 / 三段式公式 / 四重检验 / 算法对比表 / 创新量化
+% 核心强化:目标函数+约束 / 多算法对比 / 灵敏度
+% ============================================================
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{indentfirst}   % 首行缩进
+\usepackage{titlesec}      % 章节标题格式
+\usepackage{fancyhdr}      % 页眉页脚
+\usepackage{setspace}      % 行距
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=14pt}
+
+% ============ 排版规范（对齐国赛优秀论文 B159） ============
+% 行距 1.5 倍，首行缩进 2 字符
+\linespread{1.5}\selectfont
+\setlength{\parindent}{2em}
+
+% 章节标题居中，二级标题左对齐
+\titleformat{\section}{\centering\large\bfseries\heiti}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalsize\bfseries\heiti}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\heiti}{\thesubsubsection}{0.6em}{}
+
+% 页眉空、页脚页码居中
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\setCJKmainfont{SimSun}[BoldFont=SimHei, ItalicFont=KaiTi]
+\setCJKsansfont{SimHei}
+\setCJKmonofont{FangSong}
+
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator{\sgn}{sgn}
+
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!50!black},
+}
+
+\title{\textbf{[研究对象]的[优化目标]建模与求解}}
+\author{队伍编号:\textbf{XXXX}}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% ============================================================
+% 摘要三段式
+% ============================================================
+\begin{abstract}
+\noindent
+\textbf{第一段}:行业背景 + 研究对象 + 三层框架(建模-求解-检验)。
+
+\textbf{第二段}:问题一建立[模型],采用 SA-PSO 求解,年均功率 $54.2$ MW,较传统布局提升 $19.6\%$;问题二...;问题三...
+
+\textbf{第三段}:3 项创新(精度提升 $12.3\%$ / 收敛速度提升 $41.2\%$ / 计算效率提升 $45\%$)+ 四重检验指标 + 跨行业迁移。
+
+\vspace{0.5em}
+\noindent\textbf{关键词}:[对象] [模型] [算法] [方法] [指标]
+\end{abstract}
+
+\newpage
+
+% ============================================================
+\section{问题重述}
+\subsection{问题背景}
+[背景]
+\subsection{问题提出}
+\begin{itemize}
+  \item 问题一:[布局优化]
+  \item 问题二:[参数寻优]
+  \item 问题三:[方案对比]
+\end{itemize}
+
+% ============================================================
+\section{问题分析}
+[全局建模流程图]
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/fig1_roadmap.pdf}
+\caption{图1 全局建模流程(六模块:数据-建模-求解-检验-对比-交付)}
+\label{fig:roadmap}
+\end{figure}
+
+% ============================================================
+\section{模型假设}
+\begin{enumerate}
+  \item 假设1:[内容](量化误差 $\leq X\%$)
+  \item 假设2:[内容]
+  \item 假设3:[内容]
+  \item 假设4:[内容]
+  \item 假设5:[内容]
+  \item 假设6:[内容]
+\end{enumerate}
+
+% ============================================================
+\section{符号说明}
+\begin{table}[H]
+\centering
+\caption{决策变量与参数说明}
+\label{tab:symbols}
+\begin{tabular}{lllll}
+\toprule
+符号 & 含义 & 取值范围 & 单位 & 类型 \\
+\midrule
+$r_i$ & 第 $i$ 镜距塔距离 & $[50, 350]$ & m & 连续 \\
+$\theta_i$ & 第 $i$ 镜方位角 & $[0, 2\pi]$ & rad & 连续 \\
+$h$ & 吸热塔高度 & $[80, 200]$ & m & 连续 \\
+$w$ & 镜面宽度 & $[4, 12]$ & m & 离散 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{模型建立与求解}
+
+\subsection{问题一}
+
+\subsubsection{参数配置与数据预处理}
+[内容]
+
+\subsubsection{基础经典模型}
+年均功率 $P_{\text{avg}}$ 综合反映镜场效率与吸热塔匹配度,优化目标是最大化年均输出功率。
+\begin{equation}
+\max_{\mathbf{x}} \; P_{\text{avg}} = \frac{1}{8760} \sum_{t=1}^{8760} \eta_{\cos}(t) \cdot \eta_{\text{atm}}(t) \cdot I_{\text{DNI}}(t)
+\label{eq:obj}
+\end{equation}
+其中 $\mathbf{x} = (r_i, \theta_i, h)$ 为决策变量。目标函数为年化功率最大化,需满足下列四类约束。
+
+\paragraph{约束条件}
+\textbf{(1) 几何约束}
+\begin{align}
+r_i &\geq r_{\min} = 50 \text{ m}, \quad \forall i \label{eq:cons1}\\
+h_{\min} \leq h &\leq h_{\max} \label{eq:cons2}
+\end{align}
+
+式~\eqref{eq:cons1} 和式~\eqref{eq:cons2} 限定镜面几何范围。
+
+\textbf{(2) 物理约束}
+\begin{equation}
+\eta_{\text{shadow}}(i,j) \leq \epsilon_{\text{tol}}, \quad \forall i \neq j
+\label{eq:cons3}
+\end{equation}
+
+式~\eqref{eq:cons3} 约束阴影遮挡。
+
+\textbf{(3) 工程约束}
+\begin{equation}
+\sum_{i=1}^{N} A_i \leq A_{\text{total}} = 1000 \text{ m}^2
+\label{eq:cons4}
+\end{equation}
+
+式~\eqref{eq:cons4} 限制总镜面面积不超过 $1000\text{ m}^2$。
+
+\subsubsection{传统模型缺陷剖析}
+传统均匀布局存在以下缺陷:
+\begin{enumerate}
+  \item 缺陷1:未考虑三维阴影遮挡,效率损失 $X\%$
+  \item 缺陷2:固定步长排布,土地利用率仅 $Y\%$
+  \item 缺陷3:缺乏全局优化,易陷入局部最优
+\end{enumerate}
+
+\subsubsection{创新改进模型}
+本文建立基于三维阴影遮挡的效率计算模型,并提出 SA-PSO 混合优化算法。相比式~\eqref{eq:obj} 的传统模型,精度提升 $12.3\%$。
+
+\subsubsection{算法设计与求解}
+
+\paragraph{三算法对比表(强制)}
+\begin{table}[H]
+\centering
+\caption{三算法性能对比}
+\label{tab:algo_compare}
+\begin{tabular}{lccccc}
+\toprule
+算法 & 收敛迭代 & 最优值 & 稳定性 (CV) & 时间 (s) & 评级 \\
+\midrule
+SA-PSO & 127 & 54.2 MW & 2.3\% & 186 & ★★★ \\
+GA & 215 & 52.8 MW & 5.1\% & 245 & ★★☆ \\
+DE & 168 & 53.5 MW & 3.8\% & 203 & ★★☆ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+选用 SA-PSO 的理由:收敛最快(127 代),稳定性最高(CV=2.3\%),且最优值最大。
+
+\paragraph{SA-PSO 伪代码}
+\begin{algorithm}[H]
+\caption{SA-PSO 混合优化算法}
+\begin{algorithmic}[1]
+\Require 目标函数 $f$, 约束 $g$, 种群大小 $N$, 最大迭代 $T_{\max}$
+\Ensure 最优解 $\mathbf{x}^*$, 最优值 $f(\mathbf{x}^*)$
+\State 初始化种群 $\{\mathbf{x}_1, \ldots, \mathbf{x}_N\}$
+\State 计算适应度,初始化 $\mathbf{p}_i$ 和 $\mathbf{g}$
+\For{$t = 1$ to $T_{\max}$}
+  \State 温度退火 $T_t = T_0 \cdot \alpha^t$
+  \For{每个粒子 $i$}
+    \State 更新速度 $\mathbf{v}_i \leftarrow w\mathbf{v}_i + c_1 r_1 (\mathbf{p}_i - \mathbf{x}_i) + c_2 r_2 (\mathbf{g} - \mathbf{x}_i)$
+    \State SA 扰动 $\mathbf{x}_i \leftarrow \mathbf{x}_i + \mathbf{v}_i + \eta \cdot T_t$
+    \State 约束处理:违反约束则投影回可行域
+    \State 更新 $\mathbf{p}_i$, $\mathbf{g}$
+  \EndFor
+  \State 若收敛则 break
+\EndFor
+\State \Return $\mathbf{g}, f(\mathbf{g})$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{数值结果与可视化}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/fig2_convergence.pdf}
+\caption{图2 SA-PSO 收敛速度较 PSO 提升 $41.2\%$}
+\label{fig:convergence}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{问题一优化结果对比}
+\label{tab:result1}
+\begin{tabular}{lccc}
+\toprule
+指标 & 传统布局 & 优化布局 & 提升幅度 \\
+\midrule
+年均功率 (MW) & 45.3 & 54.2 & +19.6\% \\
+峰值功率 (MW) & 62.1 & 68.5 & +10.3\% \\
+镜面利用率 (\%) & 78.2 & 89.7 & +11.5\% \\
+计算时间 (s) & - & 186 & - \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+图~\ref{fig:convergence} 展示了 SA-PSO 与 GA 的收敛曲线对比。SA-PSO 在第 127 代收敛,较 GA(215 代)提升 $41\%$。最优功率 $54.2$ MW 较 GA($52.8$ MW)提高 $2.6\%$。
+
+\subsection{问题二}
+% 同六段子结构
+
+\subsection{问题三}
+% 同六段子结构
+
+% ============================================================
+\section{模型检验}
+
+\subsection{拟合精度检验}
+$R^2 = 0.987$, $\text{MAE} = 0.23$, $\text{RMSE} = 0.31$, $\text{MAPE} = 2.3\%$。
+
+\subsection{灵敏度分析}
+\begin{table}[H]
+\centering
+\caption{参数灵敏度分析}
+\label{tab:sensitivity}
+\begin{tabular}{lccccc}
+\toprule
+参数 & 基准值 & ±10\% 影响 & ±20\% 影响 & 弹性系数 $\varepsilon$ & 分级 \\
+\midrule
+镜宽 $w$ & 6 m & ±1.2\% & ±2.8\% & 0.14 & 低 \\
+塔高 $h$ & 120 m & ±3.5\% & ±7.8\% & 0.39 & 中 \\
+镜数 $N$ & 200 & ±5.2\% & ±11.3\% & 0.57 & 高 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/figN_tornado.pdf}
+\caption{图N 灵敏度龙卷风图($N$ 为高灵敏度参数)}
+\label{fig:tornado}
+\end{figure}
+
+\subsection{蒙特卡洛验证}
+$N_{\text{sim}} = 200$, $\mu = 53.8$ MW, $\sigma = 1.2$ MW, $\text{CV} = 2.2\%$, $95\%\text{CI} = [51.4, 56.2]$。
+
+\subsection{假设误差量化}
+\begin{table}[H]
+\centering
+\caption{假设误差量化}
+\label{tab:assumption_error}
+\begin{tabular}{lcc}
+\toprule
+假设 & 偏差量化 & 对结果影响 \\
+\midrule
+假设1:镜面理想平面 & $\delta = 0.5\%$ & 功率损失 $1.2\%$ \\
+假设2:无大气衰减 & $\delta = 2.1\%$ & 功率损失 $3.5\%$ \\
+假设3:稳态光照 & $\delta = 1.8\%$ & 功率波动 $\pm 2.0\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{模型优缺点与改进}
+\textbf{创新点}:
+\begin{enumerate}
+  \item 建立基于三维阴影遮挡的效率计算模型,精度提升 $12.3\%$
+  \item 提出 SA-PSO 混合优化算法,收敛速度提升 $41.2\%$,稳定性提高 $35\%$
+  \item 构建多目标优化框架,帕累托前沿求解效率提升 $28\%$
+\end{enumerate}
+
+% ============================================================
+\section{参考文献}
+\begin{thebibliography}{99}
+\bibitem{ref1} 作者. 标题[J]. 期刊, 年份, 卷(期): 页码.
+\bibitem{ref2} Author A. Title[J]. Journal, Year, Vol: Pages.
+% 近5年 ≥40%, 外文 ≥30%, 总数 ≥10
+\end{thebibliography}
+
+% ============================================================
+\appendix
+\section{附录1 数据说明}
+[result 样表 5 行 8 列]
+
+\section{附录2 代码}
+\begin{lstlisting}[language=Python, caption=problem1_optimize.py]
+from sa_pso import SA_PSO
+
+def objective(x):
+    """目标函数:最大化年均功率"""
+    pass
+
+def constraints(x):
+    """约束条件"""
+    pass
+
+solver = SA_PSO(obj=objective, dim=10, bounds=[(0, 100)] * 10, constraints=constraints)
+result = solver.solve()  # {'x_opt', 'f_opt', 'history', 'iterations'}
+\end{lstlisting}
+
+\section{附录3 公式推导}
+[目标函数完整推导]
+
+\end{document}

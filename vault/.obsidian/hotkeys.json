@@ -1,0 +1,7 @@
+{
+  "app:go-back": [{"modifiers": ["Alt"], "key": "ArrowLeft"}],
+  "app:go-forward": [{"modifiers": ["Alt"], "key": "ArrowRight"}],
+  "app:open-graph-view": [{"modifiers": ["Ctrl"], "key": "g"}],
+  "app:open-settings": [{"modifiers": ["Ctrl"], "key": ","}],
+  "editor:toggle-checklist-status": [{"modifiers": ["Ctrl"], "key": "Enter"}]
+}

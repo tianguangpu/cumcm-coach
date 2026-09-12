@@ -1,0 +1,348 @@
+% ============================================================
+% CUMCM 国赛 A 题机理类模板 — v7.2
+% 编译:xelatex main.tex(跑两遍)
+% 依赖:ctexart, amsmath, amssymb, graphicx, booktabs, hyperref
+% 金标准:六段子结构 / 三段式公式 / 四重检验 / 算法对比 / 创新量化
+% ============================================================
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=14pt}
+% ============ 排版规范（对齐国赛优秀论文 B159） ============
+% 行距 1.5 倍，首行缩进 2 字符
+\linespread{1.5}\selectfont
+\setlength{\parindent}{2em}
+
+% 章节标题居中，二级标题左对齐
+\titleformat{\section}{\centering\large\bfseries\heiti}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalsize\bfseries\heiti}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\heiti}{\thesubsubsection}{0.6em}{}
+
+% 页眉空、页脚页码居中
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+
+% 中文字体设置(评委机器通用)
+\setCJKmainfont{SimSun}[BoldFont=SimHei, ItalicFont=KaiTi]
+\setCJKsansfont{SimHei}
+\setCJKmonofont{FangSong}
+
+% 自定义算子(三段式公式规范)
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator{\sgn}{sgn}
+
+% 超链接样式
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+
+% 代码块样式
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!50!black},
+}
+
+\title{\textbf{[研究对象]的[核心问题]建模与求解}}
+\author{队伍编号:\textbf{XXXX}}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% ============================================================
+% 摘要三段式(半页内)
+% ============================================================
+\begin{abstract}
+\noindent
+\textbf{第一段(1-2 行)}:行业背景极度精简 + 研究对象 + 三层框架概括。
+
+\textbf{第二段(核心)}:各问依次:模型+算法+精准量化结果,数值前置。例如:针对问题一,建立[模型],采用[算法]求解,得到[关键数值];针对问题二,...
+
+\textbf{第三段(2-3 行)}:3 项创新(创新点1:精度提升 X\%;创新点2:速度提升 Y 倍;创新点3:稳定性提升 Z\%)+ 四重检验指标(R²/MAE/MC-CV)+ 跨行业迁移。
+
+\vspace{0.5em}
+\noindent\textbf{关键词}:[对象] [模型] [算法] [方法] [指标]
+\end{abstract}
+
+\newpage
+
+% ============================================================
+% 目录(编译两遍才能正确显示)
+% ============================================================
+\newpage
+
+% ============================================================
+% 一、问题重述
+% ============================================================
+\section{问题重述}
+
+\subsection{问题背景}
+[精简背景,1-2 段,聚焦研究对象]
+
+\subsection{问题提出}
+\begin{itemize}
+  \item 问题一:[一句话描述]
+  \item 问题二:[一句话描述]
+  \item 问题三:[一句话描述]
+\end{itemize}
+
+% ============================================================
+% 二、问题分析(附图1:物理过程示意图)
+% ============================================================
+\section{问题分析}
+
+针对问题一,本文从[物理过程]角度出发,[分析思路]。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/fig1_process.pdf}
+\caption{图1 [物理过程]的[趋势]([关键数值])}
+\label{fig:process}
+\end{figure}
+
+% ============================================================
+% 三、模型假设(含物理简化假设)
+% ============================================================
+\section{模型假设}
+
+\begin{enumerate}
+  \item 假设1:[内容]
+  \item 假设2:[内容]
+  \item 假设3:[内容]
+\end{enumerate}
+
+% ============================================================
+% 四、符号说明(物理量三线表)
+% ============================================================
+\section{符号说明}
+
+\begin{table}[H]
+\centering
+\caption{符号说明表}
+\label{tab:symbols}
+\begin{tabular}{lllll}
+\toprule
+符号 & 物理量 & 数值/范围 & 单位 & 来源 \\
+\midrule
+$I_{\text{DNI}}$ & 直射辐照度 & 200-1000 & W/m² & 气象数据 \\
+$\alpha$ & 太阳高度角 & 0-90 & ° & 计算 \\
+$\theta$ & 太阳方位角 & 0-360 & ° & 计算 \\
+$\eta_{\cos}$ & 余弦效率 & 0-1 & - & 计算 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+% 五、模型建立与求解(每问六段子结构)
+% ============================================================
+\section{模型建立与求解}
+
+% ---------- 问题一 ----------
+\subsection{问题一}
+
+% 5.1.1 参数配置与数据预处理
+\subsubsection{参数配置与数据预处理}
+[数据来源、字段说明、异常处理、参数取值]
+
+% 5.1.2 基础经典模型(三段式公式)
+\subsubsection{基础经典模型}
+
+太阳光线经定日镜反射后汇聚于吸热塔顶端吸热口,反射过程遵循菲涅尔反射定律,需建立光线追踪模型。
+\begin{equation}
+\mathbf{r}_{\text{out}} = \mathbf{r}_{\text{in}} - 2(\mathbf{r}_{\text{in}} \cdot \mathbf{n})\mathbf{n}
+\label{eq:reflection}
+\end{equation}
+其中 $\mathbf{r}_{\text{in}}$ 为入射光线单位向量,$\mathbf{r}_{\text{out}}$ 为反射光线单位向量,$\mathbf{n}$ 为镜面法向量。式~\eqref{eq:reflection} 表明反射光线关于法向量对称,需进一步计算吸热口截获效率。
+
+% 5.1.3 传统模型缺陷剖析
+\subsubsection{传统模型缺陷定量剖析}
+
+传统二维投影法存在以下缺陷:
+\begin{enumerate}
+  \item 缺陷1:[内容],仿真数据显示误差达 $X\%$
+  \item 缺陷2:[内容],在 [场景] 下失效
+  \item 缺陷3:[内容],计算精度仅 $Y\%$
+\end{enumerate}
+
+% 5.1.4 创新改进模型
+\subsubsection{自主创新改进模型}
+
+为克服上述缺陷,本文建立基于三维光线追踪的改进模型,决策变量为 $\mathbf{x} = (r_i, \theta_i, h)$。
+\begin{align}
+\eta_{\cos}(t) &= \cos\theta_{\text{inc}}(t) \label{eq:cos_eff}\\
+P_{\text{out}}(t) &= \eta_{\cos}(t) \cdot \eta_{\text{atm}}(t) \cdot I_{\text{DNI}}(t) \cdot A_i \label{eq:power}
+\end{align}
+其中 $\theta_{\text{inc}}$ 为入射角,$\eta_{\text{atm}}$ 为大气透射率。式~\eqref{eq:cos_eff} 给出余弦效率,式~\eqref{eq:power} 给出输出功率。相比式~\eqref{eq:reflection} 的二维方法,本模型精度提升 $12.3\%$。
+
+% 5.1.5 算法设计与求解
+\subsubsection{算法设计与求解}
+
+采用 Runge-Kutta 四阶方法求解常微分方程组:
+\begin{equation}
+\frac{d\mathbf{x}}{dt} = \mathbf{f}(\mathbf{x}, t), \quad \mathbf{x}(0) = \mathbf{x}_0
+\label{eq:ode}
+\end{equation}
+采用式~\eqref{eq:ode} 的四阶 Runge-Kutta 方法求解,步长 $h = 0.01$ s,精度 $10^{-6}$。
+
+% 5.1.6 数值结果与可视化
+\subsubsection{数值结果与可视化}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/fig2_3d_surface.pdf}
+\caption{图2 [对象]的[趋势](峰值 $Z_{\max} = 0.85$)}
+\label{fig:3d_surface}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{问题一求解结果对比}
+\label{tab:result1}
+\begin{tabular}{lccc}
+\toprule
+指标 & 传统方法 & 改进方法 & 提升 \\
+\midrule
+精度 (\%) & 87.5 & 99.8 & +12.3 \\
+计算时间 (s) & 45.2 & 0.53 & 85× \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ---------- 问题二 ----------
+\subsection{问题二}
+% 同六段子结构,此处省略
+
+% ---------- 问题三 ----------
+\subsection{问题三}
+% 同六段子结构,此处省略
+
+% ============================================================
+% 六、模型检验(四重检验,缺一降档)
+% ============================================================
+\section{模型检验}
+
+\subsection{拟合精度检验}
+$R^2 = 0.987$, $\text{MAE} = 0.23$, $\text{RMSE} = 0.31$, $\text{MAPE} = 2.3\%$。残差 Shapiro-Wilk 检验 $p = 0.87$,符合正态分布。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/figN_residual.pdf}
+\caption{图N 残差直方图与 Q-Q 图(残差符合正态分布)}
+\label{fig:residual}
+\end{figure}
+
+\subsection{灵敏度分析}
+
+\begin{table}[H]
+\centering
+\caption{参数灵敏度分析(弹性系数分级)}
+\label{tab:sensitivity}
+\begin{tabular}{lccccc}
+\toprule
+参数 & 基准值 & ±10\% 影响 & ±20\% 影响 & 弹性系数 $\varepsilon$ & 分级 \\
+\midrule
+镜宽 $w$ & 6 m & ±1.2\% & ±2.8\% & 0.14 & 低 \\
+塔高 $h$ & 120 m & ±3.5\% & ±7.8\% & 0.39 & 中 \\
+镜数 $N$ & 200 & ±5.2\% & ±11.3\% & 0.57 & 高 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{蒙特卡洛验证}
+$N_{\text{sim}} = 200$ 次,均值 $\mu = 53.8$ MW,标准差 $\sigma = 1.2$ MW,$\text{CV} = 2.2\%$,$95\%\text{CI} = [51.4, 56.2]$ MW。
+
+\subsection{假设误差量化}
+
+\begin{table}[H]
+\centering
+\caption{误差来源分解}
+\label{tab:error}
+\begin{tabular}{lccc}
+\toprule
+误差来源 & 估计值 & 占比 & 说明 \\
+\midrule
+数值离散化 & 0.032\% & 8\% & RK4 方法误差 \\
+参数不确定性 & 0.25\% & 62\% & 输入参数测量误差 \\
+模型简化 & 0.12\% & 30\% & 忽略高阶项 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+% 七、模型优缺点与改进
+% ============================================================
+\section{模型优缺点与改进}
+
+\textbf{优点}:
+\begin{enumerate}
+  \item 创新点1:建立三维光线追踪模型,相比传统二维投影法精度提升 $12.3\%$
+  \item 创新点2:推导高效余弦效率解析表达式,计算速度提升 $85$ 倍
+  \item 创新点3:提出分段自适应步长求解策略,数值稳定性提升 $40\%$
+\end{enumerate}
+
+\textbf{缺点}:对 [场景] 的适应性有限,未来可引入 [方法] 改进。
+
+% ============================================================
+% 八、参考文献
+% ============================================================
+\section{参考文献}
+
+\begin{thebibliography}{99}
+\bibitem{ref1} 作者. 标题[J]. 期刊, 年份, 卷(期): 页码.
+\bibitem{ref2} Author A, Author B. Title[J]. Journal, Year, Vol(Issue): Pages.
+% 注:近5年文献 ≥40%,外文 ≥30%,总数 ≥10
+\end{thebibliography}
+
+% ============================================================
+% 附录(三模块)
+% ============================================================
+\appendix
+
+\section{附录1 数据说明}
+[数据来源、字段说明、result 样表 5 行 8 列]
+
+\section{附录2 代码}
+\begin{lstlisting}[language=Python, caption=problem1.py]
+# problem1.py
+"""
+问题一求解脚本
+输入:无
+输出:result1.xlsx, fig2_3d_surface.pdf
+"""
+import numpy as np
+from scipy.integrate import solve_ivp
+
+def main():
+    # 实现代码
+    pass
+
+if __name__ == "__main__":
+    main()
+\end{lstlisting}
+
+\section{附录3 公式推导}
+[核心公式完整推导,正文只放结论]
+
+\end{document}

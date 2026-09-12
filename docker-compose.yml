@@ -1,0 +1,56 @@
+# CUMCM Coach Skill v7 Docker Compose
+
+version: '3.8'
+
+services:
+  # 主服务：运行全链流水线
+  pipeline:
+    build: .
+    container_name: cumcm-pipeline
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+      - ./output:/app/output
+      - ./state:/app/state
+      - ./reports:/app/reports
+    environment:
+      - PYTHONPATH=/app
+      - CUMCM_TEAM_ID=${CUMCM_TEAM_ID:-202600001}
+      - CUMCM_PROBLEM_TYPE=${CUMCM_PROBLEM_TYPE:-B}
+      - CUMCM_SEED=42
+    command: python scripts/run_all.py --dry
+    stdin_open: true
+    tty: true
+
+  # 测试服务：运行单元测试
+  test:
+    build: .
+    container_name: cumcm-test
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+    command: python -m pytest tests/ -v --cov=algorithms --cov-report=html
+
+  # 基准测试服务
+  benchmark:
+    build: .
+    container_name: cumcm-benchmark
+    volumes:
+      - .:/app
+      - ./reports:/app/reports
+    environment:
+      - PYTHONPATH=/app
+    command: python scripts/benchmark_viz.py --output reports/benchmark.png
+
+  # 代码质量检查
+  lint:
+    build: .
+    container_name: cumcm-lint
+    volumes:
+      - .:/app
+    command: >
+      sh -c "
+        black --check algorithms/ scripts/ &&
+        flake8 algorithms/ scripts/ --max-line-length=120
+      "

@@ -1,0 +1,332 @@
+% ============================================================
+% CUMCM 国赛 D 题数据类模板 — v7.2
+% 编译:xelatex main.tex(跑两遍)
+% 金标准:六段子结构 / 三段式公式 / 四重检验 / 算法对比 / 创新量化
+% 核心强化:统计模型 / 参数优化 / 拟合精度+MC
+% ============================================================
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=14pt}
+% ============ 排版规范（对齐国赛优秀论文 B159） ============
+% 行距 1.5 倍，首行缩进 2 字符
+\linespread{1.5}\selectfont
+\setlength{\parindent}{2em}
+
+% 章节标题居中，二级标题左对齐
+\titleformat{\section}{\centering\large\bfseries\heiti}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalsize\bfseries\heiti}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\heiti}{\thesubsubsection}{0.6em}{}
+
+% 页眉空、页脚页码居中
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+
+\setCJKmainfont{SimSun}[BoldFont=SimHei, ItalicFont=KaiTi]
+\setCJKsansfont{SimHei}
+\setCJKmonofont{FangSong}
+
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator{\sgn}{sgn}
+
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!50!black},
+}
+
+\title{\textbf{[研究对象]的数据分析与预测建模}}
+\author{队伍编号:\textbf{XXXX}}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% ============================================================
+\begin{abstract}
+\noindent
+\textbf{第一段}:行业背景 + 研究对象 + 三层框架(描述-建模-预测)。
+
+\textbf{第二段}:问题一基于 [N 条] 数据做 EDA,建立 [模型],预测 [对象] 在 [时间] 的值为 [数值](95\%CI:[a, b]);问题二...;问题三...
+
+\textbf{第三段}:3 项创新(特征工程 / 模型改进 $R^2$ 提升 $X\%$ / 预测精度提升 $Y\%$)+ 四重检验指标 + 跨行业迁移。
+
+\vspace{0.5em}
+\noindent\textbf{关键词}:[对象] [数据] [模型] [预测] [精度]
+\end{abstract}
+
+\newpage
+\newpage
+
+% ============================================================
+\section{问题重述}
+\subsection{问题背景}
+[背景:聚焦数据来源与预测需求]
+\subsection{问题提出}
+\begin{itemize}
+  \item 问题一:[数据分析与关系挖掘]
+  \item 问题二:[预测建模]
+  \item 问题三:[参数优化与情景分析]
+\end{itemize}
+
+% ============================================================
+\section{问题分析}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/fig1_eda.pdf}
+\caption{图1 数据特征分布与相关性热力图($x_1$ 与 $x_4$ 强相关 $r=0.82$)}
+\label{fig:eda}
+\end{figure}
+
+% ============================================================
+\section{模型假设}
+\begin{enumerate}
+  \item 假设1:数据采样具有代表性
+  \item 假设2:缺失值处理不引入系统性偏差
+  \item 假设3:未来趋势遵循历史规律
+  \item 假设4:残差服从独立同分布
+\end{enumerate}
+
+% ============================================================
+\section{符号说明}
+\begin{table}[H]
+\centering
+\caption{符号说明}
+\label{tab:symbols}
+\begin{tabular}{llll}
+\toprule
+符号 & 含义 & 取值范围 & 单位 \\
+\midrule
+$y_t$ & 目标变量在第 $t$ 期观测值 & - & - \\
+$\hat{y}_t$ & 预测值 & - & - \\
+$\beta_k$ & 第 $k$ 个回归系数 & - & - \\
+$\epsilon_t$ & 残差 & $\mathcal{N}(0, \sigma^2)$ & - \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{模型建立与求解}
+
+\subsection{问题一:数据分析与关系挖掘}
+
+\subsubsection{参数配置与数据预处理}
+[数据清洗:缺失值处理、异常值检测、归一化]
+
+\subsubsection{基础经典模型:线性回归}
+为挖掘 [变量] 间关系,建立多元线性回归模型:
+\begin{equation}
+y_t = \beta_0 + \beta_1 x_{1,t} + \beta_2 x_{2,t} + \cdots + \beta_k x_{k,t} + \epsilon_t
+\label{eq:linear_reg}
+\end{equation}
+其中 $\beta_k$ 为回归系数,$\epsilon_t \sim \mathcal{N}(0, \sigma^2)$ 为残差。式~\eqref{eq:linear_reg} 假设变量间线性关系,需后续检验。
+
+\subsubsection{传统模型缺陷剖析}
+\begin{enumerate}
+  \item 缺陷1:线性假设过强,$R^2$ 仅 $0.72$
+  \item 缺陷2:未捕捉时序依赖,残差自相关 DW=1.2
+  \item 缺陷3:对非线性关系建模能力弱
+\end{enumerate}
+
+\subsubsection{创新改进模型:ARIMA-LSTM 组合}
+本文建立 ARIMA-LSTM 组合预测模型,分别建模线性与非线性成分:
+\paragraph{ARIMA 线性成分}
+\begin{equation}
+\Phi(B) (1-B)^d y_t = \Theta(B) \epsilon_t
+\label{eq:arima}
+\end{equation}
+其中 $B$ 为后移算子,$\Phi, \Theta$ 为 AR/MA 多项式。
+
+式~\eqref{eq:arima} 建模时序线性成分,其中 $B$ 为后移算子。
+
+\paragraph{LSTM 非线性残差}
+\begin{equation}
+\hat{r}_{t+1} = \text{LSTM}(r_{t-L+1}, \ldots, r_t; \mathbf{W}, \mathbf{b})
+\label{eq:lstm}
+\end{equation}
+式~\eqref{eq:lstm} 用 LSTM 建模非线性残差,其中 $r_t = y_t - \hat{y}_{\text{ARIMA},t}$ 为 ARIMA 残差。组合预测 $\hat{y}_t = \hat{y}_{\text{ARIMA},t} + \hat{r}_t$。
+
+\subsubsection{算法设计与求解}
+
+\paragraph{三算法对比表}
+\begin{table}[H]
+\centering
+\caption{预测算法对比}
+\label{tab:algo_compare}
+\begin{tabular}{lccccc}
+\toprule
+算法 & $R^2$ & RMSE & MAPE & 训练时间 (s) & 评级 \\
+\midrule
+ARIMA-LSTM & 0.95 & 0.18 & 2.1\% & 320 & ★★★ \\
+纯 LSTM & 0.89 & 0.27 & 3.5\% & 280 & ★★☆ \\
+纯 ARIMA & 0.78 & 0.42 & 5.8\% & 12 & ★☆☆ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+选用 ARIMA-LSTM 组合的理由:$R^2 = 0.95$ 最高,RMSE $= 0.18$ 最低,兼顾线性和非线性建模能力。
+
+\subsubsection{数值结果与可视化}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/fig2_prediction.pdf}
+\caption{图2 预测值与真实值对比(95\%CI 阴影带, $R^2 = 0.95$)}
+\label{fig:prediction}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{问题一预测结果}
+\label{tab:result1}
+\begin{tabular}{lcccc}
+\toprule
+时间 & 真实值 & 预测值 & 95\%CI & 相对误差 \\
+\midrule
+$t+1$ & 52.3 & 52.1 & [51.4, 52.8] & 0.4\% \\
+$t+2$ & 54.8 & 54.5 & [53.6, 55.4] & 0.5\% \\
+$t+3$ & 56.2 & 56.0 & [54.8, 57.2] & 0.4\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+图~\ref{fig:prediction} 显示组合模型预测值紧贴真实值,95\%CI 覆盖率 $96.7\%$,较纯 ARIMA 的 $R^2$ 提升 $0.17$。
+
+\subsection{问题二}
+% 同六段子结构
+
+\subsection{问题三}
+% 同六段子结构
+
+% ============================================================
+\section{模型检验}
+
+\subsection{拟合精度检验}
+$R^2 = 0.95$, $\text{MAE} = 0.15$, $\text{RMSE} = 0.18$, $\text{MAPE} = 2.1\%$。残差 Shapiro-Wilk $p = 0.78$,Ljung-Box $p = 0.65$(无自相关)。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/figN_residual.pdf}
+\caption{图N 残差诊断(残差符合正态分布且无自相关)}
+\label{fig:residual}
+\end{figure}
+
+\subsection{灵敏度分析}
+\begin{table}[H]
+\centering
+\caption{模型参数灵敏度分析}
+\label{tab:sensitivity}
+\begin{tabular}{lccccc}
+\toprule
+参数 & 基准值 & ±10\% 影响 & ±20\% 影响 & 弹性系数 $\varepsilon$ & 分级 \\
+\midrule
+学习率 $\eta$ & 0.001 & ±0.8\% & ±1.5\% & 0.08 & 低 \\
+窗口 $L$ & 12 & ±2.3\% & ±4.8\% & 0.24 & 中 \\
+AR 阶数 $p$ & 3 & ±3.5\% & ±7.2\% & 0.36 & 中 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/figN_tornado.pdf}
+\caption{图N 灵敏度龙卷风图(AR 阶数 $p$ 为中灵敏度参数)}
+\label{fig:tornado}
+\end{figure}
+
+\subsection{蒙特卡洛验证}
+$N_{\text{sim}} = 200$ 次随机扰动训练数据,预测均值 $\mu = 52.1$,标准差 $\sigma = 0.8$,$\text{CV} = 1.5\%$,$95\%\text{CI} = [50.5, 53.7]$。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/pdf/figN_mc.pdf}
+\caption{图N 蒙特卡洛仿真分布(200 次, $\mu=52.1$, 95\%CI=[50.5, 53.7])}
+\label{fig:mc}
+\end{figure}
+
+\subsection{假设误差量化}
+\begin{table}[H]
+\centering
+\caption{假设误差量化}
+\label{tab:assumption_error}
+\begin{tabular}{lcc}
+\toprule
+假设 & 偏差量化 & 对预测影响 \\
+\midrule
+假设1:数据代表性 & 分布偏度 $\gamma = 0.32$ & 预测偏差 $1.2\%$ \\
+假设2:缺失值无偏 & 缺失率 $3.5\%$ & 预测偏差 $0.8\%$ \\
+假设3:趋势延续 & 趋势变动 $\Delta = 5\%$ & 预测偏差 $2.1\%$ \\
+假设4:残差独立 & DW = 1.95 & 接近理想 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{模型优缺点与改进}
+\textbf{创新点}:
+\begin{enumerate}
+  \item 构建特征工程方案,提取 [N 个] 衍生特征,$R^2$ 提升 $0.17$
+  \item ARIMA-LSTM 组合模型,较纯 LSTM 精度提升 $0.06$,较纯 ARIMA 提升 $0.17$
+  \item 蒙特卡洛置信区间量化预测不确定性,可靠性 $96.7\%$
+\end{enumerate}
+
+% ============================================================
+\section{参考文献}
+\begin{thebibliography}{99}
+\bibitem{ref1} 作者. 标题[J]. 期刊, 年份, 卷(期): 页码.
+\bibitem{ref2} Author A. Title[J]. Journal, Year, Vol: Pages.
+% 近5年 ≥40%, 外文 ≥30%, 总数 ≥10
+\end{thebibliography}
+
+% ============================================================
+\appendix
+\section{附录1 数据说明}
+[数据字段说明、缺失值处理、result 样表]
+
+\section{附录2 代码}
+\begin{lstlisting}[language=Python, caption=problem1_predict.py]
+import numpy as np
+from arima import ARIMA_Forecast
+from mlp import MLP_Forecast
+
+# ARIMA 线性成分（统计模型，numpy+scipy 自研实现）
+arima_model = ARIMA_Forecast(y_train, order=(3, 1, 2)).fit()
+arima_pred = arima_model.predict(steps=3)
+
+# MLP 非线性成分（sklearn 实现，无 torch 依赖；如需真 LSTM 可 pip install torch 后替换）
+mlp_model = MLP_Forecast(y_train, window=12, hidden_layer_sizes=(50,)).fit()
+mlp_pred = mlp_model.predict(steps=3)
+
+# 组合预测（ARIMA + MLP 加权融合）
+final_pred = 0.5 * arima_pred + 0.5 * mlp_pred
+\end{lstlisting}
+
+\section{附录3 公式推导}
+[ARIMA-LSTM 组合模型完整推导]
+
+\end{document}

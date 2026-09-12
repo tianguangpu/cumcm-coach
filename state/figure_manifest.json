@@ -1,0 +1,137 @@
+[
+  {
+    "id": "fig10_multi_crops",
+    "png_path": "figures/png/fig10_multi_crops.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig11_multi_profit",
+    "png_path": "figures/png/fig11_multi_profit.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig12_radar_model_eval",
+    "png_path": "figures/png/fig12_radar_model_eval.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig13_3d_landscape",
+    "png_path": "figures/png/fig13_3d_landscape.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig14_profit_pareto3d",
+    "png_path": "figures/png/fig14_profit_pareto3d.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig15_flow_overall",
+    "png_path": "figures/png/fig15_flow_overall.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig1_convergence",
+    "png_path": "figures/png/fig1_convergence.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig2_allocation",
+    "png_path": "figures/png/fig2_allocation.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig3_tornado",
+    "png_path": "figures/png/fig3_tornado.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig4_montecarlo",
+    "png_path": "figures/png/fig4_montecarlo.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig5_boxplot",
+    "png_path": "figures/png/fig5_boxplot.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig6_marginal",
+    "png_path": "figures/png/fig6_marginal.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig7_sensitivity_surface",
+    "png_path": "figures/png/fig7_sensitivity_surface.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig8_pareto",
+    "png_path": "figures/png/fig8_pareto.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  },
+  {
+    "id": "fig9_stability",
+    "png_path": "figures/png/fig9_stability.png",
+    "pdf_path": null,
+    "caption": "",
+    "chapter": "",
+    "latex_ref": "",
+    "typst_ref": ""
+  }
+]

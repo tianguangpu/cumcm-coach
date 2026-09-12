@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "数值结果溯源注册表 — 每个写入论文的数值必须在此登记",
+    "created": "2026-08-26",
+    "schema": {
+      "result_id": "唯一标识符，格式: result_NNN",
+      "description": "结果的简要描述",
+      "value": "数值结果（支持int/float/string/list）",
+      "unit": "单位（可选）",
+      "verification_status": "验证状态: PASS/FAIL/PENDING",
+      "approved_for_paper": "是否批准写入论文: true/false",
+      "source_script": "生成此结果的脚本路径",
+      "source_function": "脚本中的函数名",
+      "verification_report": "验证报告路径",
+      "baseline_comparison": "基线比较结果（可选）",
+      "created_at": "ISO8601时间戳",
+      "updated_at": "ISO8601时间戳"
+    }
+  },
+  "results": {
+    "result_001": {
+      "description": "示例：问题1最优解",
+      "value": null,
+      "unit": "",
+      "verification_status": "PENDING",
+      "approved_for_paper": false,
+      "source_script": "code/problem1.py",
+      "source_function": "solve_problem1()",
+      "verification_report": "reports/verification/problem1_verify.md",
+      "baseline_comparison": {
+        "baseline_method": "贪心算法",
+        "baseline_value": null,
+        "improvement_pct": null,
+        "passed": false
+      },
+      "created_at": null,
+      "updated_at": null
+    }
+  }
+}

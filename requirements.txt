@@ -1,0 +1,38 @@
+# cumcm-coach-skill-v7 依赖清单
+# ================================
+# 标注：[必装] 核心依赖 / [推荐] 求解器+分析 / [可选] 增强功能
+
+# [必装] 核心科学计算
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# [推荐] 优化求解器
+highspy>=1.7.0        # HiGHS 高性能 LP/MIP 求解器（首选）
+pulp>=2.7.0           # PuLP 线性规划建模（兜底）
+ortools>=9.6.2534     # OR-Tools CP-SAT 约束求解
+
+# [推荐] 灵敏度分析
+SALib>=1.4.0          # Sobol/Morris/FAST 全局灵敏度
+
+# [可选] 预测算法
+# tam>=0.1.0          # TAM 时序预测（D型首选，需单独安装）
+
+# [可选] 图表样式
+scienceplots>=2.1.0   # 学术图表样式（Nature/Science/IEEE 风格）
+
+# [可选] 文献检索
+requests>=2.28.0      # OpenAlex API 调用（search_openalex.py）
+
+# [可选] Typst 参考文献解析（check_paper_quality.py Typst 模式）
+pyyaml>=6.0           # YAML 解析（Typst .bib.yml 文件）
+
+# LaTeX 编译（系统依赖，非 pip）
+# - MiKTeX 或 TeX Live（含 xelatex + biber）
+# - SimHei 字体（中文显示）
+
+# MATLAB MCP（可选，用于惊艳图）
+# - MATLAB R2024a+
+# - finish_figure.m 脚本

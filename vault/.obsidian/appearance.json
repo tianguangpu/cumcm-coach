@@ -1,0 +1,9 @@
+{
+  "baseFontSize": 16,
+  "interfaceFontSize": 14,
+  "accentColor": "#7c5cbf",
+  "textFontFamily": "Microsoft YaHei, -apple-system, sans-serif",
+  "monospaceFontFamily": "JetBrains Mono, Consolas, monospace",
+  "theme": "obsidian",
+  "cssTheme": ""
+}
