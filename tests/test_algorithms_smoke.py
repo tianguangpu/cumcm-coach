@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 test_algorithms_smoke.py — 算法回归冒烟测试
 ============================================
@@ -16,8 +15,6 @@ import importlib
 import sys
 import traceback
 from pathlib import Path
-
-import numpy as np
 
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 if str(SKILL_ROOT / "algorithms") not in sys.path:

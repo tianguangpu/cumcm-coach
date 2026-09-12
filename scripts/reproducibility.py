@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 reproducibility.py — 一键复现 + 哈希绑定
 ==========================================
@@ -13,7 +12,6 @@ reproducibility.py — 一键复现 + 哈希绑定
 import argparse
 import hashlib
 import json
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -189,7 +187,7 @@ def main():
         print(f"状态: {result['status']}")
         print(f"检查文件: {result['total_files']}个")
         if result["issues"]:
-            print(f"问题:")
+            print("问题:")
             for issue in result["issues"]:
                 print(f"  - {issue}")
     elif a.hash:

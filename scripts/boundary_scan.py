@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 boundary_scan.py — 边界检验 + 鲁棒性分析
 ==========================================
@@ -10,11 +9,11 @@ boundary_scan.py — 边界检验 + 鲁棒性分析
     python boundary_scan.py --tex paper/main.tex --check-robustness
 """
 import argparse
-import json
 import sys
-import numpy as np
 from pathlib import Path
-from typing import Callable, Dict, List, Tuple, Optional
+from typing import Callable, Dict, List, Tuple
+
+import numpy as np
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -243,7 +242,7 @@ def render_report(sensitivity: dict, mc_boundary: dict, failure_boundaries: list
 
     # 失效边界
     if failure_boundaries:
-        L.append(f"\n【失效边界】")
+        L.append("\n【失效边界】")
         for fb in failure_boundaries:
             L.append(f"  {fb['param']} ({fb['direction']}): {fb['status']}")
             if "failure_factor" in fb:
@@ -294,12 +293,12 @@ def main():
         print(f"  检测词: {len(robustness_terms)}个")
         print(f"  命中: {len(found)}个 → {', '.join(found)}")
         if len(found) < 3:
-            print(f"  ⚠ 鲁棒性内容不足，建议补充:")
-            print(f"    1. 灵敏度分析(龙卷风图)")
-            print(f"    2. 蒙特卡洛边界检验(CV/95%CI)")
-            print(f"    3. 失效边界(模型什么时候不能用)")
+            print("  ⚠ 鲁棒性内容不足，建议补充:")
+            print("    1. 灵敏度分析(龙卷风图)")
+            print("    2. 蒙特卡洛边界检验(CV/95%CI)")
+            print("    3. 失效边界(模型什么时候不能用)")
         else:
-            print(f"  ✓ 鲁棒性内容充足")
+            print("  ✓ 鲁棒性内容充足")
         return 0
 
     # 如果没有指定模型函数，打印帮助

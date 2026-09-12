@@ -26,9 +26,10 @@ MonteCarlo: 蒙特卡洛模拟
     mc.plot_distribution('mc.png')
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
 from typing import Callable, Dict, Optional
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 class MonteCarlo:

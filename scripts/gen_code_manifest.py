@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 gen_code_manifest.py — v7 代码清单自动生成（增强版 v1.1）
 ======================================================
@@ -259,14 +258,14 @@ def check_requirements_consistency(root: Path):
     unused_in_code = declared_deps - third_party
 
     if missing_in_req:
-        print(f"[WARN]  代码中导入但 requirements.txt 未声明:")
+        print("[WARN]  代码中导入但 requirements.txt 未声明:")
         for pkg in sorted(missing_in_req):
             print(f"   - {pkg}")
     else:
         print("[OK] 所有代码导入都在 requirements.txt 中声明")
 
     if unused_in_code:
-        print(f"ℹ️  requirements.txt 中声明但代码未直接导入:")
+        print("ℹ️  requirements.txt 中声明但代码未直接导入:")
         for pkg in sorted(unused_in_code):
             print(f"   - {pkg}")
 

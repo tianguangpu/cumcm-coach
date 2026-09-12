@@ -23,9 +23,10 @@ VRP/MTVRP 车辆路径问题求解器 v1.0
     print(result['routes'], result['total_distance'])
 """
 
-import numpy as np
-from typing import List, Tuple, Dict, Optional
 import random
+from typing import Dict, List, Optional, Tuple
+
+import numpy as np
 
 # ============================================================
 # VRP 核心类
@@ -557,7 +558,7 @@ if __name__ == '__main__':
     print("=" * 60)
     print(f"节点数: {n_nodes}")
     print(f"需求量: {demands}")
-    print(f"车辆容量: 10")
+    print("车辆容量: 10")
     print()
 
     # 创建VRP问题

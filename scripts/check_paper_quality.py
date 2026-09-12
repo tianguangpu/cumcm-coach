@@ -10,10 +10,10 @@
 """
 
 import argparse
-import re
 import os
+import re
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict
 
 
 class PaperQualityChecker:
@@ -27,7 +27,7 @@ class PaperQualityChecker:
         self.issues = []
         self.engine = self._detect_engine()
 
-        with open(paper_path, 'r', encoding='utf-8') as f:
+        with open(paper_path, encoding='utf-8') as f:
             self.content = f.read()
 
     def _detect_engine(self) -> str:
@@ -346,7 +346,7 @@ class PaperQualityChecker:
                 bib_dir = Path(self.paper_path).parent
                 for bib_file in bib_dir.glob("*.yml"):
                     try:
-                        with open(bib_file, 'r', encoding='utf-8') as f:
+                        with open(bib_file, encoding='utf-8') as f:
                             bib_data = yaml.safe_load(f)
                         if isinstance(bib_data, dict):
                             refs = list(bib_data.values())
@@ -354,7 +354,7 @@ class PaperQualityChecker:
                         pass
                 for bib_file in bib_dir.glob("*.bib"):
                     try:
-                        with open(bib_file, 'r', encoding='utf-8') as f:
+                        with open(bib_file, encoding='utf-8') as f:
                             bib_content = f.read()
                         refs = re.findall(r'@\w+\{(.*?)(?=@\w+|\Z)', bib_content, re.DOTALL)
                     except Exception:

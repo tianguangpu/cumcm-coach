@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 check_ethics.py — 伦理维度检查（2025年新增）
 =============================================
@@ -118,7 +117,7 @@ def render_report(result: dict) -> str:
     L.append(f"\n【综合得分】 {result['score']}/100")
     L.append(f"【覆盖率】 {result['coverage']*100:.0f}% ({sum(1 for c in result['categories'].values() if c['found'])}/{len(ETHICS_KEYWORDS)} 类)")
 
-    L.append(f"\n【各类别检测】")
+    L.append("\n【各类别检测】")
     for category, data in result["categories"].items():
         icon = "✓" if data["found"] else "✗"
         L.append(f"  {icon} {category}: {data['total']}次命中")
@@ -127,12 +126,12 @@ def render_report(result: dict) -> str:
                 L.append(f"      '{h['keyword']}' x{h['count']}")
 
     if result["issues"]:
-        L.append(f"\n【问题】")
+        L.append("\n【问题】")
         for i, issue in enumerate(result["issues"], 1):
             L.append(f"  {i}. {issue}")
 
     if result["suggestions"]:
-        L.append(f"\n【建议】")
+        L.append("\n【建议】")
         for i, s in enumerate(result["suggestions"], 1):
             L.append(f"  {i}. {s}")
 

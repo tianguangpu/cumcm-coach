@@ -13,7 +13,7 @@ from pathlib import Path
 
 def embed_figures(section_dir, manifest_path, engine="latex", prefix="../"):
     """读取 manifest,自动在对应章节文件中插入图表引用"""
-    with open(manifest_path, "r", encoding="utf-8") as f:
+    with open(manifest_path, encoding="utf-8") as f:
         manifest = json.load(f)
 
     embedded = 0

@@ -26,8 +26,9 @@ AssumptionError: 假设误差量化
     report  = checker.analyze()
     # report['summary'] 排序后的影响; report['judgement'] 全文按假设判断
 """
+from typing import Dict, List
+
 import numpy as np
-from typing import Callable, Dict, List
 
 
 class AssumptionChecker:

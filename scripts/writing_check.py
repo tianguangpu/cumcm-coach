@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 writing_check.py — 论文写作质量检查（Windows兼容版）
 =====================================================
@@ -9,8 +8,6 @@ writing_check.py — 论文写作质量检查（Windows兼容版）
     python writing_check.py --paper paper/ --results reports/RESULTS_REPORT.md
 """
 import argparse
-import json
-import os
 import re
 import sys
 from pathlib import Path

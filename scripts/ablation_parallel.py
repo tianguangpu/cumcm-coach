@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """ablation_parallel.py — 多算法消融的满核并行版(子进程隔离)
 
 基于 isolated_solve.run_isolated: 每个 (算法, 问题, seed) 一次独立子进程求解,

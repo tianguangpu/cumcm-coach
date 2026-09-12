@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 check_innovation.py — 创新百分比强制检查
 =========================================
@@ -11,11 +10,9 @@ check_innovation.py — 创新百分比强制检查
 """
 import argparse
 import csv
-import json
 import os
 import re
 import sys
-from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -206,14 +203,14 @@ def render_report(innovation: dict, ablation_check: dict = None) -> str:
 
     # 问题
     if innovation["issues"]:
-        L.append(f"\n【待修复】")
+        L.append("\n【待修复】")
         for i, issue in enumerate(innovation["issues"], 1):
             L.append(f"  {i}. {issue}")
 
     # 修复建议
     suggestions = generate_fix_suggestions(innovation, ablation_check)
     if suggestions:
-        L.append(f"\n【修复建议】")
+        L.append("\n【修复建议】")
         for i, s in enumerate(suggestions, 1):
             L.append(f"  {i}. {s}")
 

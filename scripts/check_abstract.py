@@ -10,7 +10,6 @@ import re
 import sys
 from pathlib import Path
 
-
 # AI 味高频词(检测用)
 AI_PATTERNS = {
     "filler_words": [

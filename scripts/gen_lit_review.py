@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 gen_lit_review.py — 文献综述模块
 ================================
@@ -15,10 +14,9 @@ gen_lit_review.py — 文献综述模块
     lit_review.md    Markdown 版综述(供论文撰写/答辩复用)
 """
 import argparse
-import os
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -134,7 +132,7 @@ def try_openalex(topic: str, limit: int = 6) -> list:
     """可选: 用 OpenAlex 增量检索近5年文献(网络不可用/无结果则回退空列表)。"""
     sys.path.insert(0, str(Path(__file__).parent))
     try:
-        from search_openalex import search_openalex, format_bibtex_entry
+        from search_openalex import format_bibtex_entry, search_openalex
     except Exception:
         return []
     works = search_openalex(topic, years=5, limit=limit)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 mcp_router.py — MCP 工具智能路由
 =================================
@@ -18,7 +17,6 @@ mcp_router.py — MCP 工具智能路由
 """
 
 import argparse
-import json
 import sys
 from pathlib import Path
 

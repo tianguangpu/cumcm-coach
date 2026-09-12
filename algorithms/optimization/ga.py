@@ -30,9 +30,10 @@ GA: 遗传算法
     result = solver.solve()
 """
 
-import numpy as np
-from typing import Callable, List, Tuple, Optional
+from typing import Callable, List, Optional, Tuple
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class GA:

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 灰色关联分析(GRA) — 评价题/相关性题常用,可与 VIKOR/TOPSIS 做消融对照
 纯 numpy 无额外依赖。接口: from gra import grey_relational

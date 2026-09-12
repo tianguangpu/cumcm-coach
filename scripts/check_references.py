@@ -8,10 +8,9 @@
 
 import re
 import sys
-import json
-from pathlib import Path
-from datetime import datetime
 from collections import Counter
+from datetime import datetime
+from pathlib import Path
 
 
 def extract_refs_from_bib(bib_path):

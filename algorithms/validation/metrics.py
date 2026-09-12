@@ -18,9 +18,9 @@ Metrics: 拟合精度指标 + 残差分析
     FitMetrics.plot_residuals(y_true - y_pred, 'residuals.png')
 """
 
-import numpy as np
+
 import matplotlib.pyplot as plt
-from typing import Optional
+import numpy as np
 
 
 class FitMetrics:

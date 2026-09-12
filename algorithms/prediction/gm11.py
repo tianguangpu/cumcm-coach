@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 GM(1,1) 灰色预测模型 — 小样本时序预测(国赛 D 题/预测题高频)
 纯 numpy 无额外依赖。接口: from gm11 import GM11

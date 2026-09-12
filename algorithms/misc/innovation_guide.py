@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """innovation_guide.py — 创新点生成机制重构 (P0-2)
 
 废除旧的"强制创新点必须量化百分比"逻辑(易编造数字、抑制真创新)。
@@ -112,7 +111,7 @@ def suggest_innovations(problem_type="B", problem_text="", top=5):
             "模型结构/约束处理/分解类创新不强制百分比, 改为理论+消融证据",
             "若最大提升来源于基线过弱, 必须补强基线后重算",
         ],
-        "source": "problem_type={} matched={}".format(problem_type, bool(problem_text[:1])),
+        "source": f"problem_type={problem_type} matched={bool(problem_text[:1])}",
     }
 
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 run_all.py — 国赛全链流水线
 ============================
@@ -32,12 +31,11 @@ run_all.py — 国赛全链流水线
 """
 import argparse
 import json
-import os
 import subprocess
 import sys
 import time
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -211,7 +209,7 @@ def run_step(step: dict, project_dir: str, engine: str, team: str, members: str,
         return True
 
     # 格式化命令(用当前解释器 sys.executable 替代 python,规避别名缺失)
-    py = '"{}"'.format(sys.executable)
+    py = f'"{sys.executable}"'
     cmd = cmd.format(engine=engine, team=team, members=members, ptype=ptype, py=py)
 
     if dry:

@@ -10,11 +10,11 @@
     tuner.plot_cv_results("figures/png/fig_cv_results.png")
 """
 
-import warnings
 import time
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
-from pathlib import Path
 
 try:
     import matplotlib
@@ -25,11 +25,15 @@ except ImportError:
     HAS_MPL = False
 
 try:
+    from sklearn.metrics import make_scorer, mean_absolute_error, mean_squared_error, r2_score
     from sklearn.model_selection import (
-        GridSearchCV, RandomizedSearchCV, cross_val_score,
-        KFold, TimeSeriesSplit, StratifiedKFold
+        GridSearchCV,
+        KFold,
+        RandomizedSearchCV,
+        StratifiedKFold,
+        TimeSeriesSplit,
+        cross_val_score,
     )
-    from sklearn.metrics import make_scorer, mean_squared_error, r2_score, mean_absolute_error
     HAS_SKLEARN = True
 except ImportError:
     HAS_SKLEARN = False
@@ -299,7 +303,7 @@ class AutoTuner:
         fig, ax = plt.subplots(figsize=(8, 5))
 
         # 重新执行交叉验证获取各折分数
-        from sklearn.model_selection import cross_val_score, KFold
+        from sklearn.model_selection import KFold
         cv = KFold(n_splits=5, shuffle=True, random_state=42)
 
         # 需要 X, y — 这里用 cv_results 的数据
@@ -343,7 +347,7 @@ def quick_cv(model, X, y, cv=5, is_time_series=False, scoring="r2"):
     -------
     dict: {"mean", "std", "scores", "report_str"}
     """
-    from sklearn.model_selection import cross_val_score, KFold, TimeSeriesSplit
+    from sklearn.model_selection import KFold, TimeSeriesSplit, cross_val_score
 
     cv_strategy = TimeSeriesSplit(n_splits=cv) if is_time_series else KFold(n_splits=cv, shuffle=True, random_state=42)
     scores = cross_val_score(model, X, y, cv=cv_strategy, scoring=scoring)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """isolated_solve.py — 子进程隔离求解执行器 (v1.1)
 
 背景

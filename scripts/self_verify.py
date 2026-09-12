@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """self_verify.py — 求解结果自证门禁（借鉴 AutoMCM-Pro 强制代码自证）
 
 核心思想：每个求解结果必须通过验证才能被论文引用。
@@ -19,7 +18,7 @@ import json
 import math
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")

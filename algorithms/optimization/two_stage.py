@@ -20,11 +20,12 @@
     result = solver.solve(data, n_clusters=5, constraints={})
 """
 
-import numpy as np
-from typing import List, Tuple, Dict, Optional, Callable
-from scipy.cluster.hierarchy import linkage, fcluster
-from scipy.spatial.distance import cdist
 import random
+from typing import Dict, List
+
+import numpy as np
+from scipy.cluster.hierarchy import fcluster, linkage
+from scipy.spatial.distance import cdist
 
 # ============================================================
 # 两阶段求解器

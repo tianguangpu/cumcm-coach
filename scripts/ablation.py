@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 ablation.py v2.0 — 多算法消融对比框架
 ======================================
@@ -19,7 +18,8 @@ import csv
 import json
 import time
 from pathlib import Path
-from typing import Callable, List, Dict, Any, Optional, Tuple
+from typing import Callable, Dict, List, Tuple
+
 
 # numpy延迟导入 — 未安装时基本功能(write_ablation/validate_ablation)仍可用
 def _np():

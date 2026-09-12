@@ -28,17 +28,18 @@ L1-L4 四级评审(核心自动化检查项):
         --results reports/RESULTS_REPORT.md --bib references.bib --code code/
 """
 
+import argparse
 import os
 import re
 import subprocess
-import argparse
 import sys
+
 if hasattr(sys.stdout, 'reconfigure'):  # Win GBK console emoji/UTF-8 fix
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
-from pathlib import Path
-from typing import List, Tuple, Optional
 from datetime import datetime
+from pathlib import Path
+from typing import List, Optional, Tuple
 
 
 class PaperChecker:

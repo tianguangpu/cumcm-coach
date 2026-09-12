@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 init_project.py — 国赛项目初始化
 =================================
@@ -10,7 +9,6 @@ init_project.py — 国赛项目初始化
 """
 import argparse
 import json
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -95,7 +93,7 @@ def init_project(
     ai_log_path = root / "state" / "ai_interaction_log.json"
     with open(ai_log_path, "w", encoding="utf-8") as f:
         json.dump(ai_log, f, ensure_ascii=False, indent=2)
-    print(f"[初始化] ai_interaction_log.json 已创建")
+    print("[初始化] ai_interaction_log.json 已创建")
 
     # 4. 创建 plan.md
     plan_content = f"""# 方案
@@ -135,7 +133,7 @@ def init_project(
 """
     plan_path = root / "plan.md"
     plan_path.write_text(plan_content, encoding="utf-8")
-    print(f"[初始化] plan.md 已创建")
+    print("[初始化] plan.md 已创建")
 
     # 5. 创建 todo.md
     todo_content = """# 待办事项
@@ -149,7 +147,7 @@ def init_project(
 """
     todo_path = root / "todo.md"
     todo_path.write_text(todo_content, encoding="utf-8")
-    print(f"[初始化] todo.md 已创建")
+    print("[初始化] todo.md 已创建")
 
     # 6. 创建 .gitignore
     gitignore_content = """# Python
@@ -181,9 +179,9 @@ output/
     gitignore_path = root / ".gitignore"
     if not gitignore_path.exists():
         gitignore_path.write_text(gitignore_content, encoding="utf-8")
-        print(f"[初始化] .gitignore 已创建")
+        print("[初始化] .gitignore 已创建")
 
-    # 7. 记录外部算法库路径(解耦硬编码 D:\) 
+    # 7. 记录外部算法库路径(解耦硬编码 D:\)
     if external_dir:
         env_path = root / ".env"
         with open(env_path, "a", encoding="utf-8") as f:

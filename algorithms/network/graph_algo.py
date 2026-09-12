@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 图论算法 — Dijkstra 最短路 / Kruskal 最小生成树 / Edmonds-Karp 最大流
 国赛 B 题(网络/路径/调度)常用。纯标准库无额外依赖。

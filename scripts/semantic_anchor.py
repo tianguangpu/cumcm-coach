@@ -8,9 +8,8 @@
 
 import json
 import re
-import sys
-from pathlib import Path
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Optional
 
 
@@ -238,7 +237,7 @@ def verify_against_decision_log(anchors: list, decision_log_path: str) -> dict:
     if not Path(decision_log_path).exists():
         return {"status": "no_log", "issues": ["decision_log.json 不存在"]}
 
-    with open(decision_log_path, "r", encoding="utf-8") as f:
+    with open(decision_log_path, encoding="utf-8") as f:
         log = json.load(f)
 
     issues = []
@@ -268,8 +267,8 @@ def generate_report(result: VerificationResult, log_check: dict, output_path: Op
         "",
         f"## 总分: {result.score:.1f}/100",
         "",
-        f"| 类型 | 数量 |",
-        f"|------|------|",
+        "| 类型 | 数量 |",
+        "|------|------|",
         f"| 总锚点 | {result.total_anchors} |",
         f"| [OK] 匹配 | {result.matched} |",
         f"| [WARN] 部分匹配 | {result.partial} |",

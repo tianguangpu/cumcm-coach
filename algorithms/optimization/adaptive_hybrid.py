@@ -1,12 +1,12 @@
 """自适应混合优化器 (Adaptive Hybrid Optimizer, AHO)"""
 
+
 import numpy as np
-from typing import Callable, List, Tuple, Dict, Any
 
 
 class AdaptiveHybrid:
     """v7 原创算法，融合 PSO/DE/SA 三大优势"""
-    
+
     def __init__(self, objective, bounds, pop_size=50, max_iter=200, seed=42):
         self.objective = objective
         self.bounds = np.array(bounds)
@@ -20,7 +20,7 @@ class AdaptiveHybrid:
         self.best_solution = None
         self.best_fitness = float('inf')
         self.history = []
-    
+
     def solve(self, verbose=False):
         rng = np.random.default_rng(self.seed)
         pop = rng.uniform(self.bounds[:,0], self.bounds[:,1], (self.pop_size, self.dim))
@@ -34,11 +34,11 @@ class AdaptiveHybrid:
         T = self.T0
         n_eval = self.pop_size
         stagnation = 0
-        
+
         for it in range(self.max_iter):
             center = np.mean(pop, axis=0)
             diversity = np.mean(np.sqrt(np.sum((pop - center)**2, axis=1))) / np.sqrt(np.sum((self.bounds[:,1]-self.bounds[:,0])**2))
-            
+
             if diversity < 0.1:
                 for i in range(self.pop_size):
                     idxs = [j for j in range(self.pop_size) if j != i]
@@ -64,7 +64,7 @@ class AdaptiveHybrid:
                 fitness = np.array([self.objective(x) for x in pop])
                 n_eval += self.pop_size
                 strategy = 'PSO'
-            
+
             improved = fitness < personal_best_fitness
             personal_best[improved] = pop[improved]
             personal_best_fitness[improved] = fitness[improved]
@@ -75,7 +75,7 @@ class AdaptiveHybrid:
                 stagnation = 0
             else:
                 stagnation += 1
-            
+
             if stagnation >= 5:
                 perturbed = global_best + rng.normal(0, T/self.T0*0.1, self.dim) * (self.bounds[:,1]-self.bounds[:,0])
                 perturbed = np.clip(perturbed, self.bounds[:,0], self.bounds[:,1])
@@ -87,11 +87,11 @@ class AdaptiveHybrid:
                 T = max(self.T_min, T * self.alpha)
                 stagnation = 0
                 strategy = 'SA'
-            
+
             self.history.append({'iter': it, 'best': global_best_fitness, 'diversity': diversity, 'strategy': strategy})
             if verbose and it % 10 == 0:
                 print(f'迭代 {it:4d}: 最优值={global_best_fitness:.6f}, 策略={strategy}')
-        
+
         self.best_solution = global_best
         self.best_fitness = global_best_fitness
         return {'f_opt': global_best_fitness, 'x_opt': global_best.tolist(), 'n_eval': n_eval, 'history': self.history}
@@ -100,15 +100,15 @@ class AdaptiveHybrid:
 if __name__ == '__main__':
     def rastrigin(x):
         return 10*len(x) + sum(xi**2 - 10*np.cos(2*np.pi*xi) for xi in x)
-    
+
     print('='*60)
     print('自适应混合优化器 (AHO) 演示')
     print('测试函数: Rastrigin (5维)')
     print('='*60)
-    
+
     opt = AdaptiveHybrid(rastrigin, [(-5.12,5.12)]*5, pop_size=50, max_iter=100, seed=42)
     result = opt.solve(verbose=True)
     print(f'最优值: {result["f_opt"]:.6f}')
     print(f'最优解: {[round(x,4) for x in result["x_opt"]]}')
     print(f'评估次数: {result["n_eval"]}')
-    print(f'理论最优: 0.0')
+    print('理论最优: 0.0')

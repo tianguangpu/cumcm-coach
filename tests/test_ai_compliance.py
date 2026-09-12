@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """test_ai_compliance.py — AI 合规模块单元测试"""
 import json
 import sys

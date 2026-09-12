@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 ai_compliance.py — 国赛 AI 工具使用合规模块 (v2.0)
 ====================================================
@@ -45,14 +44,12 @@ ai_compliance.py — 国赛 AI 工具使用合规模块 (v2.0)
   python ai_compliance.py --aigc-check --paper paper/main.tex  # AIGC 风险自检
 """
 
+import argparse
 import json
-import os
 import re
 import sys
-import argparse
-from pathlib import Path
 from datetime import datetime
-from typing import Optional
+from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -554,7 +551,7 @@ class AILogger:
         print("  AIGC 检测风险自检报告")
         print("=" * 60)
         print(f"\n  风险等级: {report['risk_label']}  (分数: {report['risk_score']}/100)")
-        print(f"\n  ── 核心指标 ──")
+        print("\n  ── 核心指标 ──")
         m = report["metrics"]
         print(f"  中文字符总数: {m['total_cn_chars']}")
         print(f"  中文句子总数: {m['total_sentences']}")
@@ -564,12 +561,12 @@ class AILogger:
         print(f"  段首重复率: {m['opening_repetition_ratio']} (≤0.2 为安全)")
 
         if report.get("ai_phrases_found"):
-            print(f"\n  ── 命中的 AI 高频词 ──")
+            print("\n  ── 命中的 AI 高频词 ──")
             for phrase in report["ai_phrases_found"]:
                 print(f"    · {phrase}")
 
         if report.get("recommendations"):
-            print(f"\n  ── 改进建议 ──")
+            print("\n  ── 改进建议 ──")
             for i, rec in enumerate(report["recommendations"], 1):
                 print(f"  {i}. {rec}")
 

@@ -23,9 +23,7 @@
 import argparse
 import json
 import os
-import sys
 from datetime import datetime
-from pathlib import Path
 
 REGISTRY_FILE = "state/result_registry.json"
 REQUIRED_FIELDS = ['description', 'value', 'verification_status', 'source_script']
@@ -58,10 +56,10 @@ def load_registry(project_dir: str) -> dict:
     registry_path = os.path.join(project_dir, REGISTRY_FILE)
 
     if not os.path.exists(registry_path):
-        print(f"[WARN] 注册表不存在，正在初始化...")
+        print("[WARN] 注册表不存在，正在初始化...")
         return init_registry(project_dir)
 
-    with open(registry_path, 'r', encoding='utf-8') as f:
+    with open(registry_path, encoding='utf-8') as f:
         return json.load(f)
 
 
@@ -205,7 +203,7 @@ def generate_report(project_dir: str, output_path: str) -> str:
 
     # 问题清单
     if verify_result['issues']:
-        report += f"""
+        report += """
 ## 三、问题清单
 
 """
@@ -298,7 +296,7 @@ def main():
 
     elif args.command == 'verify':
         result = verify_registry(args.project)
-        print(f"\n[STATS] 验证结果:")
+        print("\n[STATS] 验证结果:")
         print(f"   总数: {result['total']}")
         print(f"   通过: {result['passed']} [OK]")
         print(f"   失败: {result['failed']} [FAIL]")
@@ -306,7 +304,7 @@ def main():
         print(f"   可写入: {result['approved_for_paper']}")
 
         if result['issues']:
-            print(f"\n[WARN] 问题:")
+            print("\n[WARN] 问题:")
             for issue in result['issues']:
                 print(f"   - {issue}")
 

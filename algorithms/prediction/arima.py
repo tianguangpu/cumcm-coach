@@ -26,9 +26,10 @@ ARIMA: 差分整合移动平均自回归模型
 - matplotlib（绘图，仅 plot() 需要）
 """
 
-import numpy as np
+from typing import Tuple
+
 import matplotlib.pyplot as plt
-from typing import Optional, Tuple
+import numpy as np
 
 
 class ARIMA_Forecast:

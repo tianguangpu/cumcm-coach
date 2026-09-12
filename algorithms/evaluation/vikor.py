@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 VIKOR 多准则折中排序 — 评价/决策题(国赛 C 题)常用,可与 TOPSIS 做消融对照
 纯 numpy 无额外依赖。接口: from vikor import VIKOR

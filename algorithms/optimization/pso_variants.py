@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 cumcm-coach-skill-v7 《优化》子模块 —— PSO 变体 / 高级约束策略 / 混合算法框架
 

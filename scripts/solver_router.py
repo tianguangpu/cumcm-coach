@@ -3,7 +3,6 @@
 支持 LP/MIP/NLP/VRP/JobShop/TSP 等多种问题类型的自动路由。
 """
 
-import warnings
 import numpy as np
 
 SOLVERS = {}
@@ -21,7 +20,7 @@ except ImportError:
     pass
 
 try:
-    from scipy.optimize import minimize, linprog
+    from scipy.optimize import linprog, minimize
     SOLVERS["scipy"] = {"name": "SciPy"}
 except ImportError:
     pass

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Sobol 全局灵敏度分析 — 增强版（SALib 优先 + 纯 numpy 降级）
 
@@ -24,8 +23,9 @@ Sobol 全局灵敏度分析 — 增强版（SALib 优先 + 纯 numpy 降级）
   - "numpy": 强制使用纯 numpy 实现
 """
 
-import numpy as np
 import warnings
+
+import numpy as np
 
 # 尝试导入 SALib
 try:
@@ -187,6 +187,6 @@ if __name__ == "__main__":
     # 验证：可加模型 f = x1 + 2*x2，方差贡献正比于 a_i^2/12
     # Var(x1) = 1/12, Var(x2) = 4/12, 总方差 = 5/12
     # S1(x1) ≈ (1/12)/(5/12) = 0.2, S1(x2) ≈ (4/12)/(5/12) = 0.8
-    print(f"\n期望: S1 ≈ [0.2, 0.8]")
+    print("\n期望: S1 ≈ [0.2, 0.8]")
     print(f"实际: S1 = {[round(v, 3) for v in r['S1']]}")
     print(f"误差: {[round(abs(v - e), 3) for v, e in zip(r['S1'], [0.2, 0.8])]}")

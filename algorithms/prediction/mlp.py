@@ -28,9 +28,10 @@ MLP: 多层感知机序列预测
 - matplotlib（绘图，仅 plot() 需要）
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
 from typing import Optional, Tuple
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 class MLP_Forecast:

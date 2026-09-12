@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 polish_abstract.py — 摘要"5+3"结构检查 + 8稿迭代追踪
 ======================================================
@@ -14,8 +13,8 @@ import json
 import os
 import re
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -153,12 +152,12 @@ def render_report(check_result: dict, draft_info: dict = None) -> str:
     L.append("=" * 55)
 
     # 基础信息
-    L.append(f"\n【基础信息】")
+    L.append("\n【基础信息】")
     L.append(f"  字数: {check_result['word_count_cn']} (建议300-1000)")
     L.append(f"  综合得分: {check_result['score']}/100")
 
     # 5要素
-    L.append(f"\n【5要素结构】")
+    L.append("\n【5要素结构】")
     for name, found in check_result["structure_5"].items():
         icon = "✓" if found else "✗"
         L.append(f"  {icon} {name}")
@@ -166,25 +165,25 @@ def render_report(check_result: dict, draft_info: dict = None) -> str:
     L.append(f"  → {found_count}/5 要素齐全")
 
     # 量化值
-    L.append(f"\n【量化结果值】")
+    L.append("\n【量化结果值】")
     L.append(f"  数量: {check_result['quant_count']} (要求≥3)")
     if check_result["quant_values"]:
         L.append(f"  示例: {', '.join(str(v) for v in check_result['quant_values'][:5])}")
 
     # 迭代追踪
     if draft_info:
-        L.append(f"\n【迭代追踪】")
+        L.append("\n【迭代追踪】")
         L.append(f"  当前: 第{draft_info['draft_num']}稿")
         L.append(f"  目标: {draft_info['target_drafts']}稿")
         L.append(f"  已完成: {draft_info['total_drafts']}/{draft_info['target_drafts']}")
         if draft_info["reached_target"]:
-            L.append(f"  ✓ 已达到8稿迭代要求")
+            L.append("  ✓ 已达到8稿迭代要求")
         else:
             L.append(f"  ⚠ 还需{draft_info['target_drafts'] - draft_info['total_drafts']}稿")
 
     # 问题
     if check_result["issues"]:
-        L.append(f"\n【待修复问题】")
+        L.append("\n【待修复问题】")
         for i, issue in enumerate(check_result["issues"], 1):
             L.append(f"  {i}. {issue}")
 

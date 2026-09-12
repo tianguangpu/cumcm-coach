@@ -18,8 +18,7 @@ import pytest
 # 添加项目根目录到 path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from algorithms.base import BaseSolver, PopulationBasedSolver, SolverResult
-
+from algorithms.base import SolverResult
 
 # ============================================================
 # 基类测试
@@ -535,7 +534,7 @@ class TestPopulation:
 
     def test_basic_interface(self):
         """Population 模型应有正确接口"""
-        from algorithms.ecology.population import lotka_volterra, SIR, SEIR
+        from algorithms.ecology.population import SEIR, SIR, lotka_volterra
 
         assert callable(lotka_volterra)
         assert callable(SIR)
@@ -561,7 +560,7 @@ class TestNash:
 
     def test_basic_interface(self):
         """Nash 应有正确接口"""
-        from algorithms.game.nash import pure_nash, mixed_nash_2x2
+        from algorithms.game.nash import mixed_nash_2x2, pure_nash
 
         assert callable(pure_nash)
         assert callable(mixed_nash_2x2)
@@ -633,7 +632,7 @@ class TestInnovationGuide:
 
     def test_basic_interface(self):
         """InnovationGuide 应有正确接口"""
-        from algorithms.misc.innovation_guide import suggest_innovations, eval_direction
+        from algorithms.misc.innovation_guide import eval_direction, suggest_innovations
 
         assert callable(suggest_innovations)
         assert callable(eval_direction)

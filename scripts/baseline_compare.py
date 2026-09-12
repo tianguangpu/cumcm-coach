@@ -19,9 +19,9 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-import numpy as np
-from pathlib import Path
 from datetime import datetime
+
+import numpy as np
 
 # ============================================================
 # 基线模型定义（按题型）
@@ -168,7 +168,7 @@ class BaselineComparator:
 
     def load_advanced(self, advanced_path: str):
         """加载高级模型结果"""
-        with open(advanced_path, 'r', encoding='utf-8') as f:
+        with open(advanced_path, encoding='utf-8') as f:
             self.advanced_result = json.load(f)
         return self.advanced_result
 
@@ -368,9 +368,9 @@ def main():
     if args.lower_is_better:
         higher_is_better = False
 
-    print(f"=" * 60)
-    print(f"基线比较机制 v1.0")
-    print(f"=" * 60)
+    print("=" * 60)
+    print("基线比较机制 v1.0")
+    print("=" * 60)
     print(f"问题类型: {args.type}")
     print(f"基线类型: {baseline_type}")
     print(f"比较指标: {metric}")
@@ -391,12 +391,12 @@ def main():
             if args.data.endswith('.csv'):
                 data_arr = np.loadtxt(args.data, delimiter=',', ndmin=2)
             elif args.data.endswith('.json'):
-                with open(args.data, 'r', encoding='utf-8') as f:
+                with open(args.data, encoding='utf-8') as f:
                     data_arr = np.array(json.load(f))
             elif args.data.endswith('.npy'):
                 data_arr = np.load(args.data)
             else:
-                print(f"   [WARN] 不支持的文件格式，使用随机数据")
+                print("   [WARN] 不支持的文件格式，使用随机数据")
                 data_arr = None
 
             if data_arr is not None:
@@ -431,7 +431,7 @@ def main():
         if args.data:
             print(f"   [WARN] 数据文件不存在: {args.data}，使用随机数据")
         else:
-            print(f"   [INFO] 未指定 --data，使用随机数据（建议指定实际数据文件）")
+            print("   [INFO] 未指定 --data，使用随机数据（建议指定实际数据文件）")
 
         if baseline_type == 'greedy':
             np.random.seed(42)
@@ -461,18 +461,18 @@ def main():
         comparator.load_advanced(args.advanced)
     else:
         # 生成示例高级模型结果
-        print(f"   [WARN] 文件不存在或为测试模式，使用示例数据")
+        print("   [WARN] 文件不存在或为测试模式，使用示例数据")
         comparator.advanced_result = {
             'method': '高级模型（示例）',
             metric: comparator.baseline_result.get(metric, 0) * 0.8  # 示例：比基线好20%
         }
 
     # 比较
-    print(f"[3/3] 执行比较...")
+    print("[3/3] 执行比较...")
     result = comparator.compare(metric=metric, higher_is_better=higher_is_better)
 
     print()
-    print(f"比较结果:")
+    print("比较结果:")
     print(f"  基线值: {result['baseline_value']:.4f}")
     print(f"  高级值: {result['advanced_value']:.4f}")
     print(f"  改进:   {result['improvement_pct']:.2f}%")

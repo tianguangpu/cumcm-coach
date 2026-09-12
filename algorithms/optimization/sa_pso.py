@@ -30,9 +30,10 @@ SA-PSO: 模拟退火粒子群优化算法
     result = solver.solve()
 """
 
-import numpy as np
-from typing import Callable, List, Tuple, Optional
+from typing import Callable, List, Optional, Tuple
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class SA_PSO:
@@ -181,10 +182,10 @@ class SA_PSO:
             X_upper = self.bounds[:, 1][np.newaxis, :]  # (1, dim)
 
             # 处理超出下界
-            mask_lower = self.X < X_lower
+            mask_lower = X_lower > self.X
             self.X = np.where(mask_lower, X_lower + np.abs(self.X - X_lower), self.X)
             # 处理超出上界
-            mask_upper = self.X > X_upper
+            mask_upper = X_upper < self.X
             self.X = np.where(mask_upper, X_upper - np.abs(self.X - X_upper), self.X)
 
             # 可行域投影修复(约束主通道)

@@ -26,10 +26,10 @@
     print(result['makespan'], result['schedule'])
 """
 
-import numpy as np
-from typing import List, Tuple, Dict, Optional
 import random
-from copy import deepcopy
+from typing import Dict, List, Optional, Tuple
+
+import numpy as np
 
 # ============================================================
 # JSSP 核心类
@@ -458,7 +458,7 @@ class JobShopScheduler:
     def _calculate_crowding(self, objectives: List[List[float]],
                            fronts: List[List[int]]) -> Dict[int, float]:
         """计算拥挤度"""
-        crowding = {i: 0.0 for i in range(len(objectives))}
+        crowding = dict.fromkeys(range(len(objectives)), 0.0)
 
         for front in fronts:
             if len(front) <= 2:
@@ -490,7 +490,7 @@ class JobShopScheduler:
     def _calculate_crowding_single(self, objectives: List[List[float]],
                                   indices: List[int]) -> Dict[int, float]:
         """计算单个前沿的拥挤度"""
-        crowding = {i: 0.0 for i in indices}
+        crowding = dict.fromkeys(indices, 0.0)
 
         if len(indices) <= 2:
             for idx in indices:

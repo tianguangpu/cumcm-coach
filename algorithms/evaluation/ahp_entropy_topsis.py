@@ -19,11 +19,10 @@ AHP + 熵权 + TOPSIS 综合评价流程
     scores = ce.topsis()
 """
 
-import numpy as np
-import pandas as pd
-from typing import List, Tuple, Optional
+from typing import List, Optional
+
 import matplotlib.pyplot as plt
-import seaborn as sns
+import numpy as np
 
 
 class ComprehensiveEvaluation:
@@ -184,7 +183,7 @@ class ComprehensiveEvaluation:
         # 综合得分
         scores = d_neg / (d_pos + d_neg + 1e-10)
 
-        print(f"\nTOPSIS 综合得分:")
+        print("\nTOPSIS 综合得分:")
         for i, score in enumerate(scores):
             print(f"  方案{i+1}: {score:.4f}")
 

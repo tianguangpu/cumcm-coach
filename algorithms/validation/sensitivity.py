@@ -21,9 +21,10 @@ Sensitivity: 灵敏度分析
     sa.plot_tornado('tornado.png')
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
 from typing import Callable, Dict, Tuple
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 class SensitivityAnalyzer:

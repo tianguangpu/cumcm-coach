@@ -1,5 +1,4 @@
-﻿# -*- coding: utf-8 -*-
-"""
+﻿"""
 cumcm-coach 机理求解模块 — 二维有限差分法(FDM)求解扩散/热传导方程
 
     方程:   du/dt = Dx·d2u/dx2 + Dy·d2u/dy2 + f(x,y,t)

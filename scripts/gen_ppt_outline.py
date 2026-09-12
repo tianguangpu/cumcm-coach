@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 gen_ppt_outline.py — 国赛答辩PPT自动生成
 ==========================================
@@ -15,8 +14,8 @@ import json
 import os
 import re
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -42,7 +41,7 @@ def extract_paper_info(tex_path: str) -> dict:
     """从LaTeX论文中提取关键信息。"""
     if not os.path.isfile(tex_path):
         return {}
-    txt = open(tex_path, "r", encoding="utf-8", errors="ignore").read()
+    txt = open(tex_path, encoding="utf-8", errors="ignore").read()
 
     info = {}
 
@@ -118,24 +117,24 @@ def generate_markdown(info: dict, results: dict, output_path: str, ptype: str = 
 
     md = []
     md.append(f"# {title}")
-    md.append(f"## 答辩PPT大纲（自动生成）")
+    md.append("## 答辩PPT大纲（自动生成）")
     md.append(f"> 生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     md.append(f"> 题目类型: {ptype if ptype else '—'}")
     md.append(f"> 论文统计: {len(sections)}节 / {fig_count}图 / {eq_count}公式")
     md.append("")
 
     for page in PPT_STRUCTURE:
-        md.append(f"---")
-        md.append(f"")
+        md.append("---")
+        md.append("")
         md.append(f"### 第{page['page']}页：{page['title']}")
-        md.append(f"")
+        md.append("")
 
         if page["page"] == 1:
             md.append(f"**{title}**")
-            md.append(f"")
-            md.append(f"- 队伍编号：_______________")
-            md.append(f"- 学校名称：_______________")
-            md.append(f"- 指导教师：_______________")
+            md.append("")
+            md.append("- 队伍编号：_______________")
+            md.append("- 学校名称：_______________")
+            md.append("- 指导教师：_______________")
             md.append(f"- 日期：{datetime.now().strftime('%Y年%m月%d日')}")
 
         elif page["page"] == 2:
@@ -160,26 +159,26 @@ def generate_markdown(info: dict, results: dict, output_path: str, ptype: str = 
 
         elif page["page"] in (4, 6, 8):
             q_num = (page["page"] - 4) // 2 + 1
-            md.append(f"**方法选择**：（为何选此方法，有何优势）")
+            md.append("**方法选择**：（为何选此方法，有何优势）")
             md.append("")
-            md.append(f"**模型公式**：")
-            md.append(f"$$")
-            md.append(f"\\min_{{x}} \\quad f(x) = \\cdots")
-            md.append(f"$$")
-            md.append(f"")
-            md.append(f"**求解结果**：")
+            md.append("**模型公式**：")
+            md.append("$$")
+            md.append("\\min_{x} \\quad f(x) = \\cdots")
+            md.append("$$")
+            md.append("")
+            md.append("**求解结果**：")
             if key_values:
                 md.append(key_values[q_num - 1] if q_num <= len(key_values) else "- （待填）")
             else:
                 md.append("- （待填关键数值）")
 
         elif page["page"] in (5, 7, 9):
-            md.append(f"**核心图表**：")
-            md.append(f"")
+            md.append("**核心图表**：")
+            md.append("")
             md.append(f"![图{(page['page']-5)//2+1}](figures/png/fig{(page['page']-5)//2+1}.png)")
-            md.append(f"")
-            md.append(f"**关键发现**：")
-            md.append(f"- （2~3句话总结图表揭示的规律）")
+            md.append("")
+            md.append("**关键发现**：")
+            md.append("- （2~3句话总结图表揭示的规律）")
 
         elif page["page"] == 10:
             md.append("**四重检验结果**：")
@@ -225,8 +224,8 @@ def generate_pptx(info: dict, results: dict, output_path: str):
     """生成PPTX格式（需要python-pptx）。"""
     try:
         from pptx import Presentation
-        from pptx.util import Inches, Pt
         from pptx.dml.color import RGBColor
+        from pptx.util import Inches, Pt
     except ImportError:
         print("[PPT] python-pptx 未安装，请运行: pip install python-pptx")
         print("[PPT] 已降级为Markdown格式输出")

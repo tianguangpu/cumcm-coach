@@ -1,5 +1,4 @@
-﻿# -*- coding: utf-8 -*-
-"""
+﻿"""
 cumcm-coach 博弈/生态/统计/全局灵敏度模块 —— 统计检验
 
 本文档属于 cumcm-coach-skill-v7 算法库的《统计》子模块。

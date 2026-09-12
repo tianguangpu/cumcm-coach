@@ -1,5 +1,4 @@
-﻿# -*- coding: utf-8 -*-
-"""
+﻿"""
 cumcm-coach 机理求解模块 — 三角网格有限元(FEM)解 Poisson 方程
 
     方程:   -div( k(x,y) * grad(u) ) = f(x,y)   线性基函数(一阶元)
@@ -120,7 +119,7 @@ def assemble_and_solve(mesh, f_func, k_func=1.0, dirichlet=None):
 if __name__ == "__main__":
     # 自测: 单位正方形 laplacian(u)=1, u=0 边界, 解析解在中心(0.5,0.5)约为 0.0736
     nodes, elements = rect_tri_mesh(10, 10)
-    bc = {i: 0.0 for i in range(len(nodes))}
+    bc = dict.fromkeys(range(len(nodes)), 0.0)
     # 只钉边界
     bc_all = {}
     for i, (xi, yi) in enumerate(nodes):

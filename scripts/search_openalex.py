@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 search_openalex.py — OpenAlex 文献自动检索
 ==========================================
@@ -18,8 +17,8 @@ search_openalex.py — OpenAlex 文献自动检索
 import argparse
 import json
 import sys
-import urllib.request
 import urllib.parse
+import urllib.request
 from datetime import datetime
 from pathlib import Path
 
