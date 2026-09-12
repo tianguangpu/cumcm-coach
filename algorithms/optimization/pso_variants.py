@@ -26,11 +26,13 @@ def pso_clerc(obj, dim, bounds, iters=500, swarms=40, c1=2.05, c2=2.05,
     """Clerc 收敛系数 PSO(附加时变线性递减 w 双保险)。obj 最小化。"""
     rng = np.random.default_rng(seed)
     b = np.asarray(bounds, float)
+    # 支持两种 bounds 形式：统一边界 [lo, hi]，或逐维边界 [[lo1,hi1],[lo2,hi2],...]
+    # （逐维边界是刚需：不同变量量纲/取值范围往往不同）
     if b.ndim == 1:
-        lo, hi = b[0], b[1]
+        lo = np.full(dim, b[0], dtype=float)
+        hi = np.full(dim, b[1], dtype=float)
     else:
-        lo, hi = b[:, 0], b[:, 1]
-    lo = float(np.broadcast_to(lo, (1,))[0]); hi = float(np.broadcast_to(hi, (1,))[0])
+        lo, hi = b[:, 0].astype(float), b[:, 1].astype(float)
     chi, c1_, c2_ = clerc_constriction(c1, c2)
     X = rng.uniform(lo, hi, (swarms, dim))
     V = rng.uniform(-(hi - lo), hi - lo, (swarms, dim)) * 0.1
@@ -62,11 +64,12 @@ def pso_tvac(obj, dim, bounds, iters=500, swarms=40, seed=None, repair=None,
     """时变加速系数 PSO(Ratnaweera 2004)+方差自适应惯性。"""
     rng = np.random.default_rng(seed)
     b = np.asarray(bounds, float)
+    # 支持两种 bounds 形式：统一边界 [lo, hi]，或逐维边界 [[lo1,hi1],[lo2,hi2],...]
     if b.ndim == 1:
-        lo, hi = b[0], b[1]
+        lo = np.full(dim, b[0], dtype=float)
+        hi = np.full(dim, b[1], dtype=float)
     else:
-        lo, hi = b[:, 0], b[:, 1]
-    lo = float(np.broadcast_to(lo, (1,))[0]); hi = float(np.broadcast_to(hi, (1,))[0])
+        lo, hi = b[:, 0].astype(float), b[:, 1].astype(float)
     X = rng.uniform(lo, hi, (swarms, dim))
     V = rng.uniform(-(hi - lo), hi - lo, (swarms, dim)) * 0.1
     if repair is not None:

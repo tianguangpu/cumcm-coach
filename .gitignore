@@ -14,6 +14,8 @@ pip-wheel-metadata/
 .pytest_cache/
 .coverage
 .coverage.*
+coverage.json
+coverage.xml
 htmlcov/
 .tox/
 .mypy_cache/

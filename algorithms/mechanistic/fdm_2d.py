@@ -72,6 +72,12 @@ def fdm_2d_explicit(D, Lx, Ly, T, nx, ny, nt, f=None, u0=None, bc=0.0,
     U = np.zeros((nx + 1, ny + 1))
     if u0 is not None:
         U = np.asarray(u0(X, Y), float)
+        # 兼容三种初值写法：常量（返回标量，如 lambda x, y: 1.0）、
+        # 可广播形式（如只依赖 x），以及完整网格函数；统一整理为 (nx+1, ny+1)
+        if U.ndim == 0:
+            U = np.full((nx + 1, ny + 1), float(U))
+        elif U.shape != (nx + 1, ny + 1):
+            U = np.ascontiguousarray(np.broadcast_to(U, (nx + 1, ny + 1)), dtype=float)
     U = _set_bc(U)
 
     U_list = [U.copy()] if return_all else None
