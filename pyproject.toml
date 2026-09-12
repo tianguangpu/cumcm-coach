@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cumcm-coach"
-version = "7.11.0"
+version = "7.12.0"
 description = "国赛(CUMCM)智能论文生成系统 — 题型识别 + 金标准内核 + 多求解器路由 + L1-L4 四级评审"
 readme = "README.md"
 requires-python = ">=3.9"

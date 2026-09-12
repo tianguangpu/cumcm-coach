@@ -1,17 +1,20 @@
 ---
 name: cumcm-coach-skill-v7
 description: >-
-  全国大学生数学建模竞赛国奖论文生成系统 v7.11.0(吸收 MathModelAgent 流水线骨架 + GitHub 前沿项目优化)。
+  全国大学生数学建模竞赛国奖论文生成系统 v7.12.0(吸收 MathModelAgent 流水线骨架 + GitHub 前沿项目优化)。
   自动识别题型(A机理/B优化/C评价/D数据),智能路由对应模板,集成 MCP 优化器/数学推导/图表验证,
   预置算法模板库,L1-L4 四级评审自动化检验。支持 Typst + LaTeX 双引擎、Python/MATLAB 双轨输出。
   触发词:数学建模、国赛、CUMCM、优化、预测、评价、机理建模。
 metadata:
-  version: 7.11.0
+  version: 7.12.0
   created: 2026-07-31
-  updated: 2026-09-01
-  author: CUMCM Coach Team
+  updated: 2026-09-13
+  author: tianguangpu
+  license: MIT
+  repository: https://github.com/tianguangpu/cumcm-coach
   supersedes: cumcm-coach-skill (v6.0.0, 已删除)
   changelog:
+    - v7.12.0 (2026-09-13): **首个开源版本** — MIT 许可 + pyproject.toml 可安装包 + GitHub Actions CI(3 作业 / 3 版本矩阵) + README 英文版 + 扩展测试 41 个(覆盖率 32.9%→46.5%) + ruff 清零(626→0) + 修复 9 处缺陷(含 3 处运行时崩溃、2 处假绿色测试)
     - v7.11.0 (2026-09-01): **最新国赛要求更新 + 绘图skill全量集成** — AIGC检测自保指南 + AIGC风险自检 + 页数合规检查 + AI声明位置检查 + 五轮自审框架 + 去AI味AIGC专项 + 金标准AIGC分级 + figure-routing v2.0(6绘图skill+2排版skill完整集成+题型→图型→skill三维映射+scipilot出版级审查)
     - v7.10.0 (2026-08-28): **工程质量优化** — 烟雾测试覆盖 18→34模块(+89%) + check_paper_quality Typst支持 + baseline_compare数据加载 + solver_router内置路由(VRP/JobShop/TSP) + requirements.txt标注 + run_all集成参考文献审查
     - v7.9.0 (2026-08-27): **GitHub调研优化** — 新增基线比较/结果溯源/VRP/JobShop/TwoStage/NSGA2 + 3套Typst模板 + gen_code_manifest增强
@@ -25,10 +28,10 @@ metadata:
     - v7.0 (2026-07-31): **初始版本** — 题型自适应+MCP集成+算法库+自动检验
 ---
 
-# cumcm-coach-skill v7.11.0 — 国赛智能论文生成系统
+# cumcm-coach v7.12.0 — 国赛智能论文生成系统
 
 > **核心定位**:专做 CUMCM 国赛,冲刺国奖。保留 v6 金标准内核(六段子结构/三段式公式/四重检验/算法对比/创新量化),叠加流水线编排、Typst 双引擎、L1-L4 四级评审。
-> **v7.11.0 最新国赛要求更新**:新增 AIGC 检测自保指南(六大降 AIGC 策略)、AIGC 风险自检(困惑度/突发性/高频词/句式模式)、页数合规检查(≤20页)、AI声明位置检查、五轮自审框架(新增 AIGC 合规审查)、去AI味指南新增 AIGC 检测专项、金标准新增 AIGC 风险分级。
+> **v7.12.0 开源版本**:MIT 许可 + pyproject.toml 可安装包 + GitHub Actions CI(代码风格 / 测试矩阵 / wheel 构建)+ README 英文版;新增扩展测试 41 个(覆盖率 32.9%→46.5%),ruff 检查清零(626→0),修复 9 处缺陷(含 3 处运行时崩溃与 2 处"假绿色"测试)。
 > **不做的**:MCM/华为/华中/APMCM 等其他赛事(交给 MathModelAgent 5writing);非国赛模板。
 
 ---

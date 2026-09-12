@@ -7,6 +7,62 @@
 
 ---
 
+## [7.12.0] - 2026-09-13
+
+首个开源版本：<https://github.com/tianguangpu/cumcm-coach>
+
+### Added
+- **开源许可**: MIT LICENSE
+- **可安装包**: pyproject.toml，支持 `pip install -e ".[full]"`；
+  核心依赖 + 五组可选依赖（solvers / sensitivity / viz / docs / dev），
+  并统一 ruff / black / pytest / mypy 工具链配置
+- **CI**: GitHub Actions 三作业流水线
+  （代码风格检查 / Python 3.9·3.11·3.13 测试矩阵 / wheel 构建与导入校验）
+- **文档**: README.en.md 英文版；README 增补项目定位、设计原则、
+  已知限制章节与目录结构说明
+- **扩展测试**: tests/test_extended_algorithms.py（41 个测试），覆盖
+  PSO 变体、自适应混合优化、二维有限差分、有限元、统计检验、
+  灵敏度分析、假设误差量化、TAM 时序预测、纳什均衡、Sobol 全局灵敏度
+
+### Fixed
+修复 9 处缺陷，其中 3 处会直接导致运行时崩溃：
+- `auto_check.py` check_bib_quality 在 `issues` 未定义时调用 `append`，
+  且该分支仅在"检查不通过"时触发——失败场景反而崩溃，本该报错的
+  路径变成程序挂掉
+- `boundary_scan.py` 调用 `os.path.isfile` 但未导入 `os`
+- `auto_check.py` 包裹子进程源码的 f-string 缺 `r` 前缀，
+  内层正则 `\s` 被当作转义解析
+- `pso_variants.py` pso_clerc / pso_tvac 把 `lo`/`hi` 强制转为标量，
+  传入逐维边界 `[[lo1,hi1],[lo2,hi2]]` 时抛 ValueError，导致
+  "为不同量纲变量设置不同取值范围"无法实现
+- `fdm_2d.py` `u0` 传常量初值函数（返回标量）时得到 0 维数组，
+  在边界赋值处索引崩溃
+- `gen_code_manifest.py` `lstrip` 使用多字符参数（按字符集删除而非
+  删除子串），行为有歧义
+- `nsga2.py` 未使用的循环控制变量
+- 2 处裸 `except` 静默吞异常
+
+### Changed
+- **测试真实性**: 修复 2 处"假绿色"测试——它们返回 bool 而非 assert，
+  断言失败被内层 `except` 吞掉并转为 `return False`，pytest 见不到异常
+  即报 PASS；纠正 1 处误判 skip（JobShop 测试与 NSGA-II 无关）
+- **pre-commit**: 统一到 ruff（替代 black + flake8 + isort），
+  移除已废弃的 `types-all` 与硬编码 `language_version: python3.13`
+- **Makefile**: `install` 改为 `pip install -e ".[dev]"`
+- **测试归位**: `scripts/test_*.py` → `tests/`（三处引用此前全部失效）
+- **代码风格**: ruff 清零（626 → 0），类型注解现代化为 PEP 585，
+  对 6 项既定风格显式声明豁免并附理由
+
+### Metrics
+| 指标 | 改进前 | 改进后 |
+|------|--------|--------|
+| 测试 | 47 passed / 1 skipped | **89 passed / 0 skipped** |
+| 覆盖率 | 32.9% | **46.5%** |
+| ruff 问题 | 626 | **0** |
+| 运行时缺陷 | 9 处 | 0 |
+
+---
+
 ## [7.11.0] - 2026-09-11
 
 ### Added
