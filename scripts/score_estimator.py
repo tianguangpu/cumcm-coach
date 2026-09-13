@@ -120,6 +120,7 @@ def estimate(scores: dict[str, float], ptype: str) -> dict:
     numerator = sum(full[k] * BASE_WEIGHTS[k] * tw[k] for k in DIMENSIONS)
     denominator = sum(BASE_WEIGHTS[k] * tw[k] for k in DIMENSIONS)
     total = numerator / denominator if denominator else 0.0
+    total = round(total, 6)  # 消除跨平台浮点误差（如 72.0 可能算成 71.9999...）
 
     tier = "未达省一"
     for name, line in TIERS:

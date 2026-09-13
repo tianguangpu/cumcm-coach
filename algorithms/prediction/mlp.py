@@ -29,6 +29,7 @@ MLP: 多层感知机序列预测
 """
 
 from typing import Optional
+import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -76,12 +77,18 @@ class MLP_Forecast:
         return np.array(X), np.array(y)
 
     def fit(self) -> "MLP_Forecast":
-        """训练 MLP，返回 self"""
-        from sklearn.neural_network import MLPRegressor
-
+        """训练 MLP，返回 self（sklearn 未装时降级为线性回归）"""
         X, y = self._make_samples(self.series)
         if len(X) < 5:
             raise ValueError("样本量不足以训练(window 过大或序列太短)")
+
+        try:
+            from sklearn.neural_network import MLPRegressor
+        except ImportError:
+            warnings.warn("sklearn 未安装，MLP 降级为线性回归（最小二乘）。安装: pip install scikit-learn")
+            self._fit_linear(X, y)
+            self.fitted = True
+            return self
 
         self.model = MLPRegressor(
             hidden_layer_sizes=self.hidden_layer_sizes,
@@ -100,6 +107,18 @@ class MLP_Forecast:
         print(f"MLP 训练完成: loss={self.train_loss:.6f}, 训练R2={self.train_r2:.4f}")
         return self
 
+    def _fit_linear(self, X, y):
+        """sklearn 未装时的降级：线性回归（最小二乘），保证无 sklearn 也能跑。"""
+        X_b = np.hstack([X, np.ones((len(X), 1))])  # 加偏置列
+        self._w = np.linalg.lstsq(X_b, y, rcond=None)[0]
+        pred = X_b @ self._w
+        ss_res = np.sum((y - pred) ** 2)
+        ss_tot = np.sum((y - np.mean(y)) ** 2)
+        self.train_r2 = 1.0 - ss_res / ss_tot if ss_tot > 1e-15 else 0.0
+        self.train_loss = float(np.mean((y - pred) ** 2))
+        self._linear = True
+        print(f"MLP 降级为线性回归: 训练R2={self.train_r2:.4f}")
+
     def predict(self, steps: int) -> np.ndarray:
         """迭代式多步预测"""
         if not self.fitted:
@@ -108,7 +127,10 @@ class MLP_Forecast:
         preds = []
         cur = self.series[-self.window:].copy()
         for _ in range(steps):
-            nxt = self.model.predict(cur.reshape(1, -1))[0]
+            if getattr(self, "_linear", False):
+                nxt = float(np.append(cur, 1.0) @ self._w)
+            else:
+                nxt = self.model.predict(cur.reshape(1, -1))[0]
             preds.append(nxt)
             cur = np.roll(cur, -1)
             cur[-1] = nxt

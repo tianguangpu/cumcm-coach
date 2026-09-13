@@ -109,8 +109,9 @@ def _sobol_salib(model_func, bounds, N=256, seed=42, n_boot=200):
         "bounds": [list(b) for b in bounds],
     }
 
-    # Saltelli 采样
-    X = salib_saltelli.sample(problem, N, seed=seed)
+    # Saltelli 采样（SALib 新版 sample 不接受 seed，改用 np.random.seed 控制）
+    np.random.seed(seed)
+    X = salib_saltelli.sample(problem, N)
 
     # 模型求值
     Y = np.array([model_func(x) for x in X])

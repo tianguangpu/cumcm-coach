@@ -70,9 +70,10 @@ def _solve_highs(objective, constraints, variables, sense):
     c = [objective.get(name, 0) for name in var_names]
     if sense == "maximize": c = [-x for x in c]
     h.addVars(n, col_lower, col_upper)
-    h.changeColsCostByRange(0, n-1, c)
+    idx = np.array(range(n), dtype=np.int32)
+    h.changeColsCost(n, idx, np.array(c))
     if any(integrality[i] == highspy.HighsVarType.kInteger for i in range(n)):
-        h.changeColsIntegralityByRange(0, n-1, integrality)
+        h.changeColsIntegrality(n, idx, np.array(integrality))
     for cons in constraints:
         row_indices = [var_names.index(name) for name in cons["coeffs"]]
         row_values = list(cons["coeffs"].values())
