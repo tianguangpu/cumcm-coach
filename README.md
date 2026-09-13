@@ -2,16 +2,14 @@
 
 # cumcm-coach
 
-**全国大学生数学建模竞赛（CUMCM）国一冲刺级论文生成系统**
+**全国大学生数学建模竞赛（CUMCM）建模与论文辅助工具**
 
-把赛题变成一篇可交卷的论文：题型识别 → 建模求解 → 图表生成 → 论文排版 → 四级评审。
+题型识别与模板路由 + 交卷前自动化检查，帮你把时间花在真正的建模上。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-101%20passed-brightgreen.svg)](tests/)
-[![Algorithms](https://img.shields.io/badge/algorithms-36%20modules-informational.svg)](algorithms/)
-[![CUMCM](https://img.shields.io/badge/CUMCM-国一冲刺-gold.svg)](#)
+[![Tests](https://img.shields.io/badge/tests-119%20passed-brightgreen.svg)](tests/)
 
 [中文](README.md) · [English](README.en.md) · [快速开始](#快速开始) · [架构](#架构设计) · [贡献指南](CONTRIBUTING.md)
 
@@ -54,7 +52,7 @@ python scripts/run_all.py --team "202600001" --members "张三,李四,王五" --
 
 | 原则 | 具体做法 |
 |------|---------|
-| **不编数字** | 论文中每个数值必须先过 `result_registry.py` 注册，未验证的数值不允许写入正文 |
+| **不编数字** | 提供 `result_registry.py` 数值溯源注册表，帮你追踪数值来源——但这是**辅助工具、靠自觉遵守**，无法强制 |
 | **不自我循环** | 模型必须与**强基线**对比（而非弱贪心），避免「自己证明自己好」 |
 | **不裸画图** | 每张图至少叠加 1 项可视化技法，禁止裸 `plot` / `bar` |
 | **不藏短板** | 假设误差逐项量化，灵敏度分析必须报出敏感参数，不粉饰 |
