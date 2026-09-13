@@ -30,7 +30,7 @@ import numpy as np
 # 尝试导入 SALib
 try:
     from SALib.analyze import sobol as salib_sobol
-    from SALib.sample import saltelli as salib_saltelli
+    from SALib.sample import sobol as salib_saltelli
     HAS_SALIB = True
 except ImportError:
     HAS_SALIB = False
@@ -109,15 +109,14 @@ def _sobol_salib(model_func, bounds, N=256, seed=42, n_boot=200):
         "bounds": [list(b) for b in bounds],
     }
 
-    # Saltelli 采样（SALib 新版 sample 不接受 seed，改用 np.random.seed 控制）
-    np.random.seed(seed)
-    X = salib_saltelli.sample(problem, N)
+    # Saltelli 采样（SALib 新版推荐 sample.sobol，支持 seed 参数）
+    X = salib_saltelli.sample(problem, N, calc_second_order=False, seed=seed)
 
     # 模型求值
     Y = np.array([model_func(x) for x in X])
 
     # Sobol 分析
-    Si = salib_sobol.analyze(problem, Y, calc_second_order=False, n_resamples=n_boot)
+    Si = salib_sobol.analyze(problem, Y, calc_second_order=False, num_resamples=n_boot)
 
     return {
         "S1": Si["S1"].tolist(),
