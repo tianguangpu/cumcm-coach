@@ -11,10 +11,15 @@ ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# 安装系统依赖（LaTeX 可选）
+# 系统依赖：构建工具 + XeLaTeX（含中文支持，用于编译论文）
 RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
     git \
+    texlive-xetex \
+    texlive-latex-recommended \
+    texlive-fonts-recommended \
+    texlive-lang-chinese \
+    fonts-noto-cjk \
     && rm -rf /var/lib/apt/lists/*
 
 # 复制依赖文件

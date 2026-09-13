@@ -32,6 +32,27 @@ services:
       - PYTHONPATH=/app
     command: python -m pytest tests/ -v --cov=algorithms --cov-report=html
 
+  # 示例服务：跑一个示例，验证 Python 环境（5 分钟跑通）
+  example:
+    build: .
+    container_name: cumcm-example
+    volumes:
+      - .:/app
+      - ./examples/output:/app/examples/output
+    environment:
+      - PYTHONPATH=/app
+    command: python examples/01_optimization.py
+
+  # 论文服务：验证 XeLaTeX 可编译论文（验证 LaTeX 环境）
+  paper:
+    build: .
+    container_name: cumcm-paper
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+    command: sh -c "xelatex --version | head -1"
+
   # 基准测试服务
   benchmark:
     build: .
