@@ -36,6 +36,7 @@ pip install -e .
 python scripts/run_all.py --team "202600001" --members "张三,李四,王五" --type B   # 换成你的题型 A/B/C/D
 ```
 
+> 🔰 **新手只看这篇就够**：[新手最小路径](docs/00_新手最小路径.md)（3 页，只讲题型路由 + L1 检查 + 12 个高频算法）。其余 36 算法 / 4 级评审 / 8 MCP 全是可选增强，不必先学。
 > 完整的 10 步比赛流程见下方「完整比赛流程（国赛 SOP）」。
 
 ---
@@ -312,7 +313,8 @@ python scripts/auto_check.py --paper paper/main.tex --level all
 
 | 文档 | 内容 |
 |------|------|
-| [SKILL.md](SKILL.md) | 完整流程规范（题型路由、金标准内核、MCP 接线） |
+| [docs/00_新手最小路径.md](docs/00_新手最小路径.md) | 🔰 **新手先看这篇**（题型路由 + L1 检查 + 12 高频算法，3 页） |
+| [SKILL.md](SKILL.md) | 完整流程规范（题型路由、写作框架、MCP 接线） |
 | [QUICKSTART.md](QUICKSTART.md) | 5 分钟上手 |
 | [examples/](examples/) | 四个可直接运行的示例（B/C/D 题型 + 通用验证） |
 | [integrations/](integrations/) | 集成的绘图模块（figure-skill / diagram-design / figure-templates / nature-plot-repro） |
