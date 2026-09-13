@@ -68,6 +68,11 @@ def check_script(path: Path, target_width_cm: float) -> list[dict]:
     except OSError as e:
         return [{"file": str(path), "level": "ERR", "msg": f"无法读取: {e}"}]
 
+    # 只检查真正绘图的脚本：不含 matplotlib 调用的脚本（如纯数据预处理）
+    # 没有画布尺寸与字号可言，报「未设定字号」属误报
+    if not re.search(r"\bmatplotlib\b|\bplt\.|\bsns\.|\bseaborn\b", src):
+        return []
+
     issues: list[dict] = []
 
     figsizes = [(float(w), float(h)) for w, h in RE_FIGSIZE.findall(src)]
