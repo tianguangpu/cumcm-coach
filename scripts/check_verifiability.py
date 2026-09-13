@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 check_verifiability.py — 图表真实性溯源检测(反假图, 题目无关通用版)
 ====================================================================
@@ -22,12 +21,13 @@ check_verifiability.py — 图表真实性溯源检测(反假图, 题目无关�
   py check_verifiability.py --no-e2e     # 跳过 L5(慢)
 """
 import sys
+
 if hasattr(sys.stdout, 'reconfigure'):  # Win GBK console emoji fix
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+import argparse
 import os
 import re
-import argparse
 
 # v7 移植版：项目根默认取当前工作目录（run_all.py 在用户项目目录下调用本脚本）。
 # 脚本位于 v7/scripts/，用户项目结构为 BASE/{code,paper,figures,results}。
@@ -179,7 +179,7 @@ def check_trace():
             for x in lst:
                 print(f'  ⚠ [WARN] {label}: {x}')
     if not (orphan or ghost):
-        print(f'  ✓ L1 通过: 论文引用的每张图都能溯源到脚本与磁盘文件')
+        print('  ✓ L1 通过: 论文引用的每张图都能溯源到脚本与磁盘文件')
     return len(orphan) + len(ghost)
 
 
@@ -212,7 +212,7 @@ def check_data_source():
             print(f'  ⚠ [WARN] {s}:{i} 疑似硬编码数据数组(≥6数字): {txt}...')
         print(f'  ⚠ [WARN] 共 {len(hardcode)} 处, 请人工确认是否为真实计算值或仅为布局坐标')
     else:
-        print(f'  ✓ 未发现硬编码长数据数组(数据均从文件读取)')
+        print('  ✓ 未发现硬编码长数据数组(数据均从文件读取)')
 
     # (c) 数据溯源: 保存结果文件的脚本必须读取原始数据或上游结果, 否则是凭空生成假数据
     phantom = []
@@ -223,7 +223,7 @@ def check_data_source():
         for s, names in phantom:
             print(f'  ✗ [FAIL] {s} 保存了 {", ".join(names)} 但未读取原始数据/上游结果(凭空生成假数据)')
     else:
-        print(f'  ✓ 每个结果文件均由读取了数据的脚本生成(数据可溯源)')
+        print('  ✓ 每个结果文件均由读取了数据的脚本生成(数据可溯源)')
     return len(phantom)
 
 
@@ -251,7 +251,7 @@ def check_timestamps():
             print(f'  ⚠ [WARN] {f} 早于最新数据文件(可能是旧图, 未随数据重生成)')
         print(f'  ⚠ [WARN] 共 {len(stale)} 张, 建议重跑绘图(注: OneDrive 同步可能干扰 mtime, 需人工复核)')
     else:
-        print(f'  ✓ 所有图均晚于数据文件(时序正常)')
+        print('  ✓ 所有图均晚于数据文件(时序正常)')
     return 0  # 时序仅提示, 不计 FAIL
 
 
@@ -280,9 +280,10 @@ def check_e2e():
     选择 1~2 个绘图脚本, 在安全环境运行, 验证输出文件。
     成功 +10 分, 失败 -20 分(容错: 仅选 1 个脚本, 避免环境依赖问题)。
     """
+    import contextlib
+    import shutil
     import subprocess
     import tempfile
-    import shutil
 
     print('\n' + '=' * 70)
     print('L5 端到端验证: 实际运行绘图脚本, 检查输出是否真实生成')
@@ -398,10 +399,8 @@ def check_e2e():
             fail += 1
         finally:
             # 清理临时目录
-            try:
+            with contextlib.suppress(Exception):
                 shutil.rmtree(tmp_base, ignore_errors=True)
-            except Exception:
-                pass
 
     return fail  # 每个失败 -1 (汇总时 *20 扣分)
 
