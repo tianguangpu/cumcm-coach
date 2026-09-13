@@ -329,6 +329,7 @@ python scripts/auto_check.py --paper paper/main.tex --level all
 | [references/aigc-awareness.md](references/aigc-awareness.md) | AIGC 检测自保指南 |
 | [references/self-review-framework.md](references/self-review-framework.md) | 五轮自审框架 |
 | [references/playbooks/](references/playbooks/) | 5 本解题手册（物理ODE/路径规划/调度优化/评价决策/数据洞察） |
+| [docs/04_迭代优化记录.md](docs/04_迭代优化记录.md) | **踩坑复盘**（16 个真实 bug 的症状/根因/修复） |
 | [vault/](vault/) | Obsidian 知识库（算法笔记 / 题型要点 / 规范速查） |
 
 ---
@@ -337,10 +338,19 @@ python scripts/auto_check.py --paper paper/main.tex --level all
 
 诚实说明当前状态，避免误用：
 
-- `algorithms/optimization/nsga2.py` 在部分环境下触发段错误，测试中已标记 `skip`，待修复。
+- `algorithms/optimization/nsga2.py` 早期在同进程连续实例化多个求解器时会触发段错误，已通过隔离子进程运行解决，求解器本身正常（含回归测试）。
 - `algorithms/prediction/tam.py` 的完整功能需额外 `pip install tam`；未安装时自动降级为简化加法分解，此时论文中须如实说明。
 - MATLAB 相关功能需本机安装 MATLAB R2024a+，未安装时自动降级到 Python 绘图。
 - MCP 工具（fetch / tavily / matlab 等）均为**可选增强**，未连接时自动降级到内置实现，流程不中断。
+
+---
+
+## 使用限制与免责声明
+
+1. 本工具仅作为**竞赛辅助工具**，禁止直接照搬 AI 生成内容参赛；模型逻辑、公式推导、数值结果务必**人工二次核验**。
+2. AI 存在公式、计算逻辑出错概率，所有代码、推导、图表均须人工校验后再用于正式提交。
+3. 不承诺「一键拿国一」——成绩取决于模型质量、验证充分性与论文表达，本工具负责把这些环节的**硬性规范自动化**，其余靠你自己。
+4. 禁止商用；仅允许学生学习、竞赛辅助使用。
 
 ---
 
