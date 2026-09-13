@@ -179,12 +179,23 @@ python scripts/run_all.py --team "202600001" --members "张三,李四,王五" --
 
 ### 作为 Claude Code Skill 使用
 
-本仓库同时是一个 Claude Code Skill。克隆到 skills 目录即可通过 `/cumcm-coach-skill-v7` 调用：
+本仓库同时是一个 Claude Code Skill。两种用法：
+
+**完整版（推荐，含算法库 + 检查脚本）**——克隆到 skills 目录，通过 `/cumcm-coach-skill-v7` 调用：
 
 ```bash
 git clone https://github.com/tianguangpu/cumcm-coach.git \
   ~/.claude/skills/cumcm-coach-skill-v7
 ```
+
+**轻量版（只需题型识别）**——只取 `SKILL.md` 一个文件，就能用「题型识别 → 模板路由」这个核心功能（算法库、L1 检查需完整版）：
+
+```bash
+curl -o ~/.claude/skills/cumcm-coach/SKILL.md \
+  https://raw.githubusercontent.com/tianguangpu/cumcm-coach/master/SKILL.md
+```
+
+> **多平台**：本仓库主体是标准 Claude Code Skill；核心逻辑（题型识别规则、模板路由、写作框架）都在 `SKILL.md` 纯 markdown 里，可移植到 Codex / Cursor 等支持 skill 的 CLI（需按各平台格式适配）。
 
 ---
 
