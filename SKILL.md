@@ -1,5 +1,5 @@
 ---
-name: cumcm-coach-skill-v7
+name: cumcm-coach
 description: >-
   全国大学生数学建模竞赛(CUMCM)建模与论文辅助工具 v7.12.0。
   核心价值:题型识别(A机理/B优化/C评价/D数据)路由到对应模板与算法 + 交卷前 L1 自动化检查(页数/AI声明/数值溯源)。
@@ -665,7 +665,7 @@ cumcm_2026/
 ### 6.1 目录概览
 
 ```
-cumcm-coach-skill-v7/ (971KB, 106个文件)
+cumcm-coach/ (971KB, 106个文件)
 ├── SKILL.md                    # 主入口(768行)
 ├── QUICKSTART.md               # 快速启动指南
 ├── requirements.txt            # 依赖清单

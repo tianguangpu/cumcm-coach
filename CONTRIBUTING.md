@@ -58,7 +58,7 @@
 ```bash
 # 克隆项目
 git clone <repo-url>
-cd cumcm-coach-skill-v7
+cd cumcm-coach
 
 # 创建虚拟环境
 python -m venv venv
@@ -80,7 +80,7 @@ pre-commit install
 ### 目录结构
 
 ```
-cumcm-coach-skill-v7/
+cumcm-coach/
 ├── scripts/          # 工具脚本
 ├── algorithms/       # 算法库
 ├── templates/        # 论文模板

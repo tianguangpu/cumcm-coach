@@ -2,7 +2,7 @@
 
 # cumcm-coach
 
-**A competition-grade paper generation system for CUMCM (China Undergraduate Mathematical Contest in Modeling)**
+**A modeling & paper assistant for CUMCM (China Undergraduate Mathematical Contest in Modeling)**
 
 Turn a problem statement into a submittable paper: problem typing → modeling & solving → figures → typesetting → four-level review.
 
@@ -53,7 +53,7 @@ This tool turns what judges actually look for into **automatable checks**: every
 
 | Principle | Implementation |
 |-----------|---------------|
-| **No fabricated numbers** | Every value must be registered in `result_registry.py` before it may appear in the paper |
+| **No fabricated numbers** | Provides `result_registry.py` for value tracing — an **assistant, honored voluntarily, not enforced** |
 | **No self-verification loops** | Models are compared against **strong** baselines (not weak greedy heuristics) |
 | **No bare plots** | Each figure must layer at least one visualization technique over plain `plot` / `bar` |
 | **No hidden weaknesses** | Assumption errors are quantified item by item; sensitivity analysis must name sensitive parameters |
@@ -66,7 +66,7 @@ This tool turns what judges actually look for into **automatable checks**: every
 | Capability | Detail |
 |-----------|--------|
 | **Adaptive problem typing** | Auto-classifies into A (mechanistic) / B (optimization) / C (evaluation) / D (data), then into 12 sub-types driving algorithm selection |
-| **36 algorithm modules** | Optimization, prediction, evaluation, graph theory, mechanistic, statistics, game theory, ecology, validation |
+| **Algorithm modules** | 34 self-written (pure numpy) + 3 scipy-based; optimization, prediction, evaluation, graph theory, mechanistic, statistics, game theory, ecology, validation — see [ATTRIBUTION.md](algorithms/ATTRIBUTION.md) |
 | **Multi-solver routing** | LP → HiGHS ｜ MIP/CSP → OR-Tools CP-SAT ｜ NLP → SciPy ｜ continuous → built-in SA-PSO / GA / DE |
 | **Mandatory four-fold validation** | Goodness-of-fit + Sobol global sensitivity + Monte Carlo (≥200 runs) + assumption-error quantification (≥3 items) |
 | **Publication-grade figures** | 300 dpi PNG + 600 dpi vector PDF, 5 academic palettes, 10 visualization techniques |
@@ -125,7 +125,7 @@ This repository is also a Claude Code Skill. Two ways to use it:
 
 ```bash
 git clone https://github.com/tianguangpu/cumcm-coach.git \
-  ~/.claude/skills/cumcm-coach-skill-v7
+  ~/.claude/skills/cumcm-coach
 ```
 
 **Lite (type-routing only)** — grab just `SKILL.md` for the core "type detection → template routing" feature:

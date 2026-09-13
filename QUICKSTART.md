@@ -20,7 +20,7 @@ py -c "import highspy; print('HiGHS OK')" 2>/dev/null || echo "HiGHS 未安装�
 mkdir cumcm_2026C && cd cumcm_2026C
 
 # 初始化项目结构
-py ~/.claude/skills/cumcm-coach-skill-v7/scripts/init_project.py \
+py ~/.claude/skills/cumcm-coach/scripts/init_project.py \
   --team "202600001" --members "张三,李四,王五" --type C
 ```
 
@@ -28,7 +28,7 @@ py ~/.claude/skills/cumcm-coach-skill-v7/scripts/init_project.py \
 
 ```bash
 # 全链流水线（快速模式）
-py ~/.claude/skills/cumcm-coach-skill-v7/scripts/run_all.py --fast
+py ~/.claude/skills/cumcm-coach/scripts/run_all.py --fast
 
 # 查看结果
 ls results/

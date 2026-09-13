@@ -93,9 +93,9 @@ python examples/01_optimization.py    # 先跑一个示例看看效果
 
 自动识别 A 机理 / B 优化 / C 评价 / D 数据 四大题型，路由到对应论文模板与算法族；再细分为 12 个细类（OPT/EVA/PRE/GRA/PDE/STA/CLU/GAM/ECO/PHY/NLP/COM）决定算法选型。
 
-**🔬 36 个算法模块**
+**🔬 算法模块（34 纯 numpy 自研 + 3 用 scipy）**
 
-覆盖优化、预测、评价、图论、机理、统计、博弈、生态、验证九大方向，全部可直接 `import`，不依赖外部服务。
+覆盖优化、预测、评价、图论、机理、统计、博弈、生态、验证九大方向，可直接 `import`。实现来源（自研/包装/调求解器）见 [ATTRIBUTION.md](algorithms/ATTRIBUTION.md)。
 
 **⚙️ 多求解器自动路由**
 
@@ -206,11 +206,11 @@ python scripts/run_all.py --team "202600001" --members "张三,李四,王五" --
 
 本仓库同时是一个 Claude Code Skill。两种用法：
 
-**完整版（推荐，含算法库 + 检查脚本）**——克隆到 skills 目录，通过 `/cumcm-coach-skill-v7` 调用：
+**完整版（推荐，含算法库 + 检查脚本）**——克隆到 skills 目录，通过 `/cumcm-coach` 调用：
 
 ```bash
 git clone https://github.com/tianguangpu/cumcm-coach.git \
-  ~/.claude/skills/cumcm-coach-skill-v7
+  ~/.claude/skills/cumcm-coach
 ```
 
 **轻量版（只需题型识别）**——只取 `SKILL.md` 一个文件，就能用「题型识别 → 模板路由」这个核心功能（算法库、L1 检查需完整版）：
