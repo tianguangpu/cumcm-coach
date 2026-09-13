@@ -583,6 +583,38 @@ class PaperChecker:
         return True, f"附录代码完整（lstinputlisting {len(lstinput)} 处{module_note}）"
 
     # ============================================================
+    # 步骤 8e:四重检验深度检查 [国一内容深度：检验须图表化]
+    # ============================================================
+    def check_validation_depth(self) -> tuple[bool, str]:
+        """四重检验深度：拟合精度需 Q-Q/残差、灵敏度需 Sobol/龙卷风、MC 需 CDF、假设误差需风险分级。"""
+        text = self._read_all_paper_text()
+        issues = []
+
+        # 1. 拟合精度：应有残差/Q-Q 正态性验证
+        if re.search(r'拟合精度|拟合优度|R\^2|R²|MAE|RMSE', text) and \
+           not re.search(r'[Qq][-—]?[Qq]|残差.*正态|正态性|qq', text):
+            issues.append("拟合精度缺 Q-Q 图/残差正态性检验")
+
+        # 2. 灵敏度：应有 Sobol 全局灵敏度或龙卷风图（而非仅单参数/阈值）
+        if re.search(r'灵敏度|敏感性', text) and \
+           not re.search(r'[Ss]obol|龙卷风|tornado|全局灵敏', text):
+            issues.append("灵敏度缺 Sobol 全局灵敏度/龙卷风图")
+
+        # 3. 蒙特卡洛：应有 CDF 累计分布图（而非仅均值/CV 数字）
+        if re.search(r'蒙特卡洛|Monte|MC|置信区间', text) and \
+           not re.search(r'CDF|累计分布|累积分布', text):
+            issues.append("蒙特卡洛缺 CDF 累计分布图")
+
+        # 4. 假设误差：应有风险等级分级（致命/显著/轻微/可忽略）
+        if re.search(r'假设误差|假设.*影响', text) and \
+           not re.search(r'风险|致命|显著|轻微|可忽略', text):
+            issues.append("假设误差缺风险等级分级")
+
+        if issues:
+            return False, "四重检验深度不足: " + "；".join(issues)
+        return True, "四重检验深度达标（Q-Q/Sobol/CDF/风险分级）"
+
+    # ============================================================
     # 步骤 9:PDF 视觉逐页检查 [新增]
     # ============================================================
     def check_pdf_visual(self) -> tuple[bool, str]:
@@ -1169,6 +1201,7 @@ class PaperChecker:
             ('6c. AI声明位置', 1, self.check_ai_declaration),
             ('7. 参考文献规范', 2, lambda: self.check_references(min_count=min_refs)),
             ('7b. 附录代码完整', 1, self.check_appendix_code),
+            ('7c. 四重检验深度', 2, self.check_validation_depth),
             ('8a. 图表数量', 2, lambda: self.check_figure_count(min_count=min_figures)),
             ('8b. 图表质量', 2, self.check_figure_quality),
             ('8c. 图题自解释', 2, self.check_figure_captions),
