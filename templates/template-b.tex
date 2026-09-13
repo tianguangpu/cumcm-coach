@@ -32,13 +32,14 @@
 \setlength{\parindent}{2em}
 
 % 章节标题居中，二级标题左对齐
-\titleformat{\section}{\centering\large\bfseries\heiti}{\thesection}{0.8em}{}
-\titleformat{\subsection}{\normalsize\bfseries\heiti}{\thesubsection}{0.8em}{}
-\titleformat{\subsubsection}{\normalsize\bfseries\heiti}{\thesubsubsection}{0.6em}{}
+\titleformat{\section}{\centering\zihao{2}\bfseries\heiti}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\zihao{-3}\bfseries\heiti}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\zihao{4}\bfseries\heiti}{\thesubsubsection}{0.6em}{}
 
 % 页眉空、页脚页码居中
 \pagestyle{fancy}
 \fancyhf{}
+\fancyhead[C]{\small 2026\,\text{高教社杯全国大学生数学建模竞赛}\quad\texttt{XX题}\quad|\quad 队伍\texttt{XXXX}}
 \fancyfoot[C]{\small\thepage}
 \renewcommand{\headrulewidth}{0pt}
 
@@ -54,6 +55,7 @@
 \DeclareMathOperator{\sgn}{sgn}
 
 \hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+\captionsetup{font=footnotesize, labelfont=bf}
 
 \lstset{
   basicstyle=\ttfamily\small,
