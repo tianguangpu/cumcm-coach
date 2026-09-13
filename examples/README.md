@@ -1,32 +1,40 @@
-# 示例
+# 示例（题型 × 算法矩阵）
 
-四个可直接运行的示例，对应国赛四类题型的典型分析流程。
+八个可直接运行的示例，覆盖 A/B/C/D 四类题型 × 高频算法。**装好之后不知道干嘛？从这里开始。**
 
 ## 运行
 
 无需安装即可运行（示例内部已处理 `sys.path`）：
 
 ```bash
-python examples/01_optimization.py
-python examples/02_evaluation.py
-python examples/03_prediction.py
-python examples/04_verification.py
+python examples/01_optimization.py      # B 题：算法对比
+python examples/02_evaluation.py        # C 题：综合评价
+python examples/03_prediction.py        # D 题：时序预测
+python examples/04_verification.py      # 通用：四重检验
+python examples/05_mechanism_fdm.py     # A 题：机理 FDM
+python examples/06_nsga2_multiobjective.py  # B 题：多目标
+python examples/07_sobol_sensitivity.py # 通用：Sobol 灵敏度
+python examples/08_tam_forecast.py      # D 题：TAM 分解
 ```
 
 生成的图片输出到 `examples/output/`（该目录已加入 `.gitignore`）。
 
-## 示例一览
+## 题型 × 算法矩阵
 
-| 示例 | 对应题型 | 演示内容 | 核心接口 |
-|------|---------|---------|---------|
-| [`01_optimization.py`](01_optimization.py) | **B 优化** | 同一问题跑 GA / DE / Clerc-PSO，输出对比表与收敛曲线 | `GA` `DE` `pso_clerc` |
-| [`02_evaluation.py`](02_evaluation.py) | **C 评价** | 熵权法 + AHP + 组合赋权 + TOPSIS 排序 | `ComprehensiveEvaluation` |
-| [`03_prediction.py`](03_prediction.py) | **D 数据** | TAM 加法分解预测，含置信区间与成分分解图 | `TAM_Forecast` |
-| [`04_verification.py`](04_verification.py) | **通用验证** | 局部灵敏度 + Sobol 全局灵敏度 + 假设误差量化 | `SensitivityAnalyzer` `sobol_analysis` `AssumptionChecker` |
+| 题型 | 示例 | 算法 | 什么时候用 |
+|------|------|------|-----------|
+| **A 机理** | [`05_mechanism_fdm.py`](05_mechanism_fdm.py) | FDM 有限差分 | 物理方程（热传导/扩散/波动）数值解 |
+| **B 优化** | [`01_optimization.py`](01_optimization.py) | GA / DE / Clerc-PSO | 单目标连续优化 + 算法对比 |
+| **B 优化** | [`06_nsga2_multiobjective.py`](06_nsga2_multiobjective.py) | NSGA-II | 多目标（成本 vs 质量）帕累托前沿 |
+| **C 评价** | [`02_evaluation.py`](02_evaluation.py) | 熵权 + AHP + TOPSIS | 综合评价排序、指标赋权 |
+| **D 数据** | [`03_prediction.py`](03_prediction.py) | TAM / ARIMA / MLP | 时序预测（多算法交叉）|
+| **D 数据** | [`08_tam_forecast.py`](08_tam_forecast.py) | TAM 趋势 + 季节分解 | 可解释的时序分解预测 |
+| **通用** | [`04_verification.py`](04_verification.py) | 灵敏度 + 假设误差 | 四重检验（国赛硬性要求）|
+| **通用** | [`07_sobol_sensitivity.py`](07_sobol_sensitivity.py) | Sobol 全局灵敏度 | 参数重要性 + 交互效应 |
 
 ## 关于 bounds 写法
 
-四个优化器（GA / DE / NSGA2 / PSO 变体）接受**同一种** `bounds` 写法，
+优化器（GA / DE / NSGA2 / PSO 变体）接受**同一种** `bounds` 写法，
 由 `algorithms/optimization/bounds.py` 统一归一化：
 
 ```python
@@ -66,5 +74,5 @@ def my_objective(x):
 BOUNDS = [[0, 100], [0, 10]]
 ```
 
-完整的赛题工作流（题型识别 → 建模求解 → 图表 → 论文 → 四级评审）见
-[`../SKILL.md`](../SKILL.md) 与 [`../QUICKSTART.md`](../QUICKSTART.md)。
+完整的赛题工作流（题型识别 → 建模求解 → 图表 → 论文 → 评审）见
+[`../SKILL.md`](../SKILL.md) 与 [`../docs/00_新手最小路径.md`](../docs/00_新手最小路径.md)。

@@ -17,27 +17,19 @@
 
 ---
 
-## 30 秒上手
+## 30 秒：要不要用？
 
-**你是哪种题？** 看题目关键词，对号入座：
+**你做 CUMCM，72 小时最怕两件事**：拿到题不知道该用啥方法；交卷前踩硬伤（页数超限、缺 AI 声明、数值对不上）。
 
-| 题型 | 关键词 | 核心做法 | 论文模板 |
-|------|--------|---------|---------|
-| **A 机理** | 物理 / 几何 / 轨迹 / 能量 / 扩散 | 建机理方程 → FDM/ODE 数值解 | `templates/template-a.tex` |
-| **B 优化** | 最优 / 规划 / 调度 / 分配 | 目标函数 + 约束 → SA-PSO / GA / NSGA2 | `templates/template-b.tex` |
-| **C 评价** | 评价 / 决策 / 排序 / 指标 | 指标体系 → AHP + 熵权 + TOPSIS | `templates/template-c.tex` |
-| **D 数据** | 统计 / 预测 / 趋势 / 回归 | TAM / ARIMA / MLP → 四重检验 | `templates/template-d.tex` |
-
-**3 行命令跑通：**
+**这工具就解决这两件**：题型识别帮你选对方法（A机理 / B优化 / C评价 / D数据），L1 自动化检查帮你交卷前查硬伤。
 
 ```bash
 git clone https://github.com/tianguangpu/cumcm-coach.git && cd cumcm-coach
 pip install -e .
-python scripts/run_all.py --team "202600001" --members "张三,李四,王五" --type B   # 换成你的题型 A/B/C/D
+python examples/01_optimization.py    # 先跑一个示例看看效果
 ```
 
-> 🔰 **新手只看这篇就够**：[新手最小路径](docs/00_新手最小路径.md)（3 页，只讲题型路由 + L1 检查 + 12 个高频算法）。其余 36 算法 / 4 级评审 / 8 MCP 全是可选增强，不必先学。
-> 完整的 10 步比赛流程见下方「完整比赛流程（国赛 SOP）」。
+> 想深入了解 → [新手最小路径](docs/00_新手最小路径.md)（3 页）→ [5 分钟跑通](#5-分钟跑通) → [完整 SOP](#完整比赛流程国赛-sop)。
 
 ---
 
