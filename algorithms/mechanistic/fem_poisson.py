@@ -1,4 +1,4 @@
-﻿"""
+"""
 cumcm-coach 机理求解模块 — 三角网格有限元(FEM)解 Poisson 方程
 
     方程:   -div( k(x,y) * grad(u) ) = f(x,y)   线性基函数(一阶元)

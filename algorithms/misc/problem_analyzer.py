@@ -1,4 +1,4 @@
-﻿"""problem_analyzer.py — 问题理解模块 (P0-4)
+"""problem_analyzer.py — 问题理解模块 (P0-4)
 
 在建模开始前对赛题做结构化分析, 解决"直接生成=赌运气"的问题:
 

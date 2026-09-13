@@ -307,7 +307,7 @@ python algorithms/misc/innovation_guide.py --type <A/B/C/D>
 
 **3.4 图表质量自动验证**(v7.7 升级为视觉自检闭环,调用 `scipilot-figure-skill` + `paper-layouter`):
 1. **画图错误拦截**(scipilot §主动拦截):出图前先对图型做拦截检查,禁止——双Y轴、饼图、Y轴不当截断、小样本(n<10)画均值柱、rainbow/jet色图、把分类点连成折线。命中即按替代方案改图(均值柱→箱线+stripplot,饼图→横向柱状,rainbow→viridis/RdBu_r)
-2. **机器审计**:调用 `scipilot-figure-skill` 的 `scripts/check_figure.py --strict`(程序自检缺字/裁切/刻度重叠/字号<8pt)
+2. **机器审计**:调用 `integrations/scipilot-figure-skill/scripts/check_figure.py --strict`(程序自检缺字/裁切/刻度重叠/字号<8pt)
 3. **AI 读图复核**:调用 `image-reader` (GLM-4V-Plus) 复核遮盖/子图对齐
 4. **文字重叠修复**:调用 `math-modeling-paper-layouter` 的 `code/check_overlaps.py --fix --marked`(repel_text 仿 ggrepel 排斥 + shrink_overlapping 缩字号≥8pt),补齐 v7 原"只检测不修复"短板
 5. **回改重渲**:任一层 FAIL → 回改 → 重渲,直到通过,记录到 `RESULTS_REPORT.md`
