@@ -41,6 +41,14 @@ python examples/01_optimization.py    # 先跑一个示例看看效果
 
 本工具把评审老师真正会看的点，固化成**可自动检查的流程**：每个子问题必须走完六段子结构、每张图必须带结论、每个数值必须可溯源、每处创新必须配消融对照。
 
+**示例能生成这样的图**（来自 `examples/`，跑一遍就有）：
+
+<div align="center">
+  <img src="assets/example_convergence.png" width="32%" alt="算法收敛对比">
+  <img src="assets/example_pareto.png" width="32%" alt="NSGA2 帕累托前沿">
+  <img src="assets/example_heat.png" width="32%" alt="一维热传导 FDM">
+</div>
+
 ### 设计原则
 
 | 原则 | 具体做法 |
