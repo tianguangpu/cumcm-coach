@@ -28,8 +28,8 @@ MLP: 多层感知机序列预测
 - matplotlib（绘图，仅 plot() 需要）
 """
 
-from typing import Optional
 import warnings
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
