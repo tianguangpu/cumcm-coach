@@ -11,7 +11,7 @@
 |------|------|
 | 算法模块 | 36 个（9 个方向） |
 | 工具脚本 | 30 个 |
-| 测试 | 101 passed / 0 skipped |
+| 测试 | 119 passed / 0 skipped |
 | 覆盖率 | 46.5% |
 | ruff 检查 | 0 问题 |
 
@@ -34,13 +34,11 @@
 **为什么值得做**：这几个模块是 B 题（优化调度类）的主力工具，也是
 当前缺陷最可能潜伏的地方——它们只被"导入冒烟测试"覆盖过。
 
-### 2. 解决 NSGA-II 段错误
+### 2. 解决 NSGA-II 段错误 ✅（已解决）
 
 `optimization/nsga2.py` 在同进程内连续实例化多个求解器时会触发段错误。
-目前的规避方式是 `scripts/isolated_solve.py` 的子进程隔离。
-
-**待办**：定位是 `numpy` 调用模式还是 `C` 扩展层问题，给出根因或
-永久性隔离方案。
+已通过 `scripts/isolated_solve.py` 的子进程隔离解决，并新增真实 solve
+回归测试（`test_solve_returns_pareto_front`）固化，防「段错误误判」回归。
 
 ### 3. 示例扩充
 
@@ -76,6 +74,24 @@
 - 图论：最小费用最大流、二分图匹配
 - 统计：贝叶斯参数估计、Bootstrap 置信区间（现已部分覆盖）
 
+### 7. 补全 B/C 题端到端案例
+
+当前只有 2026 E 题一个完整端到端案例。建议补：
+
+- **B 题优化**：完整跑一个调度/分配类真题，验证 SA-PSO / GA / NSGA2 链路
+- **C 题评价**：纯评价题（无求解难度，最看论证完整度），验证 AHP+熵权+TOPSIS
+
+### 8. Docker 一键环境
+
+新用户要装 Python + LaTeX + MATLAB + 8 个 MCP 才能完整体验，门槛高。
+建议出 `docker-compose up` 一键起 Python + LaTeX 路径的环境，至少让
+核心链路 5 分钟跑起来。
+
+### 9. 「国一冲刺级」基准对照
+
+强承诺缺乏公开对照数据。建议在 `docs/` 放一份「2023/2024 国一论文 vs
+本工具产出」的对比报告，把这个承诺坐实。
+
 ---
 
 ## 已知限制（不计划修复）
@@ -97,7 +113,8 @@
 - [ ] 为 `job_shop.py` / `two_stage.py` 补充单元测试（见方向 1）
 - [ ] 补充 A 题（机理建模）示例（见方向 3）
 - [ ] 为 `algorithms/` 下的模块 docstring 补英文摘要（见方向 5）
-- [ ] 复现并定位 NSGA-II 段错误（见方向 2）
+- [ ] 补 B/C 题端到端案例（见方向 7）
+- [ ] 编写 Dockerfile + docker-compose 一键环境（见方向 8）
 
 提 PR 前请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，并确保
 `make test` 与 `ruff check algorithms/ scripts/ utils/ tests/` 通过。

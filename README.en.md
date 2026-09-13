@@ -18,6 +18,27 @@ Turn a problem statement into a submittable paper: problem typing → modeling &
 
 ---
 
+## 30-second start
+
+**What kind of problem do you have?** Match the keywords:
+
+| Type | Keywords | Core approach | Template |
+|------|----------|---------------|----------|
+| **A Mechanism** | physics / geometry / trajectory / energy / diffusion | mechanistic equation → FDM/ODE numeric solve | `templates/template-a.tex` |
+| **B Optimization** | optimal / planning / scheduling / allocation | objective + constraints → SA-PSO / GA / NSGA2 | `templates/template-b.tex` |
+| **C Evaluation** | evaluation / decision / ranking / index | index system → AHP + entropy + TOPSIS | `templates/template-c.tex` |
+| **D Data** | statistics / prediction / trend / regression | TAM / ARIMA / MLP → four-fold validation | `templates/template-d.tex` |
+
+**Run in 3 commands:**
+
+```bash
+git clone https://github.com/tianguangpu/cumcm-coach.git && cd cumcm-coach
+pip install -e .
+python scripts/run_all.py --team "202600001" --members "Alice,Bob,Carol" --type B   # use your type A/B/C/D
+```
+
+---
+
 ## What is this
 
 A full-pipeline paper-generation toolchain for CUMCM, distributed as a [Claude Code](https://claude.com/claude-code) Skill.
@@ -218,10 +239,19 @@ python scripts/result_registry.py verify
 
 Stated honestly, so you don't misuse them:
 
-- `algorithms/optimization/nsga2.py` segfaults in some environments; its test is marked `skip` pending a fix.
+- `algorithms/optimization/nsga2.py` used to segfault when instantiating multiple solvers in-process; this is now fixed via subprocess isolation (regression test included).
 - `algorithms/prediction/tam.py` requires `pip install tam` for full functionality; it falls back to a simplified additive decomposition otherwise, which must be disclosed in the paper.
 - MATLAB-dependent features require a local MATLAB R2024a+; they fall back to Python plotting when unavailable.
 - All MCP tools (fetch / tavily / matlab / …) are **optional enhancements**. The pipeline falls back to built-in implementations and never blocks on a missing tool.
+
+---
+
+## Limitations & disclaimer
+
+1. This tool is an **assistant**, not a substitute for your own work. Never submit AI-generated content verbatim — review and verify the model logic, derivations, and numbers yourself.
+2. AI makes mistakes in formulas and computations; every script, derivation, and figure must be manually checked before submission.
+3. No "one-click national first prize" is promised — your score depends on model quality, validation rigor, and writing. This tool automates the *hard constraints*, the rest is on you.
+4. Non-commercial use only; for study and competition assistance.
 
 ---
 
