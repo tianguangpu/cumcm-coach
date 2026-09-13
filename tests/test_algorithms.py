@@ -591,6 +591,23 @@ class TestNSGA2:
 
         assert NSGA2 is not None
 
+    def test_solve_returns_pareto_front(self):
+        """NSGA2 应正常求解并返回非空帕累托前沿（此前被误判为段错误而 skip）"""
+        from algorithms.optimization.nsga2 import NSGA2
+
+        ns = NSGA2(
+            [lambda x: sum((xi - 1) ** 2 for xi in x),
+             lambda x: sum((xi + 1) ** 2 for xi in x)],
+            dim=2,
+            bounds=[(-5, 5)] * 2,
+            pop_size=50,
+            max_gen=30,
+        )
+        r = ns.solve()
+        assert isinstance(r, dict)
+        assert r["n_pareto"] > 0
+        assert len(r["pareto_X"]) == r["n_pareto"]
+
 
 class TestPSOVariants:
     """PSO 变体测试"""

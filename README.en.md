@@ -8,7 +8,7 @@ Turn a problem statement into a submittable paper: problem typing → modeling &
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml)
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Tests](https://img.shields.io/badge/tests-101%20passed-brightgreen.svg)](tests/)
 [![Algorithms](https://img.shields.io/badge/algorithms-36%20modules-informational.svg)](algorithms/)
 
@@ -59,7 +59,7 @@ This tool turns what judges actually look for into **automatable checks**: every
 
 | Dependency | Version | Required |
 |-----------|---------|----------|
-| Python | 3.9+ | **Yes** |
+| Python | 3.10+ | **Yes** |
 | LaTeX (XeLaTeX + biber) | TeX Live / MiKTeX | Either one |
 | Typst | 0.11+ | Either one |
 | MATLAB | R2024a+ | Optional (advanced figures) |

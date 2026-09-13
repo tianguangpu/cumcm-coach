@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml)
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](pyproject.toml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Tests](https://img.shields.io/badge/tests-101%20passed-brightgreen.svg)](tests/)
 [![Algorithms](https://img.shields.io/badge/algorithms-36%20modules-informational.svg)](algorithms/)
 [![CUMCM](https://img.shields.io/badge/CUMCM-国一冲刺-gold.svg)](#)
@@ -16,6 +16,29 @@
 [中文](README.md) · [English](README.en.md) · [快速开始](#快速开始) · [架构](#架构设计) · [贡献指南](CONTRIBUTING.md)
 
 </div>
+
+---
+
+## 30 秒上手
+
+**你是哪种题？** 看题目关键词，对号入座：
+
+| 题型 | 关键词 | 核心做法 | 论文模板 |
+|------|--------|---------|---------|
+| **A 机理** | 物理 / 几何 / 轨迹 / 能量 / 扩散 | 建机理方程 → FDM/ODE 数值解 | `templates/template-a.tex` |
+| **B 优化** | 最优 / 规划 / 调度 / 分配 | 目标函数 + 约束 → SA-PSO / GA / NSGA2 | `templates/template-b.tex` |
+| **C 评价** | 评价 / 决策 / 排序 / 指标 | 指标体系 → AHP + 熵权 + TOPSIS | `templates/template-c.tex` |
+| **D 数据** | 统计 / 预测 / 趋势 / 回归 | TAM / ARIMA / MLP → 四重检验 | `templates/template-d.tex` |
+
+**3 行命令跑通：**
+
+```bash
+git clone https://github.com/tianguangpu/cumcm-coach.git && cd cumcm-coach
+pip install -e .
+python scripts/run_all.py --team "202600001" --members "张三,李四,王五" --type B   # 换成你的题型 A/B/C/D
+```
+
+> 完整的 10 步比赛流程见下方「完整比赛流程（国赛 SOP）」。
 
 ---
 
@@ -81,7 +104,7 @@ LP → HiGHS ｜ MIP/CSP → OR-Tools CP-SAT ｜ NLP → SciPy ｜ 连续优化 
 
 | 依赖 | 版本 | 必需性 |
 |------|------|--------|
-| Python | 3.9+ | **必需** |
+| Python | 3.10+ | **必需** |
 | LaTeX (XeLaTeX + biber) | TeX Live / MiKTeX | 二选一 |
 | Typst | 0.11+ | 二选一 |
 | MATLAB | R2024a+ | 可选（惊艳图表） |
