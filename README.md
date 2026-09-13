@@ -11,6 +11,7 @@
 [![CI](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Tests](https://img.shields.io/badge/tests-119%20passed-brightgreen.svg)](tests/)
+[![Coverage](https://img.shields.io/badge/coverage-52%25-yellow.svg)](algorithms/)
 
 [中文](README.md) · [English](README.en.md) · [快速开始](#快速开始) · [架构](#架构设计) · [贡献指南](CONTRIBUTING.md)
 
@@ -69,6 +70,18 @@ python examples/01_optimization.py    # 先跑一个示例看看效果
 | **不藏短板** | 假设误差逐项量化，灵敏度分析必须报出敏感参数，不粉饰 |
 | **合规优先** | 2024 年起国赛要求 AI 工具使用声明，全链路自动记录 AI 交互并生成合规材料 |
 
+### 能力边界（诚实说明）
+
+「自动强制」和「靠自觉」分开讲清，避免误以为工具能杜绝编造：
+
+| 类别 | 内容 | 强制方式 |
+|------|------|---------|
+| ✅ **自动强制** | 页数超限、AI 声明位置、附录代码完整、图题含数值、公式编号 | L1 检查，FAIL 拦下 |
+| ⚠️ **半自动** | 数值溯源（result_registry）、求解自证（self_verify）| 需你主动调用，不调不生效 |
+| 🔒 **靠自觉** | 不裸画图、六段子结构、强基线对比、不编数字 | 纯规范，工具无法强制 |
+
+> 防编造靠的是你的自觉 + 评审的复现检查，工具只提供溯源便利。
+
 ---
 
 ## 核心能力
@@ -102,6 +115,8 @@ LP → HiGHS ｜ MIP/CSP → OR-Tools CP-SAT ｜ NLP → SciPy ｜ 连续优化 
 
 自动化检查 → 交叉验证 → 对抗评审 → Red-Team 终审，含页数合规、AI 声明位置、AIGC 风险自检。
 
+> **诚实说明**：L1 是 Python 脚本自动检查（页数/数值/AI声明等硬伤，真能拦下）；L2-L4 是 **AI 辅助评审**（对抗/语义锚点），同源自审、可信度有限，不作「权威评审」承诺。详见 [能力边界](#能力边界诚实说明)。
+
 </td></tr>
 </table>
 
@@ -117,6 +132,16 @@ LP → HiGHS ｜ MIP/CSP → OR-Tools CP-SAT ｜ NLP → SciPy ｜ 连续优化 
 | LaTeX (XeLaTeX + biber) | TeX Live / MiKTeX | 二选一 |
 | Typst | 0.11+ | 二选一 |
 | MATLAB | R2024a+ | 可选（惊艳图表） |
+
+**最小可用栈**（只装 Python，能跑通哪些）：
+
+| 只装 Python + `pip install -e .` | 能做什么 |
+|----------------------------------|---------|
+| ✅ 全部 8 个示例（算法求解 + 出图）| GA/NSGA2/AHP+TOPSIS/FDM/Sobol/TAM |
+| ✅ 题型识别 + 模板路由 | 文字指导 |
+| ✅ L1 检查（页数/数值/AI声明）| 需先生成 paper/main.tex |
+| ⚠️ 论文编译 | 需 LaTeX 或 Typst |
+| ⚠️ 惊艳高级图（弦图/桑基）| 需 MATLAB（或用 Python 兜底出 90% 效果）|
 
 ### 安装
 
