@@ -6,11 +6,11 @@
 
 Turn a problem statement into a submittable paper: problem typing → modeling & solving → figures → typesetting → four-level review.
 
+[![GitHub stars](https://img.shields.io/github/stars/tianguangpu/cumcm-coach?style=social)](https://github.com/tianguangpu/cumcm-coach/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
-[![Tests](https://img.shields.io/badge/tests-101%20passed-brightgreen.svg)](tests/)
-[![Algorithms](https://img.shields.io/badge/algorithms-36%20modules-informational.svg)](algorithms/)
+[![Tests](https://img.shields.io/badge/tests-119%20passed-brightgreen.svg)](tests/)
 
 [中文](README.md) · English · [Quick Start](#quick-start) · [Architecture](#architecture)
 
@@ -119,12 +119,23 @@ make help
 
 ### As a Claude Code Skill
 
-This repository is also a Claude Code Skill. Clone it into your skills directory to invoke it via `/cumcm-coach-skill-v7`:
+This repository is also a Claude Code Skill. Two ways to use it:
+
+**Full (recommended, includes algorithm library + check scripts)** — clone into your skills directory:
 
 ```bash
 git clone https://github.com/tianguangpu/cumcm-coach.git \
   ~/.claude/skills/cumcm-coach-skill-v7
 ```
+
+**Lite (type-routing only)** — grab just `SKILL.md` for the core "type detection → template routing" feature:
+
+```bash
+curl -o ~/.claude/skills/cumcm-coach/SKILL.md \
+  https://raw.githubusercontent.com/tianguangpu/cumcm-coach/master/SKILL.md
+```
+
+> **Multi-platform**: the core logic (type detection rules, template routing, writing framework) lives in `SKILL.md` as plain markdown, portable to Codex / Cursor and other skill-aware CLIs (with per-platform format adaptation).
 
 ---
 
