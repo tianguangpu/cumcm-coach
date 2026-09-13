@@ -47,7 +47,7 @@ STEPS = [
     {
         "id": "01",
         "name": "初始化项目目录",
-        "cmd": "{py} scripts/init_project.py --team {team} --members {members}",
+        "cmd": "{py} scripts/init_project.py --team {team} --members {members} --type {ptype} --engine {engine}",
         "skip_if": "plan.md",
         "fast_skip": False,
     },
@@ -89,11 +89,19 @@ STEPS = [
         "manual": "执行 code/ 下的求解脚本，生成 results/*.json",
     },
     {
+        "id": "04c",
+        "name": "求解结果自证(反自证循环)",
+        "cmd": "{py} scripts/self_verify.py --type {ptype} --results results/ --output state/self_verify.json",
+        "skip_if": "state/self_verify.json",
+        "fast_skip": True,
+    },
+    {
         "id": "04b",
-        "name": "高级检验数据生成(Sobol+假设误差+Clerc-PSO)",
-        "cmd": "{py} gen_validation_results.py --only validation",
+        "name": "四重检验数据生成(Sobol+假设误差+MC)",
+        "cmd": None,
         "skip_if": "results/validation_results.json",
         "fast_skip": True,
+        "manual": "用 algorithms/validation/sobol.py、assumption_error.py、monte_carlo.py 生成四重检验数据，存 results/validation_results.json",
     },
     {
         "id": "05",
@@ -122,6 +130,13 @@ STEPS = [
             "（DPI/画布尺寸）+ check_overlaps.py --fix 重叠修复 + "
             "image-reader 读图复核 + 回改重渲"
         ),
+    },
+    {
+        "id": "07b",
+        "name": "图表真实性溯源(反假图)",
+        "cmd": "{py} scripts/check_verifiability.py --dir . --no-e2e",
+        "skip_if": None,
+        "fast_skip": True,
     },
     {
         "id": "08",
@@ -154,14 +169,14 @@ STEPS = [
     {
         "id": "10",
         "name": "L1-L4 四级评审",
-        "cmd": "{py} scripts/auto_check.py --paper latex/paper.tex --figures figures/png/ --engine {engine} --level all --pro --bib latex/refs.bib",
+        "cmd": "{py} scripts/auto_check.py --paper paper/main.tex --figures figures/png/ --engine {engine} --level all --pro --results reports/RESULTS_REPORT.md --code code/",
         "skip_if": None,
         "fast_skip": True,
     },
     {
         "id": "10b",
         "name": "参考文献审查",
-        "cmd": "{py} scripts/check_references.py --tex paper/sections/ --output reports/reference_report.md",
+        "cmd": "{py} scripts/check_references.py --tex paper/ --output reports/reference_report.md",
         "skip_if": "reports/reference_report.md",
         "fast_skip": True,
     },

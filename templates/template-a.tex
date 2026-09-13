@@ -45,6 +45,11 @@
 \setCJKsansfont{SimHei}
 \setCJKmonofont{FangSong}
 
+% 图/表题自动编号前缀（ctexart 默认不设置，缺失会导致图题无「图」字）
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+
+
 % 自定义算子(三段式公式规范)
 \DeclareMathOperator{\erf}{erf}
 \DeclareMathOperator{\sgn}{sgn}
@@ -323,24 +328,31 @@ $N_{\text{sim}} = 200$ 次,均值 $\mu = 53.8$ MW,标准差 $\sigma = 1.2$ MW,$\
 \section{附录1 数据说明}
 [数据来源、字段说明、result 样表 5 行 8 列]
 
-\section{附录2 代码}
-\begin{lstlisting}[language=Python, caption=problem1.py]
-# problem1.py
-"""
-问题一求解脚本
-输入:无
-输出:result1.xlsx, fig2_3d_surface.pdf
-"""
-import numpy as np
-from scipy.integrate import solve_ivp
+\section{附录2 代码清单}
+% ============ 国一铁律：附录必须含完整代码，缺代码取消评奖资格 ============
+% 完整代码用 \lstinputlisting 从 code/ 目录读入，禁止只贴片段/伪代码。
+% 每个脚本附输入/输出/功能说明，确保可复现（全部固定 SEED=42）。
+\begin{table}[H]
+\centering
+\caption{代码模块说明（完整代码见附件，固定 SEED=42 可复现）}
+\label{tab:code_modules}
+\begin{tabular}{llll}
+\toprule
+脚本 & 功能 & 输入 & 输出 \\
+\midrule
+\texttt{code/00\_data\_prep.py} & 数据预处理与质量校验 & 附件1.xlsx & \texttt{data/clean/*.csv} \\
+\texttt{code/01\_q1\_analysis.py} & 问题一求解 & 清洗后数据 & \texttt{results/q1\_*.json} \\
+\texttt{code/02\_q2\_classify.py} & 问题二求解 & 关键词表 & \texttt{results/q2\_*.json} \\
+\texttt{code/03\_q3\_optimize.py} & 问题三求解 & 问题二结果 & \texttt{results/q3\_*.json} \\
+\texttt{code/04\_q4\_robust.py} & 问题四求解 & 问题三模型 & \texttt{results/q4\_*.json} \\
+\texttt{code/05\_figures.py} & 图表生成 & \texttt{results/*.json} & \texttt{figures/png}, \texttt{figures/pdf} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-def main():
-    # 实现代码
-    pass
+% 逐文件引入完整代码（示例）：
+% \lstinputlisting[language=Python, caption=code/01_q1_analysis.py]{../code/01_q1_analysis.py}
 
-if __name__ == "__main__":
-    main()
-\end{lstlisting}
 
 \section{附录3 公式推导}
 [核心公式完整推导,正文只放结论]

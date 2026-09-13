@@ -334,73 +334,30 @@ class PaperChecker:
     # ============================================================
     def check_page_count(self, max_pages: int = 20) -> tuple[bool, str]:
         """
-        检查论文页数是否超过限制。
-        国赛要求：正文（不含附录）不超过 20 页。
-        通过编译后的 PDF 页数检测，或通过 LaTeX 源文件估算。
+        检查正文页数（不含附录）是否超过限制。
+        国赛要求：正文（不含附录代码/数据）不超过 20 页。
+        以 LaTeX 源文件估算为主（读 PDF 总页数会误把附录代码计入，故不采用）。
         """
-        # 方式1:检查编译后的 PDF 页数
-        pdf_candidates = [
-            self.paper_path.with_suffix(".pdf"),
-            self.paper_path.parent / "main.pdf",
-        ]
-        for pdf_path in pdf_candidates:
-            if pdf_path.exists():
-                try:
-                    # 尝试用 PyPDF2 或简单正则读取 PDF 页数
-                    import subprocess
-                    result = subprocess.run(
-                        ["python", "-c", rf"""
-import sys
-try:
-    from PyPDF2 import PdfReader
-    reader = PdfReader(r"{pdf_path}")
-    print(len(reader.pages))
-except ImportError:
-    # 简单方法:搜索 /Type /Page
-    with open(r"{pdf_path}", "rb") as f:
-        content = f.read()
-    import re
-    pages = len(re.findall(rb'/Type\s*/Page[^s]', content))
-    print(pages)
-"""],
-                        capture_output=True, text=True, timeout=10
-                    )
-                    if result.returncode == 0 and result.stdout.strip().isdigit():
-                        page_count = int(result.stdout.strip())
-                        if page_count > max_pages:
-                            return False, (
-                                f"PDF 页数超限: {page_count} > {max_pages} 页。"
-                                f"建议精简内容或移入附录。"
-                            )
-                        return True, f"PDF 页数合规: {page_count}/{max_pages} 页"
-                except Exception:
-                    pass  # PDF 读取失败，回退到源文件估算
-
-        # 方式2:通过 LaTeX 源文件估算页数
         text = self._read_all_paper_text()
-        # 粗略估算:每个 \newpage / \clearpage 约增加 1 页
-        # 每 3000 字符约 1 页（含公式/图表/表格占位）
-        page_breaks = len(re.findall(r'\\(?:newpage|clearpage)', text))
-        char_estimate = len(text) / 3000
-        estimated_pages = max(page_breaks, char_estimate)
 
-        # 检查附录位置（附录后的页数不计入）
+        # 附录及之后的内容不计入正文
         appendix_pos = text.find("\\appendix")
-        if appendix_pos > 0:
-            before_appendix = text[:appendix_pos]
-            estimated_main_pages = max(
-                len(re.findall(r'\\(?:newpage|clearpage)', before_appendix)),
-                len(before_appendix) / 3000
-            )
-        else:
-            estimated_main_pages = estimated_pages
+        body = text[:appendix_pos] if appendix_pos > 0 else text
 
-        if estimated_main_pages > max_pages:
+        # 估算正文页数 = 字符量 + 图/表占位 + 显式分页
+        n_fig = len(re.findall(r'\\begin\{figure\}', body))
+        n_tab = len(re.findall(r'\\begin\{table\}', body))
+        char_pages = len(body) / 2600.0          # 每页约 2600 字符（含公式占位）
+        float_pages = (n_fig + n_tab) * 0.35     # 每图/表约 0.35 页
+        page_breaks = len(re.findall(r'\\(?:newpage|clearpage)', body))
+        estimated = max(char_pages + float_pages, page_breaks)
+
+        if estimated > max_pages:
             return False, (
-                f"估算正文页数约 {estimated_main_pages:.0f} 页，可能超过 {max_pages} 页限制。"
-                f"（注:此为源文件估算，以编译后 PDF 为准）"
+                f"正文估算约 {estimated:.0f} 页 > {max_pages} 页限制"
+                f"（不含附录，以编译 PDF 为准）"
             )
-        return True, f"估算正文页数约 {estimated_main_pages:.0f}/{max_pages} 页（源文件估算）"
+        return True, f"正文估算约 {estimated:.0f}/{max_pages} 页（不含附录）"
 
     # ============================================================
     # 步骤 6c:AI 声明位置检查 [新增]
@@ -568,12 +525,17 @@ except ImportError:
         text = self._read_all_paper_text()
 
         if self.is_latex:
-            captions = re.findall(r'\\caption\{([^}]*)\}', text)
+            # 只提取 figure 环境内的 \caption，排除 table/algorithm 环境的 caption。
+            # 旧版按 caption 文本是否以"表/Tab"开头过滤，会漏掉不以"表"开头的表题
+            # （如 \caption{主要符号说明}），导致表题被误判为图题。
+            fig_captions = [
+                m.group(1) for m in re.finditer(
+                    r'\\begin\{figure\}.*?\\caption\{([^}]*)\}', text, re.DOTALL
+                )
+            ]
         else:  # typst
-            captions = re.findall(r'caption:\s*\[([^\]]*)\]', text)
+            fig_captions = re.findall(r'caption:\s*\[([^\]]*)\]', text)
 
-        # 粗判过滤表题(以"表"或"Tab"开头)
-        fig_captions = [c for c in captions if not c.strip().startswith(("表", "Tab"))]
         if not fig_captions:
             return True, "未检测到图题, 跳过"
 
@@ -589,6 +551,36 @@ except ImportError:
         if issues:
             return False, "图题自解释不足: " + " | ".join(issues) + f"(共 {len(fig_captions)} 图题)"
         return True, f"图题自解释通过({len(fig_captions)} 个图题, 无'示意图', 均含数值)"
+
+    # ============================================================
+    # 步骤 8d:附录代码完整性检查 [国一铁律：缺完整代码取消评奖资格]
+    # ============================================================
+    def check_appendix_code(self) -> tuple[bool, str]:
+        """检查附录是否含完整代码（禁止只贴片段/伪代码/pass 占位）"""
+        text = self._read_all_paper_text()
+
+        if not re.search(r'\\appendix', text):
+            return False, "未检测到 \\appendix 附录（附录须含完整代码与数据说明）"
+
+        # 完整代码引入：\lstinputlisting / \inputminted 从 code/ 读入
+        lstinput = re.findall(r'\\(?:lstinputlisting|inputminted)', text)
+        # 模块说明表：含「脚本/输入/输出/功能」
+        has_module_table = bool(re.search(r'代码模块|代码清单|模块说明', text))
+        # 完整代码字样
+        has_full_code = bool(re.search(r'完整代码|全套代码|全部脚本', text))
+        # 占位/未完成代码（def ...(): pass 或目标函数占位）
+        placeholder_code = re.findall(
+            r'def\s+\w+\([^)]*\):\s*\n\s*pass|"""目标函数[^"]*"""\s*\n\s*pass',
+            text,
+        )
+
+        if placeholder_code:
+            return False, f"附录含未完成占位代码 {len(placeholder_code)} 处（禁止 pass/伪代码，须贴完整可运行脚本）"
+        if not (lstinput or has_full_code):
+            return False, "附录缺完整代码：须用 \\lstinputlisting 引入全部求解脚本（缺代码直接取消评奖资格）"
+
+        module_note = "，含模块说明表" if has_module_table else ""
+        return True, f"附录代码完整（lstinputlisting {len(lstinput)} 处{module_note}）"
 
     # ============================================================
     # 步骤 9:PDF 视觉逐页检查 [新增]
@@ -1173,7 +1165,10 @@ except ImportError:
             ('4. 公式编号', 1, self.check_equation_numbering),
             ('5. 数值一致性', 2, self.check_values),
             ('6. 占位符与泄露', 1, self.check_placeholders),
+            ('6b. 页数合规', 1, self.check_page_count),
+            ('6c. AI声明位置', 1, self.check_ai_declaration),
             ('7. 参考文献规范', 2, lambda: self.check_references(min_count=min_refs)),
+            ('7b. 附录代码完整', 1, self.check_appendix_code),
             ('8a. 图表数量', 2, lambda: self.check_figure_count(min_count=min_figures)),
             ('8b. 图表质量', 2, self.check_figure_quality),
             ('8c. 图题自解释', 2, self.check_figure_captions),

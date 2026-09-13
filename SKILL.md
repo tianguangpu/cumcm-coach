@@ -416,7 +416,7 @@ python scripts/embed_figures.py paper/sections state/figure_manifest.json <engin
 - 不混用 Typst/LaTeX 语法
 - 正文避免出现工作流内部名称(`reports/`、`figures/`、`plan.md`、`todo.md`)
 - 参考文献必须真实存在,数量 ≥10,近5年 ≥40%,外文 ≥30%
-- **参考文献统一用 `.bib`+biber**(LaTeX)或 `.yml`+`#bibliography`(Typst),**禁止 `thebibliography` 硬编码**;手写或用 `search_openalex.py` 生成 `refs.bib`,正文用 `\cite{}` 引用,auto_check 自动校验引用-文献对应关系
+- **参考文献推荐用 `thebibliography`(GB/T 7714 格式, 编译最可靠)**, 也可用 `.bib`+biber(LaTeX, 需 gb7714-2015 包)或 `.yml`+`#bibliography`(Typst); 手写或 `search_openalex.py` 生成, 模板默认 `\bibitem` 直写, auto_check 自动校验数量/近5年/外文占比
 
 ### 第 5 步:四级反馈评审(阶段 4)
 
@@ -724,6 +724,8 @@ py scripts/run_all.py --fast                 # 快速模式
 
 # 单步执行
 py scripts/auto_check.py --paper paper/main.tex --level all  # L1-L4检查
+py scripts/check_verifiability.py --dir . --no-e2e   # 反假图五层溯源(图↔脚本↔数据)
+py scripts/self_verify.py --type B --results results/  # 求解结果自证(反自证循环)
 py scripts/search_openalex.py --query "关键词" --limit 10    # 文献检索
 py scripts/ai_compliance.py all              # 生成合规材料
 py scripts/ai_compliance.py --aigc-check --paper paper/main.tex  # AIGC风险自检

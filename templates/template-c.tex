@@ -45,6 +45,11 @@
 \setCJKsansfont{SimHei}
 \setCJKmonofont{FangSong}
 
+% 图/表题自动编号前缀（ctexart 默认不设置，缺失会导致图题无「图」字）
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+
+
 \DeclareMathOperator{\erf}{erf}
 \DeclareMathOperator{\sgn}{sgn}
 
@@ -301,21 +306,31 @@ $N_{\text{sim}} = 200$ 次随机扰动权重,排序一致性 $92.5\%$,$95\%\text
 \section{附录1 数据说明}
 [指标原始数据样表]
 
-\section{附录2 代码}
-\begin{lstlisting}[language=Python, caption=problem1_evaluate.py]
-from ahp_entropy_topsis import ComprehensiveEvaluation
+\section{附录2 代码清单}
+% ============ 国一铁律：附录必须含完整代码，缺代码取消评奖资格 ============
+% 完整代码用 \lstinputlisting 从 code/ 目录读入，禁止只贴片段/伪代码。
+% 每个脚本附输入/输出/功能说明，确保可复现（全部固定 SEED=42）。
+\begin{table}[H]
+\centering
+\caption{代码模块说明（完整代码见附件，固定 SEED=42 可复现）}
+\label{tab:code_modules}
+\begin{tabular}{llll}
+\toprule
+脚本 & 功能 & 输入 & 输出 \\
+\midrule
+\texttt{code/00\_data\_prep.py} & 数据预处理与质量校验 & 附件1.xlsx & \texttt{data/clean/*.csv} \\
+\texttt{code/01\_q1\_analysis.py} & 问题一求解 & 清洗后数据 & \texttt{results/q1\_*.json} \\
+\texttt{code/02\_q2\_classify.py} & 问题二求解 & 关键词表 & \texttt{results/q2\_*.json} \\
+\texttt{code/03\_q3\_optimize.py} & 问题三求解 & 问题二结果 & \texttt{results/q3\_*.json} \\
+\texttt{code/04\_q4\_robust.py} & 问题四求解 & 问题三模型 & \texttt{results/q4\_*.json} \\
+\texttt{code/05\_figures.py} & 图表生成 & \texttt{results/*.json} & \texttt{figures/png}, \texttt{figures/pdf} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-ce = ComprehensiveEvaluation(
-    data=X,                  # 原始数据矩阵 (n_samples, n_features)
-    benefit_cols=[0, 1, 2],  # 效益型指标索引
-    cost_cols=[3, 4],        # 成本型指标索引
-    col_names=['效率', '质量', '稳定性', '可维护性', '成本'],
-)
-ce.run_ahp(A)              # AHP 判断矩阵 → 主观权重
-ce.run_entropy()           # 熵权法 → 客观权重
-ce.combine_weights(alpha=0.5)  # 组合赋权
-scores = ce.topsis()       # TOPSIS 排序 → 综合得分向量
-\end{lstlisting}
+% 逐文件引入完整代码（示例）：
+% \lstinputlisting[language=Python, caption=code/01_q1_analysis.py]{../code/01_q1_analysis.py}
+
 
 \section{附录3 公式推导}
 [组合赋权完整推导]

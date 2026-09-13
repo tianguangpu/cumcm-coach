@@ -45,6 +45,7 @@ paper/main.pdf
 # ---- 运行产物（可重新生成，不提交） ----
 output/
 examples/output/
+results/
 
 # ---- 数据（大文件不提交） ----
 data/*.xlsx

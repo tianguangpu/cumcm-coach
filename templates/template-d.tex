@@ -44,6 +44,11 @@
 \setCJKsansfont{SimHei}
 \setCJKmonofont{FangSong}
 
+% 图/表题自动编号前缀（ctexart 默认不设置，缺失会导致图题无「图」字）
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+
+
 \DeclareMathOperator{\erf}{erf}
 \DeclareMathOperator{\sgn}{sgn}
 
@@ -308,23 +313,31 @@ $N_{\text{sim}} = 200$ 次随机扰动训练数据,预测均值 $\mu = 52.1$,标
 \section{附录1 数据说明}
 [数据字段说明、缺失值处理、result 样表]
 
-\section{附录2 代码}
-\begin{lstlisting}[language=Python, caption=problem1_predict.py]
-import numpy as np
-from arima import ARIMA_Forecast
-from mlp import MLP_Forecast
+\section{附录2 代码清单}
+% ============ 国一铁律：附录必须含完整代码，缺代码取消评奖资格 ============
+% 完整代码用 \lstinputlisting 从 code/ 目录读入，禁止只贴片段/伪代码。
+% 每个脚本附输入/输出/功能说明，确保可复现（全部固定 SEED=42）。
+\begin{table}[H]
+\centering
+\caption{代码模块说明（完整代码见附件，固定 SEED=42 可复现）}
+\label{tab:code_modules}
+\begin{tabular}{llll}
+\toprule
+脚本 & 功能 & 输入 & 输出 \\
+\midrule
+\texttt{code/00\_data\_prep.py} & 数据预处理与质量校验 & 附件1.xlsx & \texttt{data/clean/*.csv} \\
+\texttt{code/01\_q1\_analysis.py} & 问题一求解 & 清洗后数据 & \texttt{results/q1\_*.json} \\
+\texttt{code/02\_q2\_classify.py} & 问题二求解 & 关键词表 & \texttt{results/q2\_*.json} \\
+\texttt{code/03\_q3\_optimize.py} & 问题三求解 & 问题二结果 & \texttt{results/q3\_*.json} \\
+\texttt{code/04\_q4\_robust.py} & 问题四求解 & 问题三模型 & \texttt{results/q4\_*.json} \\
+\texttt{code/05\_figures.py} & 图表生成 & \texttt{results/*.json} & \texttt{figures/png}, \texttt{figures/pdf} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-# ARIMA 线性成分（统计模型，numpy+scipy 自研实现）
-arima_model = ARIMA_Forecast(y_train, order=(3, 1, 2)).fit()
-arima_pred = arima_model.predict(steps=3)
+% 逐文件引入完整代码（示例）：
+% \lstinputlisting[language=Python, caption=code/01_q1_analysis.py]{../code/01_q1_analysis.py}
 
-# MLP 非线性成分（sklearn 实现，无 torch 依赖；如需真 LSTM 可 pip install torch 后替换）
-mlp_model = MLP_Forecast(y_train, window=12, hidden_layer_sizes=(50,)).fit()
-mlp_pred = mlp_model.predict(steps=3)
-
-# 组合预测（ARIMA + MLP 加权融合）
-final_pred = 0.5 * arima_pred + 0.5 * mlp_pred
-\end{lstlisting}
 
 \section{附录3 公式推导}
 [ARIMA-LSTM 组合模型完整推导]
