@@ -119,6 +119,32 @@ pytest tests/ -q
 make help
 ```
 
+### 完整比赛流程（国赛 SOP）
+
+拿到赛题后，按下面 10 步走完「建模 → 求解 → 论文 → 交卷」全流程。✅ 是自动步骤，👤 是 Agent（你或 Claude）按 `SKILL.md` 执行的步骤：
+
+| # | 步骤 | 关键命令 / 产物 | 自动 |
+|---|------|----------------|------|
+| 0 | 初始化项目 | `init_project.py --team "202600001" --members "张三,李四,王五" --type B` → `plan.md`/`todo.md` | ✅ |
+| 1 | 问题分析 | `algorithms/misc/problem_analyzer.py` → 歧义/隐含约束/依赖图 | ✅ |
+| 2 | 题型识别 + 创新方向 | `innovation_guide.py B reports/innovation_plan.json` | ✅ |
+| 3 | 建模与求解 | 写 `code/*.py` → `results/*.json`（四问） | 👤 |
+| 4 | 求解自证（反自证循环） | `self_verify.py --type B --results results/` | ✅ |
+| 5 | 图表生成 | 数据图 + 技术路线图 → `figures/{png,pdf}/` | 👤 |
+| 6 | 反假图溯源 | `check_verifiability.py --dir . --no-e2e`（图↔脚本↔数据五层） | ✅ |
+| 7 | 论文撰写 | 套 `templates/template-b.tex` → `paper/main.tex`（六段子结构 + 四重检验） | 👤 |
+| 8 | L1-L4 评审 | `auto_check.py --paper paper/main.tex --level all` + `semantic_anchor.py --problem problem.txt ...` | ✅ |
+| 9 | AI 合规材料 | `ai_compliance.py all` → 声明 + 支撑材料 | ✅ |
+
+一键串联所有 ✅ 自动步骤：
+
+```bash
+python scripts/run_all.py --team "202600001" --members "张三,李四,王五" --type B
+# 断点续跑：python scripts/run_all.py --from 07
+```
+
+> **真实案例**：本仓库用 2026 E 题（SEM 广告投放）完整验证了这条 SOP——四问求解 → 论文 66 页 → L1-L4 评审通过（L4 语义锚点 86.1 分）。详见 `references/` 与 `tests/test_e2e.py`。
+
 ### 作为 Claude Code Skill 使用
 
 本仓库同时是一个 Claude Code Skill。克隆到 skills 目录即可通过 `/cumcm-coach-skill-v7` 调用：
