@@ -31,6 +31,7 @@ metadata:
 # cumcm-coach v7.12.0 — CUMCM 建模辅助工具
 
 > **核心定位**:CUMCM 国赛辅助工具。真正立住的价值是两件事——①**题型识别 → 模板/算法路由**(帮新手选对方法);②**L1 自动化检查**(交卷前查页数/AI声明/数值溯源,防硬伤)。算法模板库与 L2-L4 评审为可选增强,不作"保证获奖"承诺。
+> **渐进式加载**:本文档是主入口。别一次性加载全部 references(20 篇)——按当前阶段参照 [`references/README.md`](references/README.md) 的「何时加载」表按需取用。
 > **v7.12.0 开源版本**:MIT 许可 + pyproject.toml 可安装包 + GitHub Actions CI(代码风格 / 测试矩阵 / wheel 构建)+ README 英文版;新增扩展测试 41 个(覆盖率 32.9%→46.5%),ruff 检查清零(626→0),修复 9 处缺陷(含 3 处运行时崩溃与 2 处"假绿色"测试)。
 > **不做的**:MCM/华为/华中/APMCM 等其他赛事(交给 MathModelAgent 5writing);非国赛模板。
 
