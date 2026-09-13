@@ -6,6 +6,7 @@
 
 题型识别与模板路由 + 交卷前自动化检查，帮你把时间花在真正的建模上。
 
+[![GitHub stars](https://img.shields.io/github/stars/tianguangpu/cumcm-coach?style=social)](https://github.com/tianguangpu/cumcm-coach/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/tianguangpu/cumcm-coach/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
@@ -48,6 +49,15 @@ python examples/01_optimization.py    # 先跑一个示例看看效果
   <img src="assets/example_pareto.png" width="32%" alt="NSGA2 帕累托前沿">
   <img src="assets/example_heat.png" width="32%" alt="一维热传导 FDM">
 </div>
+
+### 为什么选它
+
+| 你需要的 | 手写 + scipy | 其他 AI 建模工具 | cumcm-coach |
+|---------|-------------|-----------------|-------------|
+| 拿到题选对方法 | 靠自己查资料 | 部分覆盖 | ✅ 题型识别 → 模板/算法路由 |
+| 交卷前查硬伤 | 容易漏 | 部分 | ✅ L1 检查（页数 / AI 声明 / 数值溯源）|
+| 反假图溯源 | 无 | 无 | ✅ 图 ↔ 脚本 ↔ 数据五层溯源 |
+| 上手成本 | 低 | 高（要学全套）| 低（新手只看 3 页）|
 
 ### 设计原则
 
@@ -381,7 +391,13 @@ make test               # 确认测试通过
 - [SALib](https://github.com/SALib/SALib) — 全局灵敏度分析
 - [scikit-learn](https://github.com/scikit-learn/scikit-learn) — API 设计参考
 
+---
+
 <div align="center">
+
+**如果这个项目帮到了你，给个 ⭐ Star 吧** — 让更多建模同学看到它。
+
+如果你有改进想法或踩坑经历，欢迎提 [Issue](https://github.com/tianguangpu/cumcm-coach/issues) 或 PR，见 [贡献指南](CONTRIBUTING.md)。
 
 **[⬆ 回到顶部](#cumcm-coach)**
 
