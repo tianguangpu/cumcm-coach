@@ -94,11 +94,9 @@
 - **B 题优化**：完整跑一个调度/分配类真题，验证 SA-PSO / GA / NSGA2 链路
 - **C 题评价**：纯评价题（无求解难度，最看论证完整度），验证 AHP+熵权+TOPSIS
 
-### 8. Docker 一键环境
+### 8. Docker 一键环境 ✅（已落地）
 
-新用户要装 Python + LaTeX + MATLAB + 8 个 MCP 才能完整体验，门槛高。
-建议出 `docker-compose up` 一键起 Python + LaTeX 路径的环境，至少让
-核心链路 5 分钟跑起来。
+Dockerfile 已含 XeLaTeX + 中文字体（fonts-noto-cjk），`docker compose up example` 跑示例、`docker compose up paper` 验证 LaTeX。新用户无需本地装 Python/LaTeX 即可体验核心链路。
 
 ### 9. 「国一冲刺级」基准对照
 
