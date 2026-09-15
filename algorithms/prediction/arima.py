@@ -98,7 +98,7 @@ class ARIMA_Forecast:
         # AR 初值：Yule-Walker 方程（提升收敛速度与稳定性）
         if self.p > 0:
             try:
-                gamma = [np.dot(y[:-k], y[k:]) / len(y) for k in range(self.p + 1)]
+                gamma = [np.dot(y[:len(y) - k], y[k:]) / len(y) for k in range(self.p + 1)]
                 R = np.array([[gamma[abs(i - j)] for j in range(self.p)]
                               for i in range(self.p)])
                 init[1:1 + self.p] = np.linalg.solve(R, gamma[1:])

@@ -174,6 +174,19 @@ class TestTwoStageEdgePaths:
 # ARIMA: Yule-Walker 降级 + auto_order 异常 continue
 # ============================================================
 class TestARIMAFallbackPaths:
+    def test_yule_walker_normal_lines_102_104(self):
+        """正常序列 Yule-Walker 成功覆盖 try body (102-104)"""
+        from algorithms.prediction.arima import ARIMA_Forecast
+
+        # 线性递增序列 -> gamma 非零 -> R 非奇异 -> solve 成功
+        series = np.arange(1.0, 21.0)  # [1, 2, ..., 20]
+        model = ARIMA_Forecast(series, order=(1, 0, 0))
+        model.fit()
+        assert model.fitted is True
+        assert model.params is not None
+        # AR 系数 phi_1 应该接近 1（线性序列高度自相关）
+        assert model.params[1] > 0.5
+
     def test_yule_walker_singular_except_lines_105_106(self):
         """常数序列 d=1 差分后全 0 R 奇异 except 0.1 初值"""
         from algorithms.prediction.arima import ARIMA_Forecast
@@ -183,6 +196,7 @@ class TestARIMAFallbackPaths:
         model.fit()
         assert model.fitted is True
         assert model.params is not None
+        # except 分支用 0.1 初始化 -> BFGS 优化后 params 可能不同
         pred = model.predict(steps=3)
         assert len(pred) == 3
 
