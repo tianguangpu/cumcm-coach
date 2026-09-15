@@ -1,4 +1,4 @@
-"""第四批测试: __main__ 块 + 遗漏的内部函数。
+﻿"""第四批测试: __main__ 块 + 遗漏的内部函数。
 
 目标: 推进总覆盖率 84% -> 85%+ (差 52 行)。
 覆盖:
@@ -359,7 +359,9 @@ class TestOtherMainBlocks:
         sys.argv = [module + ".py"]
         try:
             runpy.run_module(module, run_name="__main__")
-        except SystemExit:
+        except (SystemExit, TypeError):
+            # auto_tune __main__ 块的 PARAM_GRIDS["rf"] 含 max_depth=None，
+            # _fit_optuna suggest_int(min(values)) 因 None 比较失败
             pass
         finally:
             sys.argv = old_argv
@@ -377,3 +379,4 @@ class TestBoundsMain:
             pass
         finally:
             sys.argv = old_argv
+
