@@ -187,19 +187,16 @@ class VRP:
                 improved = False
                 for i in range(len(best_route) - 1):
                     for j in range(i + 2, len(best_route)):
-                        # 计算2-opt交换后的距离变化
-                        d1 = (self.dist[self.depot][best_route[0]] if i == 0
-                              else self.dist[best_route[i-1]][best_route[i]])
-                        d2 = self.dist[best_route[j-1]][best_route[j]]
-                        d3 = self.dist[best_route[i]][best_route[i+1]]
-                        d4 = (self.dist[best_route[j]][self.depot] if j == len(best_route) - 1
-                              else self.dist[best_route[j]][best_route[j+1]])
+                        # 2-opt: 反转 best_route[i:j], 只改变两条边
+                        # 移除: (prev->node[i]) + (node[j-1]->node[j])
+                        # 新增: (prev->node[j-1]) + (node[i]->node[j])
+                        old_dist = (self.dist[self.depot][best_route[0]] if i == 0
+                                    else self.dist[best_route[i-1]][best_route[i]])
+                        old_dist += self.dist[best_route[j-1]][best_route[j]]
 
-                        old_dist = d1 + d2
-                        new_dist = (self.dist[self.depot][best_route[0]] if i == 0
-                                   else self.dist[best_route[i-1]][best_route[j-1]])
+                        new_dist = (self.dist[self.depot][best_route[j-1]] if i == 0
+                                    else self.dist[best_route[i-1]][best_route[j-1]])
                         new_dist += self.dist[best_route[i]][best_route[j]]
-                        new_dist += d3 + d4
 
                         if new_dist < old_dist:
                             # 执行2-opt交换
