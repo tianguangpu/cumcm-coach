@@ -96,9 +96,11 @@ class ARIMA_Forecast:
         init[0] = np.mean(y)
 
         # AR 初值：Yule-Walker 方程（提升收敛速度与稳定性）
+        n = len(y)
         if self.p > 0:
             try:
-                gamma = [np.dot(y[:len(y) - k], y[k:]) / len(y) for k in range(self.p + 1)]
+                # 注意: 不能用 y[:-k], 因为 k=0 时 y[:-0]=y[:0]=空数组
+                gamma = [np.dot(y[:n - k], y[k:]) / n for k in range(self.p + 1)]
                 R = np.array([[gamma[abs(i - j)] for j in range(self.p)]
                               for i in range(self.p)])
                 init[1:1 + self.p] = np.linalg.solve(R, gamma[1:])
@@ -121,8 +123,9 @@ class ARIMA_Forecast:
         self.residuals = self._arma_residuals(y, self.params)
 
         # AIC（高斯似然近似）
-        n = len(y)
         sigma2 = np.sum(self.residuals ** 2) / n
+        if sigma2 <= 0:
+            sigma2 = 1e-10  # 避免常数序列差分后全 0 导致 log(0)
         ll = -0.5 * n * (np.log(2 * np.pi * sigma2) + 1)
         self.aic = 2 * n_params - 2 * ll
         self.fitted = True
