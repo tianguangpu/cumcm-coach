@@ -28,3 +28,7 @@ Makefile text
 # 编译产物不参与统计
 *.pdf   -diff
 *.png   -diff
+
+# 修正 GitHub 语言统计：integrations 下 HTML 是第三方 skill 资源，不计入主语言统计
+integrations/**/*.html linguist-vendored=true
+integrations/diagram-design/** linguist-vendored=true
